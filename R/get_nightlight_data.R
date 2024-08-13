@@ -56,7 +56,5 @@ get_nightlight_data <- function(year, month, version = "v10", destination_dir = 
 }
 
 
-# Eaxample: download the latest available data for March 2024
 
-get_nightlight_data(2024, 3, "v10", ".", timeout = 1200)
 
