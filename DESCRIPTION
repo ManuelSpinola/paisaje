@@ -9,6 +9,7 @@ Description: This package contains functions to perform landscape analysis
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+URL: https://manuelspinola.github.io/paisaje/
 Imports:
     sf,
     h3jsr,
