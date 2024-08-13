@@ -1,0 +1,66 @@
+---
+title: paisaje: tools for landscape analysis
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# paisaje
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of paisaje is to provide tools for landscape analysis.
+
+## Installation
+
+You can install the development version of paisaje from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("ManuelSpinola/paisaje")
+```
+
+## Example
+
+This is a basic example which shows you how to use the package:
+
+```{r}
+#| message: false
+#| warning: false
+library(paisaje)
+library(tidyverse)
+```
+
+Let's bring an sf object
+
+```{r}
+#| message: false
+#| warning: false
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+```
+
+Create an h3 grid of resolution 5
+
+```{r}
+#| message: false
+#| warning: false
+h3_grid_nc <- get_h3_grid(nc, resolution = 5)
+```
+
+Make a map
+
+```{r}
+ggplot() +
+  geom_sf(data = h3_grid_nc)
+```
+
