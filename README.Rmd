@@ -1,5 +1,5 @@
 ---
-title: paisaje: tools for landscape analysis
+title: "paisaje: tools for landscape analysis"
 output: github_document
 ---
 
@@ -39,6 +39,8 @@ This is a basic example which shows you how to use the package:
 #| warning: false
 library(paisaje)
 library(tidyverse)
+library(sf)
+library(h3jsr)
 ```
 
 Let's bring an sf object
