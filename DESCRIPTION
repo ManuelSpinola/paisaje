@@ -5,6 +5,11 @@ Version: 0.1.0
 Author: Manuel Spínola
 Maintainer: The package maintainer <mspinola10@gmail.com>
 Description: This package contains functions to perform landscape analysis
-License: What license is it under?
+    Some of the functions allow to get data for landscape analysis.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+    sf,
+    h3jsr,
+    rvest
