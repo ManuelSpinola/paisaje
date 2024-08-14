@@ -1,7 +1,18 @@
-
+#'
+#' @name get_h3_grid
+#'
+#' @title Create an H3 grid for a spatial object
+#'
+#' @description This function allows you to create an H3 grid for a specific region.
+#'
+#' This function is a wrapper of functions from the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
+#'
+#'
 library(rvest)
 
 get_nightlight_data <- function(year, month, version = "v10", destination_dir = ".", timeout = 1200) {
+  # Load the necessary packages
+  library(rvest)
   # Ensure the year and month are properly formatted
   year <- as.character(year)
   month <- sprintf("%02d", as.integer(month))
@@ -54,7 +65,3 @@ get_nightlight_data <- function(year, month, version = "v10", destination_dir = 
     return(NULL)
   })
 }
-
-
-
-

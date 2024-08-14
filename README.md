@@ -48,7 +48,7 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 Create an h3 grid of resolution 5
 
 ``` r
-h3_grid_nc <- get_h3_grid(nc, resolution = 5)
+h3_grid_nc <- get_h3_grid(nc, resolution = 4)
 ```
 
 Make a map

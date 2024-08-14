@@ -1,23 +1,43 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   https://r-pkgs.org
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
+#'
+#' @name get_h3_grid
+#'
+#' @title Create an H3 grid for a spatial object
+#'
+#' @description This function allows you to create an H3 grid for a specific region.
+#'
+#' This function is a wrapper of functions from the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
+#'
+#' @usage get_h3_grid(sf_object, resolution)
+#'
+#' @param sf_object (\code{character}) An sf_object where to create the grid.
+#'
+#' @param resolution (\code{numeric}) The option for the resolution of image to
+#' download. Should between 1 and 16.
+#'
+#' @references
+#' O'Brien L (2023). h3jsr: Access Uber's H3 Library. R
+#' package version 1.3.1,
+#' <https://CRAN.R-project.org/package=h3jsr>.
+#'
+#' @details
+#' \href{https://h3geo.org}{H3, a hexagonal hierarchical geospatial indexing system}
+#'
+#'
+#' @examples
+#'
+#' Assuming you have an sf object called 'my_sf_object'
+#' h3_grid_sf <- get_h3_grid(my_sf_object, resolution = 7)
+#'
+#' @export
 
 library(sf)
 library(h3jsr)
 library(dplyr)
 
 get_h3_grid <- function(sf_object, resolution = 7) {
+  # Load the necessary packages
+  library(sf)
+  library(h3jsr)
   # Check if the input is an sf object
   if (!inherits(sf_object, "sf")) {
     stop("Input must be an sf object")
@@ -47,6 +67,4 @@ get_h3_grid <- function(sf_object, resolution = 7) {
   return(h3_grid)
 }
 
-# Example usage:
-# Assuming you have an sf object called 'my_sf_object'
-# h3_grid_sf <- get_h3_grid(my_sf_object, resolution = 7)
+
