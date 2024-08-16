@@ -6,7 +6,7 @@
 \alias{paisaje-package}
 \title{paisaje: Tools for landscape analysis}
 \description{
-This package contains functions to perform landscape analysis Some of the functions allow to get data for landscape analysis.
+This package contains functions to perform landscape analysis Some of the functions allows to get data for landscape analysis.
 }
 \seealso{
 Useful links:

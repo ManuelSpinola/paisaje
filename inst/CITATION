@@ -1,14 +1,10 @@
 citHeader("To cite paisaje in publications use:")
 
-citEntry(
-  entry    = "Manual",
-  title    = "paisaje: tools for landscape analysis",
+bibentry(
+  bibtype  = "Manual",
+  title    = "paisaje",
   author   = "Manuel Spínola",
-  note     = "R package version 0.1.0",
   year     = "2024",
-  url      = "https://github.com/ManuelSpinola/paisaje",
-  textVersion = paste("Manuel Spínola (2024).",
-                "paisaje: tools for landscape analysis.",
-                "R package version 0.1.0.",
-                "Available at https://github.com/ManuelSpinola/paisaje.")
+  note     = "version 0.1.0",
+  url      = "https://manuelspinola.github.io/paisaje/"
 )

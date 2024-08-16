@@ -12,7 +12,7 @@
 #'
 #' @examples
 #'
-#' get_night_light_data(2024, 3, "v10", ".", timeout = 1200)
+#' get_nightlight_data(2024, 3, "v10", ".", timeout = 1200)
 #'
 #'
 

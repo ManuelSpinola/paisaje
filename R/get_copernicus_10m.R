@@ -1,15 +1,15 @@
 #'
 #' @name get_copernicus_10m
 #'
-#' @title Download nightlight data
+#' @title Download land cover data
 #'
 #' @description
 #' This function allows you to download land cover data from
 #'  the \href{https://esa-worldcover.org/en}{ESA WorldCover}.
 #'
-#' @usage get_copernicus_1pm(aoi_sf, year = 2021, output_folder = ".")
+#' @usage get_copernicus_10m(aoi_sf, year = 2021, output_folder = ".")
 #'
-#' @param sf_object (\code{character}) an sf_object which defines
+#' @param aoi_sf (\code{character}) an sf_object which defines
 #' the area of interest (AOI). an sf object can represent any
 #' geographical area, such as a country, state, or custom boundary.
 #'
@@ -51,11 +51,11 @@ get_copernicus_10m <- function(aoi_sf, year = 2021, output_folder = ".") {
 
   # Load the WorldCover grid
   grid_url <- paste0(s3_url_prefix, "/esa_worldcover_grid.geojson")
-  grid <- st_read(grid_url)
+  grid <- sf::st_read(grid_url)
 
   # Reproject the AOI to match the CRS of the grid
-  grid_crs <- st_crs(grid)
-  aoi_sf <- st_transform(aoi_sf, crs = grid_crs)
+  grid_crs <- sf::st_crs(grid)
+  aoi_sf <- sf::st_transform(aoi_sf, crs = grid_crs)
 
   # Get grid tiles intersecting the AOI
   intersecting_tiles <- st_intersects(grid, aoi_sf, sparse = FALSE)
@@ -69,7 +69,7 @@ get_copernicus_10m <- function(aoi_sf, year = 2021, output_folder = ".") {
   version <- ifelse(year == 2020, "v100", "v200")
 
   # Prepare the progress bar
-  pb <- progress_bar$new(
+  pb <- progress::progress_bar$new(
     format = "  downloading [:bar] :percent eta: :eta",
     total = nrow(tiles),
     clear = FALSE,

@@ -53,7 +53,9 @@ Make a map
 
 ``` r
 ggplot() +
-  geom_sf(data = h3_grid_nc)
+  theme_minimal() +
+  geom_sf(data = nc, color = "blue", linewidth = 0.5) +
+  geom_sf(data = h3_grid_nc, alpha = 0.4, color = "coral", linewidth = 0.5)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

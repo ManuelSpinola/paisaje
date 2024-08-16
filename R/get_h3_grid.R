@@ -52,22 +52,22 @@ get_h3_grid <- function(sf_object, resolution = 7) {
   }
 
   # Ensure the sf object is in the correct CRS (WGS84)
-  sf_object <- st_transform(sf_object, 4326)
+  sf_object <- sf::st_transform(sf_object, 4326)
 
   # Get the bounding box of the sf object
-  bbox <- st_bbox(sf_object)
+  bbox <- sf::st_bbox(sf_object)
 
   # Create a polygon from the bounding box
-  bbox_poly <- st_as_sfc(st_bbox(sf_object))
+  bbox_poly <- sf::st_as_sfc(st_bbox(sf_object))
 
   # Get H3 hexagons for the bounding box
-  h3_hexagons <- polygon_to_cells(bbox_poly, res = resolution)
+  h3_hexagons <- h3jsr::polygon_to_cells(bbox_poly, res = resolution)
 
   # Convert H3 hexagons to sf object
-  h3_sf <- cell_to_polygon(h3_hexagons)
+  h3_sf <- h3jsr::cell_to_polygon(h3_hexagons)
 
   # Intersect H3 hexagons with the original sf object
-  h3_intersect <- st_intersects(h3_sf, sf_object)
+  h3_intersect <- sf::st_intersects(h3_sf, sf_object)
 
   # Keep only the hexagons that intersect with the sf object
   h3_grid <- h3_sf[lengths(h3_intersect) > 0, ]

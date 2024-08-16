@@ -10,7 +10,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-7839-1908"))
 Maintainer: The package maintainer <mspinola10@gmail.com>
 Description: This package contains functions to perform landscape analysis
-    Some of the functions allow to get data for landscape analysis.
+    Some of the functions allows to get data for landscape analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

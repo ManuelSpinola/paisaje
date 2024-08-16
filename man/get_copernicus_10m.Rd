@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_copernicus_10m.R
 \name{get_copernicus_10m}
 \alias{get_copernicus_10m}
-\title{Download nightlight data}
+\title{Download land cover data}
 \usage{
-get_copernicus_1pm(aoi_sf, year = 2021, output_folder = ".")
+get_copernicus_10m(aoi_sf, year = 2021, output_folder = ".")
 }
 \arguments{
-\item{sf_object}{(\code{character}) an sf_object which defines
+\item{aoi_sf}{(\code{character}) an sf_object which defines
 the area of interest (AOI). an sf object can represent any
 geographical area, such as a country, state, or custom boundary.}
 
