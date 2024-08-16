@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# paisaje
+# paisaje <img align="right" width="180" src="man/figures/paisaje_logo.png">
 
 <!-- badges: start -->
 <!-- badges: end -->

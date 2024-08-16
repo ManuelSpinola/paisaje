@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# paisaje
+# paisaje <img align="right" width="180" src="man/figures/paisaje_logo.png">
 
 <!-- badges: start -->
 <!-- badges: end -->
