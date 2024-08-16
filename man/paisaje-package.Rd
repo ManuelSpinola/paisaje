@@ -15,4 +15,8 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Manuel Spínola \email{mspinola10@gmail.com} (\href{https://orcid.org/0000-0002-7839-1908}{ORCID})
+
+}
 \keyword{internal}

@@ -3,7 +3,9 @@
 #'
 #' @title Create an H3 grid for a spatial object
 #'
-#' @description This function allows you to create an H3 grid for a specific region.
+#' @description
+#' This function allows you to create an H3 grid for a specific
+#'  region.
 #'
 #' This function is a wrapper of functions from the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
 #'
@@ -22,22 +24,28 @@
 #' @details
 #' \href{https://h3geo.org}{H3, a hexagonal hierarchical geospatial indexing system}
 #'
+#' @export
 #'
 #' @examples
 #'
-#' Assuming you have an sf object called 'my_sf_object'
-#' h3_grid_sf <- get_h3_grid(my_sf_object, resolution = 7)
+#' library(sf)
 #'
-#' @export
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#'
+#' h3_grid_sf <- get_h3_grid(nc, resolution = 7)
+#'
+#'
 
 library(sf)
 library(h3jsr)
 library(dplyr)
 
 get_h3_grid <- function(sf_object, resolution = 7) {
+
   # Load the necessary packages
   library(sf)
   library(h3jsr)
+
   # Check if the input is an sf object
   if (!inherits(sf_object, "sf")) {
     stop("Input must be an sf object")

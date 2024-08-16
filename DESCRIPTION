@@ -2,7 +2,12 @@ Package: paisaje
 Type: Package
 Title: Tools for landscape analysis
 Version: 0.1.0
-Author: Manuel Spínola
+Authors@R: 
+  person(given = "Manuel",
+           family = "Spínola",
+           role = c("aut", "cre"),
+           email = "mspinola10@gmail.com",
+           comment = c(ORCID = "0000-0002-7839-1908"))
 Maintainer: The package maintainer <mspinola10@gmail.com>
 Description: This package contains functions to perform landscape analysis
     Some of the functions allow to get data for landscape analysis.
@@ -15,4 +20,5 @@ Imports:
     sf,
     h3jsr,
     rvest
+    
 

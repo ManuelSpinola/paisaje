@@ -1,5 +1,4 @@
 ---
-title: "paisaje: tools for landscape analysis"
 output: github_document
 ---
 

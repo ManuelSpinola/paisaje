@@ -1,5 +1,3 @@
-paisaje: tools for landscape analysis
-================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
