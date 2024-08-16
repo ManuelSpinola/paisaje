@@ -19,6 +19,8 @@ URL: https://manuelspinola.github.io/paisaje/
 Imports:
     sf,
     h3jsr,
-    rvest
+    rvest,
+    httr,
+    progress
     
 

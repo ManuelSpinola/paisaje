@@ -3,7 +3,7 @@ citHeader("To cite paisaje in publications use:")
 bibentry(
   bibtype  = "Manual",
   title    = "paisaje",
-  author   = "Manuel Spínola",
+  author   =  person("Manuel", "Spínola"),
   year     = "2024",
   note     = "version 0.1.0",
   url      = "https://manuelspinola.github.io/paisaje/"
