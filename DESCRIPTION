@@ -22,5 +22,11 @@ Imports:
     rvest,
     httr,
     progress
+Depends:
+    sf,
+    h3jsr,
+    rvest,
+    httr,
+    progress
     
 
