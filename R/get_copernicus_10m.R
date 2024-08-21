@@ -23,6 +23,18 @@
 #' will be saved. The default value for output_folder is ".",
 #' which represents the current working directory.
 #'
+#' @references
+#' Zanaga, D., Van De Kerchove, R., Daems, D., De Keersmaecker,
+#'  W., Brockmann, C., Kirches, G., Wevers, J., Cartus, O.,
+#'  Santoro, M., Fritz, S., Lesiv, M., Herold, M., Tsendbazar,
+#'  N.E., Xu, P., Ramoino, F., Arino, O., 2022. ESA WorldCover
+#'  10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
+#'
+#' ESA WorldCover project / Contains modified Copernicus
+#' Sentinel data (2021) processed by ESA WorldCover consortium
+#'
+#' \href{https://worldcover2021.esa.int/}{ESA WorldCover 2021}
+#'
 #' @export
 #'
 #' @examples

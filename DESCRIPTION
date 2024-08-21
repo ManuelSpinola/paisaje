@@ -18,12 +18,14 @@ RoxygenNote: 7.3.2
 URL: https://manuelspinola.github.io/paisaje/
 Imports:
     sf,
+    terra,
     h3jsr,
     rvest,
     httr,
     progress
 Depends:
     sf,
+    terra,
     h3jsr,
     rvest,
     httr,

@@ -72,6 +72,8 @@ get_h3_grid <- function(sf_object, resolution = 7) {
   # Keep only the hexagons that intersect with the sf object
   h3_grid <- h3_sf[lengths(h3_intersect) > 0, ]
 
+  h3_grid <- st_as_sf(h3_grid)
+
   return(h3_grid)
 }
 
