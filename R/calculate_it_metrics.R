@@ -3,12 +3,28 @@
 #'
 #' @title Calculate information theory landscape metrics
 #'
+#' @description
+#' This function allow to calculate information theory
+#' landscape metrics
+#'
+#'
 #' @param landscape_raster A categorical raster object: SpatRaster.
 #' @param aoi_sf The spatial area of interest as an sf object.
 #'
 #' @return An sf object
 #'
+#' @note This is a wrapper of the function "sample_lsm" from the
+#'  landscapemetrics package (see References)
+#'
 #' @export
+#'
+#' @references Hesselbarth, M.H.K., Sciaini, M., With, K.A.,
+#' Wiegand, K., Nowosad, J. 2019. landscapemetrics: an
+#' open‐source R tool to calculate landscape metrics.
+#' Ecography, 42: 1648-1657 (v2.1.4).
+#'
+#' \href{https://r-spatialecology.github.io/landscapemetrics/articles/new_metrics.html}{Information theory-based framework for the analysis of landscape patterns}
+#'
 #'
 #' @examples
 #'

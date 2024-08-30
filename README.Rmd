@@ -50,7 +50,7 @@ Let's bring an sf object
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
-Create an h3 grid of resolution 5
+Create an h3 grid of resolution 4
 
 ```{r}
 #| message: false

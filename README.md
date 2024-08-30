@@ -43,7 +43,7 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 #> Geodetic CRS:  NAD27
 ```
 
-Create an h3 grid of resolution 5
+Create an h3 grid of resolution 4
 
 ``` r
 h3_grid_nc <- get_h3_grid(nc, resolution = 4)
