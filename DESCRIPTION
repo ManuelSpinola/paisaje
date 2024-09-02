@@ -22,13 +22,10 @@ Imports:
     h3jsr,
     rvest,
     httr,
+    landscapemetrics,
+    spocc,
     progress
 Depends:
-    sf,
-    terra,
-    h3jsr,
-    rvest,
-    httr,
-    progress
+    ggplot2
     
 

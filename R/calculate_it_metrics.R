@@ -1,15 +1,20 @@
 #'
 #' @name calculate_it_metrics
 #'
-#' @title Calculate information theory landscape metrics
+#' @title Calculate 5 information theory landscape metrics
 #'
 #' @description
-#' This function allow to calculate information theory
+#' This function allow to calculate 5 information theory
 #' landscape metrics
 #'
 #'
 #' @param landscape_raster A categorical raster object: SpatRaster.
 #' @param aoi_sf The spatial area of interest as an sf object.
+#'
+#' @details
+#'
+#' Calculate the landscape metrics: condent, ent, joinent,
+#' mutinf, and relmutinf.
 #'
 #' @return An sf object
 #'
@@ -22,6 +27,11 @@
 #' Wiegand, K., Nowosad, J. 2019. landscapemetrics: an
 #' open‐source R tool to calculate landscape metrics.
 #' Ecography, 42: 1648-1657 (v2.1.4).
+#'
+#' Nowosad J., TF Stepinski. 2019. Information theory as a
+#' consistent framework for quantification and classification
+#' of landscape patterns.
+#' https://doi.org/10.1007/s10980-019-00830-x
 #'
 #' \href{https://r-spatialecology.github.io/landscapemetrics/articles/new_metrics.html}{Information theory-based framework for the analysis of landscape patterns}
 #'
