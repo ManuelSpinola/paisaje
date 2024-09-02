@@ -36,10 +36,6 @@
 #'
 #'
 
-library(sf)
-library(h3jsr)
-library(dplyr)
-
 get_h3_grid <- function(sf_object, resolution = 7) {
 
   # Load the necessary packages

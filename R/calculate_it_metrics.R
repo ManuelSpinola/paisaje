@@ -7,6 +7,7 @@
 #' This function allow to calculate 5 information theory
 #' landscape metrics
 #'
+#' @usage calcluate_it_metrics(landscape_raster, aoi_sf)
 #'
 #' @param landscape_raster A categorical raster object: SpatRaster.
 #' @param aoi_sf The spatial area of interest as an sf object.

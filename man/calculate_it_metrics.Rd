@@ -3,6 +3,9 @@
 \name{calculate_it_metrics}
 \alias{calculate_it_metrics}
 \title{Calculate 5 information theory landscape metrics}
+\usage{
+calcluate_it_metrics(landscape_raster, aoi_sf)
+}
 \arguments{
 \item{landscape_raster}{A categorical raster object: SpatRaster.}
 
