@@ -31,7 +31,7 @@
 #'
 
 
-get_records_by_hexagon <- function(species_name, aoi_sf, res = 7,
+get_records_by_hexagon <- function(species_name, aoi_sf, res = NULL,
                                    providers = NULL) {
 
   library(sf)
