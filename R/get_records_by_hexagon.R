@@ -31,11 +31,14 @@
 #'
 
 
-get_records_by_hexagon <- function(species_name, aoi_sf, res = NULL,
+get_records_by_hexagon <- function(species_name,
+                                   aoi_sf,
+                                   res = NULL,
                                    providers = NULL) {
 
   library(sf)
-  library(dplyr)
+  library(h3jsr)
+  library(spocc)
 
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
@@ -43,12 +46,12 @@ get_records_by_hexagon <- function(species_name, aoi_sf, res = NULL,
   }
 
   # Ensure that the AOI has a valid CRS
-  if (is.na(sf::st_crs(aoi_sf))) {
+  if (is.na(st_crs(aoi_sf))) {
     stop("The AOI must have a valid CRS.")
   }
 
   # Transform the AOI to WGS84 if necessary
-  if (sf::st_crs(aoi_sf)$epsg != 4326) {
+  if (st_crs(aoi_sf)$epsg != 4326) {
     aoi_sf <- sf::st_transform(aoi_sf, 4326)
   }
 
@@ -62,11 +65,7 @@ get_records_by_hexagon <- function(species_name, aoi_sf, res = NULL,
   bbox <- sf::st_bbox(aoi_sf)
 
   # Obtain species occurrence data using the spocc package with bbox and verbose output
-  species_data <- spocc::occ(query = species_name,
-                             from = providers,
-                             geometry = bbox,
-                             has_coords = TRUE,
-                             limit = 100000)
+  species_data <- spocc::occ(query = species_name, from = providers, geometry = bbox, has_coords = TRUE, limit = 100000)
 
   # Extract GBIF data
   gbif_data <- spocc::occ2df(species_data)
@@ -79,29 +78,13 @@ get_records_by_hexagon <- function(species_name, aoi_sf, res = NULL,
   }
 
   # Convert the GBIF data to an sf object using the correct columns for latitude and longitude
-  gbif_sf <- sf::st_as_sf(gbif_data,
-                          coords = c("longitude", "latitude"),
-                          crs = 4326)
+  gbif_sf <- sf::st_as_sf(gbif_data, coords = c("longitude", "latitude"), crs = 4326)
 
-  # Perform a spatial join to count the number of records in each hexagon
-  hex_count <- sf::st_join(hexagons,
-                           gbif_sf,
-                           join = st_intersects) |>
-    dplyr::group_by(h3_address) |>
-    dplyr::summarize(record_count = n()) |>
-    dplyr::ungroup()
+  # Intersection (first argument map, then points)
+  inter <- sf::st_intersects(hexagons, gbif_sf)
 
-  # Ensure hexagons with no records get a count of 0 using st_join
-  hexagons <- sf::st_join(hexagons,
-                          hex_count,
-                          join = st_equals)
-
-  # Remove any duplicated h3_address columns
-  hexagons <- hexagons |>
-    dplyr::select(-starts_with("h3_address.y")) |>
-    dplyr::rename(h3_address = h3_address.x)
-
-  hexagons$record_count <- ifelse(is.na(hexagons$record_count), 0, hexagons$record_count)
+  # Add point count to each polygon
+  hexagons$record_count <- lengths(inter)
 
   # Return the hexagonal grid with the record counts as an sf object
   return(hexagons)
