@@ -78,7 +78,9 @@ get_records_by_hexagon <- function(species_name,
   }
 
   # Convert the GBIF data to an sf object using the correct columns for latitude and longitude
-  gbif_sf <- sf::st_as_sf(gbif_data, coords = c("longitude", "latitude"), crs = 4326)
+  gbif_sf <- sf::st_as_sf(gbif_data,
+                          coords = c("longitude", "latitude"),
+                          crs = 4326)
 
   # Intersection (first argument map, then points)
   inter <- sf::st_intersects(hexagons, gbif_sf)
