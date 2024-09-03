@@ -15,7 +15,7 @@ You can install the development version of paisaje from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ManuelSpinola/crhexgrids")
+devtools::install_github("ManuelSpinola/paisaje")
 ```
 
 ## Example
