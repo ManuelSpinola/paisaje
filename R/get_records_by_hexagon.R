@@ -34,8 +34,6 @@
 get_records_by_hexagon <- function(species_name, aoi_sf, res = 7,
                                    providers = NULL) {
 
-  # Ensure necessary packages are loaded
-  library(spocc)
   library(sf)
   library(dplyr)
 
