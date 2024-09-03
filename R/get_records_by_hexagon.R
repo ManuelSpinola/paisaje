@@ -62,7 +62,11 @@ get_records_by_hexagon <- function(species_name, aoi_sf, res = 7,
   bbox <- sf::st_bbox(aoi_sf)
 
   # Obtain species occurrence data using the spocc package with bbox and verbose output
-  species_data <- spocc::occ(query = species_name, from = providers, geometry = bbox, has_coords = TRUE, limit = 100000)
+  species_data <- spocc::occ(query = species_name,
+                             from = providers,
+                             geometry = bbox,
+                             has_coords = TRUE,
+                             limit = 100000)
 
   # Extract GBIF data
   gbif_data <- spocc::occ2df(species_data)

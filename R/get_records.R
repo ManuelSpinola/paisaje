@@ -49,9 +49,11 @@ get_records <- function(species_name, aoi_sf, providers = NULL) {
   bbox <- sf::st_bbox(aoi_sf)
 
   # Obtain species occurrence data from specified providers
-  species_data <- spocc::occ(query = species_name, from = providers,
-                      geometry = bbox, has_coord = TRUE,
-                      limit = 100000)
+  species_data <- spocc::occ(query = species_name,
+                             from = providers,
+                             geometry = bbox,
+                             has_coords = TRUE,
+                             limit = 100000)
 
   # Convert occurrences to data frame
   df <- spocc::occ2df(species_data)
