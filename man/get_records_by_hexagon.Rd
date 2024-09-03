@@ -5,7 +5,7 @@
 \title{Download species records by hexagon of a hexagonal grid
 of a specified resolution}
 \usage{
-get_records_by_hexagon(species_name, aoi_sf, res = 7, providers = NULL)
+get_records_by_hexagon(species_name, aoi_sf, res = NULL, providers = NULL)
 }
 \arguments{
 \item{species_name}{(\code{character}) Species name.}
