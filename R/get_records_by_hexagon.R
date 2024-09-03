@@ -79,16 +79,22 @@ get_records_by_hexagon <- function(species_name, aoi_sf, res = 7,
   }
 
   # Convert the GBIF data to an sf object using the correct columns for latitude and longitude
-  gbif_sf <- sf::st_as_sf(gbif_data, coords = c("longitude", "latitude"), crs = 4326)
+  gbif_sf <- sf::st_as_sf(gbif_data,
+                          coords = c("longitude", "latitude"),
+                          crs = 4326)
 
   # Perform a spatial join to count the number of records in each hexagon
-  hex_count <- sf::st_join(hexagons, gbif_sf, join = st_intersects) |>
+  hex_count <- sf::st_join(hexagons,
+                           gbif_sf,
+                           join = st_intersects) |>
     dplyr::group_by(h3_address) |>
     dplyr::summarize(record_count = n()) |>
     dplyr::ungroup()
 
   # Ensure hexagons with no records get a count of 0 using st_join
-  hexagons <- sf::st_join(hexagons, hex_count, join = st_equals)
+  hexagons <- sf::st_join(hexagons,
+                          hex_count,
+                          join = st_equals)
 
   # Remove any duplicated h3_address columns
   hexagons <- hexagons |>

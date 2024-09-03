@@ -65,7 +65,9 @@ get_records <- function(species_name, aoi_sf, providers = NULL) {
   }
 
   # Convert the data frame to an sf object
-  df_sf <- sf::st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326)
+  df_sf <- sf::st_as_sf(df,
+                        coords = c("longitude", "latitude"),
+                        crs = 4326)
 
   # Ensure the geometry column is correctly set
   if (!"geometry" %in% colnames(df_sf)) {
