@@ -23,7 +23,7 @@ This function is wrapper of the occ function from the
 }
 \examples{
 
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 records <- get_records("Lynx rufus", nc, providers = c("gbif",
 "inat"))

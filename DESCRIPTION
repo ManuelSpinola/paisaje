@@ -17,7 +17,8 @@ LazyData: true
 RoxygenNote: 7.3.2
 URL: https://manuelspinola.github.io/paisaje/
 Imports:
-    tidyverse,
+    dplyr,
+    tidyr,
     sf,
     terra,
     h3jsr,
@@ -27,6 +28,7 @@ Imports:
     spocc,
     progress
 Depends:
-    ggplot2
+    ggplot2,
+    spDataLarge
     
 

@@ -27,15 +27,7 @@
 #'
 #' @export
 #'
-#' @examples
-#'
-#' input_raster = "copernicus_10m_non_categorical_raster.tif"
-#' output_raster = "copernicus_10m_categorical_raster.tif"
-#'
-#'
-#' create_cat_copernicus_10m(input_raster, output_raster)
-#'
-#'
+
 
 
 create_cat_copernicus_10m <- function(input_raster, output_raster = NULL) {

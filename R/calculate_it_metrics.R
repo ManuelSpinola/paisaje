@@ -7,7 +7,7 @@
 #' This function allow to calculate 5 information theory
 #' landscape metrics
 #'
-#' @usage calcluate_it_metrics(landscape_raster, aoi_sf)
+#' @usage calculate_it_metrics(landscape_raster, aoi_sf)
 #'
 #' @param landscape_raster A categorical raster object: SpatRaster.
 #' @param aoi_sf The spatial area of interest as an sf object.
@@ -42,7 +42,7 @@
 #' library(sf)
 #' library(spDataLarge)
 #'
-#' landscape_raster <- rast(system.file("raster/nlcd.tif",
+#' landscape_raster <- terra::rast(system.file("raster/nlcd.tif",
 #' package = "spDataLarge"))
 #'
 #' bbox <- st_bbox(landscape_raster) |>
@@ -57,18 +57,6 @@
 #'
 
 
-# Install and load necessary packages
-if (!requireNamespace("landscapemetrics", quietly = TRUE)) {
-  install.packages("landscapemetrics")
-}
-if (!requireNamespace("terra", quietly = TRUE)) {
-  install.packages("terra")
-}
-if (!requireNamespace("sf", quietly = TRUE)) {
-  install.packages("sf")
-}
-
-
 calculate_it_metrics <- function(landscape_raster, aoi_sf) {
   # Ensure the landscape raster is loaded as a SpatRaster object
   if (!inherits(landscape_raster, "SpatRaster")) {
@@ -81,14 +69,14 @@ calculate_it_metrics <- function(landscape_raster, aoi_sf) {
   }
 
   # Calculate landscape metrics
-  it_metrics <- sample_lsm(landscape_raster,
-                           aoi_sf,
-                           level = "landscape",
-                           type = "complexity metric")
+  it_metrics <- landscapemetrics::sample_lsm(landscape_raster,
+                                             aoi_sf,
+                                             level = "landscape",
+                                             type = "complexity metric")
 
   it_metrics_w <- it_metrics |>
-    distinct() |>
-    pivot_wider(id_cols = plot_id,
+    dplyr::distinct() |>
+    tidyr::pivot_wider(id_cols = plot_id,
                 names_from = metric,
                 values_from = value)
 

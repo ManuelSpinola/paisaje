@@ -20,16 +20,6 @@ A raster
 Create a categorical land cover raster from
  a land cover raster from copernicus 10m resolution
 }
-\examples{
-
-input_raster = "copernicus_10m_non_categorical_raster.tif"
-output_raster = "copernicus_10m_categorical_raster.tif"
-
-
-create_cat_copernicus_10m(input_raster, output_raster)
-
-
-}
 \references{
 Zanaga, D., Van De Kerchove, R., Daems, D., De Keersmaecker,
  W., Brockmann, C., Kirches, G., Wevers, J., Cartus, O.,

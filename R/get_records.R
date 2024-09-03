@@ -22,7 +22,7 @@
 #'
 #' @examples
 #'
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' records <- get_records("Lynx rufus", nc, providers = c("gbif",
 #' "inat"))
@@ -36,25 +36,25 @@ get_records <- function(species_name, aoi_sf, providers = NULL) {
   }
 
   # Ensure that the AOI has a valid CRS
-  if (is.na(st_crs(aoi_sf))) {
+  if (is.na(sf::st_crs(aoi_sf))) {
     stop("The AOI must have a valid CRS.")
   }
 
   # Transform the AOI to WGS84 if necessary
-  if (st_crs(aoi_sf)$epsg != 4326) {
-    aoi_sf <- st_transform(aoi_sf, 4326)
+  if (sf::st_crs(aoi_sf)$epsg != 4326) {
+    aoi_sf <- sf::st_transform(aoi_sf, 4326)
   }
 
   # Create a bounding box from the AOI
-  bbox <- st_bbox(aoi_sf)
+  bbox <- sf::st_bbox(aoi_sf)
 
   # Obtain species occurrence data from specified providers
-  species_data <- occ(query = species_name, from = providers,
+  species_data <- spocc::occ(query = species_name, from = providers,
                       geometry = bbox, has_coord = TRUE,
                       limit = 100000)
 
   # Convert occurrences to data frame
-  df <- occ2df(species_data)
+  df <- spocc::occ2df(species_data)
 
   # Check if there are any records returned
   if (nrow(df) == 0) {
@@ -63,15 +63,15 @@ get_records <- function(species_name, aoi_sf, providers = NULL) {
   }
 
   # Convert the data frame to an sf object
-  df_sf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326)
+  df_sf <- sf::st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326)
 
   # Ensure the geometry column is correctly set
   if (!"geometry" %in% colnames(df_sf)) {
-    df_sf <- st_set_geometry(df_sf, st_geometry(df_sf))
+    df_sf <- sf::st_set_geometry(df_sf, st_geometry(df_sf))
   }
 
   # Intersect with the AOI
-  df_sf_within_aoi <- st_intersection(df_sf, aoi_sf)
+  df_sf_within_aoi <- sf::st_intersection(df_sf, aoi_sf)
 
   return(df_sf_within_aoi)
 }

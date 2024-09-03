@@ -4,7 +4,7 @@
 \alias{calculate_it_metrics}
 \title{Calculate 5 information theory landscape metrics}
 \usage{
-calcluate_it_metrics(landscape_raster, aoi_sf)
+calculate_it_metrics(landscape_raster, aoi_sf)
 }
 \arguments{
 \item{landscape_raster}{A categorical raster object: SpatRaster.}
@@ -31,7 +31,7 @@ This is a wrapper of the function "sample_lsm" from the
 library(sf)
 library(spDataLarge)
 
-landscape_raster <- rast(system.file("raster/nlcd.tif",
+landscape_raster <- terra::rast(system.file("raster/nlcd.tif",
 package = "spDataLarge"))
 
 bbox <- st_bbox(landscape_raster) |>
