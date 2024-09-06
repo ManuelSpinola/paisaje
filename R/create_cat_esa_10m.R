@@ -1,7 +1,8 @@
 #'
-#' @name create_cat_copernicus_10m
+#' @name create_cat_esa_10m
 #'
-#' @title Create a categorical land cover raster
+#' @title Create a categorical land cover raster from
+#'  \href{https://esa-worldcover.org/en}{ESA WorldCover}
 #'
 #' @description Create a categorical land cover raster from
 #'  a land cover raster from copernicus 10m resolution
@@ -40,14 +41,14 @@
 #' With year either 2020 or 2021 for the WorldCover 2020
 #' and 2021 map, respectively.
 #'
-#' \href{https://worldcover2021.esa.int/}{ESA WorldCover 2021}
+#' \href{https://esa-worldcover.org/en}{ESA WorldCover}
 #'
 #' @export
 #'
 
 
 
-create_cat_copernicus_10m <- function(input_raster, output_raster = NULL) {
+create_cat_esa_10m <- function(input_raster, output_raster = NULL) {
 
   # Load the Copernicus land cover raster
   land_cover <- terra::rast(input_raster)

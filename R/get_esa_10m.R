@@ -1,5 +1,5 @@
 #'
-#' @name get_copernicus_10m
+#' @name get_esa_10m
 #'
 #' @title Download land cover data
 #'
@@ -7,7 +7,7 @@
 #' This function allows you to download land cover data from
 #'  the \href{https://esa-worldcover.org/en}{ESA WorldCover}.
 #'
-#' @usage get_copernicus_10m(aoi_sf, year = 2021, output_folder = ".")
+#' @usage get_esa_10m(aoi_sf, year = 2021, output_folder = ".")
 #'
 #' @param aoi_sf (\code{character}) an sf_object which defines
 #' the area of interest (AOI). an sf object can represent any
@@ -50,7 +50,7 @@
 #' With year either 2020 or 2021 for the WorldCover 2020
 #' and 2021 map, respectively.
 #'
-#' \href{https://worldcover2021.esa.int/}{ESA WorldCover 2021}
+#' \href{https://esa-worldcover.org/en}{ESA WorldCover}
 #'
 #' @export
 #'
@@ -60,11 +60,11 @@
 #'
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #'
-#' get_copernicus_10m(nc, year = 2021, output_folder = ".")
+#' get_esa_10m(nc, year = 2021, output_folder = ".")
 #'
 #'
 
-get_copernicus_10m <- function(aoi_sf, year = 2021, output_folder = ".") {
+get_esa_10m <- function(aoi_sf, year = NULL, output_folder = ".") {
 
   # Load the necessary packages
   library(sf)
@@ -120,5 +120,3 @@ get_copernicus_10m <- function(aoi_sf, year = 2021, output_folder = ".") {
 
   message("Download completed.")
 }
-
-
