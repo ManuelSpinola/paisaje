@@ -54,6 +54,8 @@
 #'
 #' @examples
 #'
+#' library(sf)
+#' library(terra)
 #'
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #' nc <- st_transform(nc, crs = 4326)
