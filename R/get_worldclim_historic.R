@@ -13,42 +13,34 @@
 #' designed to handle download issues with retry logic
 #' and customizable timeouts.
 #'
-#' @param var @param var A character string specifying the
+#' @param var A character string specifying the
 #' climate variable to download. Possible values are:
-#'
-#'   - `"tavg"`: Average temperature
-#'
-#'   - `"tmin"`: Minimum temperature
-#'
-#'   - `"tmax"`: Maximum temperature
-#'
-#'   - `"prec"`: Precipitation
-#'
-#'   - `"srad"`: Solar radiation
-#'
-#'   - `"wind"`: Wind speed
-#'
-#'   - `"vapr"`: Vapor pressure
-#'
-#'   - `"bio"`: Bioclimatic variables
+#'.  \itemize{
+#'     \item "tavg": Average temperature
+#'     \item "tmin": Minimum temperature
+#'     \item "tmax": Maximum temperature
+#'     \item "prec": Precipitation
+#'     \item "srad": Solar radiation
+#'     \item "wind": Wind speed
+#'     \item "vapr": Vapor pressure
+#'     \item "bio": Bioclimatic variables
+#'  }
 #'
 #' @param res A numeric value indicating the resolution of the
 #' data. Valid options are:
-#'
-#'   - `0.5`: 30 arc-seconds (~1 km)
-#'
-#'   - `2.5`: 2.5 arc-minutes (~5 km)
-#'
-#'   - `5`: 5 arc-minutes (~10 km)
-#'
-#'   - `10`: 10 arc-minutes (~20 km)
-#'
+#'   \itemize{
+#'     \item 0.5: 30 arc-seconds (~1 km)
+#'     \item 2.5: 2.5 arc-minutes (~5 km)
+#'     \item   5: 5 arc-minutes (~10 km)
+#'     \item  10: 10 arc-minutes (~20 km)
+#'  }
 #' @param aoi A spatial object representing the area of
 #'  interest. Can be an `sf` or `terra` vector.
 #' @param retries An integer specifying the number of times
 #'  to retry the download if it fails. Default is 3.
 #' @param timeout A numeric value specifying the maximum
-#'  time (in seconds) to wait for a server response. Default is 300 seconds.
+#'  time (in seconds) to wait for a server response. Default is
+#'  300 seconds.
 #'
 #' @return A `SpatRaster` object containing the downloaded
 #'  climate data, clipped to the specified AOI.
@@ -56,14 +48,16 @@
 #'
 #' @references
 #' Fick, Stephen E., and Robert J.
-#' Hijmans. "WorldClim 2: new 1-km spatial resolution climate surfaces for
-#' global land areas." \emph{International journal of climatology}
-#' 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
+#' Hijmans. "WorldClim 2: new 1-km spatial resolution climate
+#' surfaces for global land areas." \emph{International journal
+#' of climatology} 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 #'
 #' @examples
+#'
 #' nc <- st_read(system.file("shape/nc.shp", package="sf")) |>
 #' st_transform(4326)
-#' climate_raster <- download_worldclim_data_aoi(var =
+#'
+#' climate_historic <- get_worldclim_historic(var =
 #'  "tmin", res = 5, aoi = nc)
 #'
 #' @export
