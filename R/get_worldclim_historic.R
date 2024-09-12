@@ -13,10 +13,36 @@
 #' designed to handle download issues with retry logic
 #' and customizable timeouts.
 #'
-#' @param var A character string specifying the climate variable
-#'  to download. Options include "tavg", "tmin", "tmax", "prec", "srad", "wind", "vapr", "bio".
-#' @param res A numeric value specifying the resolution of
-#'  the data to download. Options are 0.5, 2.5, 5, or 10.
+#' @param var @param var A character string specifying the
+#' climate variable to download. Possible values are:
+#'
+#'   - `"tavg"`: Average temperature
+#'
+#'   - `"tmin"`: Minimum temperature
+#'
+#'   - `"tmax"`: Maximum temperature
+#'
+#'   - `"prec"`: Precipitation
+#'
+#'   - `"srad"`: Solar radiation
+#'
+#'   - `"wind"`: Wind speed
+#'
+#'   - `"vapr"`: Vapor pressure
+#'
+#'   - `"bio"`: Bioclimatic variables
+#'
+#' @param res A numeric value indicating the resolution of the
+#' data. Valid options are:
+#'
+#'   - `0.5`: 30 arc-seconds (~1 km)
+#'
+#'   - `2.5`: 2.5 arc-minutes (~5 km)
+#'
+#'   - `5`: 5 arc-minutes (~10 km)
+#'
+#'   - `10`: 10 arc-minutes (~20 km)
+#'
 #' @param aoi A spatial object representing the area of
 #'  interest. Can be an `sf` or `terra` vector.
 #' @param retries An integer specifying the number of times
