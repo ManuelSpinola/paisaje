@@ -54,8 +54,9 @@
 #'
 #' @examples
 #'
-#' nc <- st_read(system.file("shape/nc.shp", package="sf")) |>
-#' st_transform(4326)
+#'
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- st_transform(nc, crs = 4326)
 #'
 #' climate_historic <- get_worldclim_historic(var =
 #'  "tmin", res = 5, aoi = nc)
@@ -113,15 +114,15 @@ get_worldclim_historic <- function(var = "bio", res = 10,
 
   # Load raster data using terra
   raster_files <- list.files(unzip_dir, pattern = "\\.tif$", full.names = TRUE)
-  climate_rasters <- rast(raster_files)
+  climate_rasters <- terra::rast(raster_files)
 
   # If AOI is provided, crop and mask the data
   if (!is.null(aoi)) {
     if (inherits(aoi, "sf")) {
-      aoi <- vect(aoi)
+      aoi <- terra::vect(aoi)
     }
-    climate_rasters <- crop(climate_rasters, aoi)
-    climate_rasters <- mask(climate_rasters, aoi)
+    climate_rasters <- terra::crop(climate_rasters, aoi)
+    climate_rasters <- terra::mask(climate_rasters, aoi)
   }
 
   # Return the terra raster object

@@ -98,8 +98,11 @@
 #'
 #' @examples
 #'
-#' nc <- st_read(system.file("shape/nc.shp", package="sf")) |>
-#' st_transform(4326)
+#' library(sf)
+#' library(terra)
+#'
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- st_transform(nc, crs = 4326)
 #'
 #' climate_future <- get_worldclim_future(var = "tmin",
 #' res = "10m", scenario = "585", time_range = "2021-2040",
@@ -166,15 +169,15 @@ get_worldclim_future <- function(var = "bio",
   }
 
   # Load the raster data using terra
-  climate_raster <- rast(temp_file)
+  climate_raster <- terra::rast(temp_file)
 
   # If AOI is provided, crop and mask the data
   if (!is.null(aoi)) {
     if (inherits(aoi, "sf")) {
-      aoi <- vect(aoi)
+      aoi <- terra::vect(aoi)
     }
-    climate_raster <- crop(climate_raster, aoi)
-    climate_raster <- mask(climate_raster, aoi)
+    climate_raster <- terra::crop(climate_raster, aoi)
+    climate_raster <- terra::mask(climate_raster, aoi)
   }
 
   # Return the terra raster object

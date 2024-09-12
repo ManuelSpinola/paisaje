@@ -112,8 +112,11 @@ clipped to a specific area of interest (AOI) if provided.
 }
 \examples{
 
-nc <- st_read(system.file("shape/nc.shp", package="sf")) |>
-st_transform(4326)
+library(sf)
+library(terra)
+
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_transform(nc, crs = 4326)
 
 climate_future <- get_worldclim_future(var = "tmin",
 res = "10m", scenario = "585", time_range = "2021-2040",

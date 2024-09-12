@@ -61,8 +61,9 @@ and customizable timeouts.
 }
 \examples{
 
-nc <- st_read(system.file("shape/nc.shp", package="sf")) |>
-st_transform(4326)
+
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_transform(nc, crs = 4326)
 
 climate_historic <- get_worldclim_historic(var =
  "tmin", res = 5, aoi = nc)
