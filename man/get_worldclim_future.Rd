@@ -6,7 +6,7 @@
 made by worldclim version 2.1.}
 \usage{
 get_worldclim_future(
-  var = "bio",
+  var = "bioc",
   res = "30s",
   scenario = "585",
   time_range = "2021-2040",
@@ -20,13 +20,13 @@ get_worldclim_future(
 \item{var}{Character. Climate variable to download. Available
 options are:
   \itemize{
-    \item "bio" - Bioclimatic variables (19 variables)
+    \item "bioc" - Bioclimatic variables (19 variables)
     \item "prec" - Precipitation
     \item "tavg" - Average temperature
     \item "tmin" - Minimum temperature
     \item "tmax" - Maximum temperature
   }
-  Default is "bio".}
+  Default is "bioc".}
 
 \item{res}{Character. Spatial resolution of the data.
 Available options are:

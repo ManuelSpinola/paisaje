@@ -14,13 +14,13 @@
 #' @param var Character. Climate variable to download. Available
 #' options are:
 #'   \itemize{
-#'     \item "bio" - Bioclimatic variables (19 variables)
+#'     \item "bioc" - Bioclimatic variables (19 variables)
 #'     \item "prec" - Precipitation
 #'     \item "tavg" - Average temperature
 #'     \item "tmin" - Minimum temperature
 #'     \item "tmax" - Maximum temperature
 #'   }
-#'   Default is "bio".
+#'   Default is "bioc".
 #' @param res Character. Spatial resolution of the data.
 #' Available options are:
 #'   \itemize{
@@ -115,7 +115,7 @@
 #'
 
 
-get_worldclim_future <- function(var = "bio",
+get_worldclim_future <- function(var = "bioc",
                                  res = "30s",
                                  scenario = "585",
                                  time_range = "2021-2040",
@@ -132,7 +132,7 @@ get_worldclim_future <- function(var = "bio",
                   'MRI-ESM2-0', 'UKESM1-0-LL')
 
   # Validate inputs
-  stopifnot(var %in% c("bio", "prec", "tavg", "tmin", "tmax"))
+  stopifnot(var %in% c("bioc", "prec", "tavg", "tmin", "tmax"))
   stopifnot(res %in% c("30s", "2.5m", "5m", "10m"))
   stopifnot(scenario %in% c("126", "245", "370", "585"))  # SSP scenarios
   stopifnot(time_range %in% c("2021-2040", "2041-2060", "2061-2080", "2081-2100"))  # Available time ranges
