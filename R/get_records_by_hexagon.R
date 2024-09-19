@@ -8,14 +8,22 @@
 #' This function is wrapper of the occ function from the
 #'  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 #'
-#' @param species_name (\code{character}) Species name.
-#' @param aoi_sf (\code{character}) The spatial area of interest as an sf object.
-#' @param res (\code{numeric}) The option for the resolution of image to
-#' download. Should between 1 and 16.
-#' @param providers (\code{character}) The providers argument allows you to specify
-#' multiple data sources (e.g., "gbif", "inat", etc.).
+#' @param species_name Character. The scientific name of the
+#' species to search for.
+#' @param aoi_sf `sf` object. The area of interest as a
+#' simple features (sf) object. Must have a valid CRS.
+#' @param res Integer. The H3 resolution level for the
+#' hexagonal grid. Higher values create smaller hexagons.
+#' @param providers Character vector. Data providers to
+#' query for species occurrence data (e.g., `c("gbif", "inat")`).
+#' See the `spocc` package documentation for options.
+#' @param remove_duplicates Logical. If `TRUE`, removes
+#' duplicate records based on geometry to avoid counting
+#' the same location multiple times. Default is `FALSE`.
 #'
-#' @return An sf object
+#' @return An `sf` object representing the hexagonal grid
+#' with a `record_count` column indicating the number of
+#' species occurrence records in each hexagon.
 #'
 #' @export
 #'

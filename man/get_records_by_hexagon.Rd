@@ -5,21 +5,36 @@
 \title{Download species records by hexagon of a hexagonal grid
 of a specified resolution}
 \usage{
-get_records_by_hexagon(species_name, aoi_sf, res = NULL, providers = NULL)
+get_records_by_hexagon(
+  species_name,
+  aoi_sf,
+  res = NULL,
+  providers = NULL,
+  remove_duplicates = FALSE
+)
 }
 \arguments{
-\item{species_name}{(\code{character}) Species name.}
+\item{species_name}{Character. The scientific name of the
+species to search for.}
 
-\item{aoi_sf}{(\code{character}) The spatial area of interest as an sf object.}
+\item{aoi_sf}{`sf` object. The area of interest as a
+simple features (sf) object. Must have a valid CRS.}
 
-\item{res}{(\code{numeric}) The option for the resolution of image to
-download. Should between 1 and 16.}
+\item{res}{Integer. The H3 resolution level for the
+hexagonal grid. Higher values create smaller hexagons.}
 
-\item{providers}{(\code{character}) The providers argument allows you to specify
-multiple data sources (e.g., "gbif", "inat", etc.).}
+\item{providers}{Character vector. Data providers to
+query for species occurrence data (e.g., `c("gbif", "inat")`).
+See the `spocc` package documentation for options.}
+
+\item{remove_duplicates}{Logical. If `TRUE`, removes
+duplicate records based on geometry to avoid counting
+the same location multiple times. Default is `FALSE`.}
 }
 \value{
-An sf object
+An `sf` object representing the hexagonal grid
+with a `record_count` column indicating the number of
+species occurrence records in each hexagon.
 }
 \description{
 This function is wrapper of the occ function from the
