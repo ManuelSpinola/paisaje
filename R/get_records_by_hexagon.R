@@ -34,11 +34,12 @@
 get_records_by_hexagon <- function(species_name,
                                    aoi_sf,
                                    res = NULL,
-                                   providers = NULL) {
+                                   providers = NULL,
+                                   remove_duplicates = FALSE) {
 
   library(sf)
-  library(h3jsr)
   library(spocc)
+  library(h3jsr)
 
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
@@ -52,23 +53,23 @@ get_records_by_hexagon <- function(species_name,
 
   # Transform the AOI to WGS84 if necessary
   if (st_crs(aoi_sf)$epsg != 4326) {
-    aoi_sf <- sf::st_transform(aoi_sf, 4326)
+    aoi_sf <- st_transform(aoi_sf, 4326)
   }
 
   # Convert AOI to H3 cells
-  h3_cells <- h3jsr::polygon_to_cells(aoi_sf, res = res)
+  h3_cells <- polygon_to_cells(aoi_sf, res = res)
 
   # Convert the H3 cells back to polygons and create an sf object
-  hexagons <- h3jsr::cell_to_polygon(h3_cells, simple = FALSE)
+  hexagons <- cell_to_polygon(h3_cells, simple = FALSE)
 
   # Create a bounding box from the AOI
-  bbox <- sf::st_bbox(aoi_sf)
+  bbox <- st_bbox(aoi_sf)
 
   # Obtain species occurrence data using the spocc package with bbox and verbose output
-  species_data <- spocc::occ(query = species_name, from = providers, geometry = bbox, has_coords = TRUE, limit = 100000)
+  species_data <- occ(query = species_name, from = providers, geometry = bbox, has_coords = TRUE, limit = 100000)
 
   # Extract GBIF data
-  gbif_data <- spocc::occ2df(species_data)
+  gbif_data <- occ2df(species_data)
 
   # Check if there are any records returned
   if (nrow(gbif_data) == 0) {
@@ -78,9 +79,12 @@ get_records_by_hexagon <- function(species_name,
   }
 
   # Convert the GBIF data to an sf object using the correct columns for latitude and longitude
-  gbif_sf <- sf::st_as_sf(gbif_data,
-                          coords = c("longitude", "latitude"),
-                          crs = 4326)
+  gbif_sf <- st_as_sf(gbif_data, coords = c("longitude", "latitude"), crs = 4326)
+
+  # Optionally remove duplicate geometries
+  if (remove_duplicates) {
+    gbif_sf <- gbif_sf %>% dplyr::distinct(geometry, .keep_all = TRUE)
+  }
 
   # Intersection (first argument map, then points)
   inter <- sf::st_intersects(hexagons, gbif_sf)
