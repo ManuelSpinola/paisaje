@@ -60,7 +60,7 @@ get_h3_grid <- function(sf_object, resolution = 7) {
   h3_hexagons <- h3jsr::polygon_to_cells(bbox_poly, res = resolution)
 
   # Convert H3 hexagons to sf object
-  h3_sf <- h3jsr::cell_to_polygon(h3_hexagons)
+  h3_sf <- h3jsr::cell_to_polygon(h3_hexagons, simple = FALSE)
 
   # Intersect H3 hexagons with the original sf object
   h3_intersect <- sf::st_intersects(h3_sf, sf_object)
