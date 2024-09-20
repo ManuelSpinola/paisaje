@@ -59,9 +59,6 @@ valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if
 }
 \examples{
 
-Get species records within the AOI using a hexagonal grid
-of resolution 6
-
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
