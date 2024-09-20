@@ -2,22 +2,41 @@
 % Please edit documentation in R/get_records.R
 \name{get_records}
 \alias{get_records}
-\title{Download species occurrences from different sources}
+\title{Retrieve Species Occurrence Records Within an Area
+of Interest}
 \usage{
-get_records(species_name, aoi_sf, providers = NULL)
+get_records(species_name,
+aoi_sf,
+providers = NULL,
+remove_duplicates = FALSE))
 }
 \arguments{
-\item{species_name}{Species name.}
+\item{species_name}{Character. The scientific name of the
+species to search for.}
 
-\item{aoi_sf}{The spatial area of interest as an sf object.}
+\item{aoi_sf}{`sf` object. The area of interest as a simple
+features (sf) object. Must have a valid CRS.}
 
-\item{providers}{The providers argument allows you to specify
-multiple data sources (e.g., "gbif", "inat", etc.).}
+\item{providers}{Character vector. Data providers to query
+for species occurrence data (e.g., `c("gbif", "inat")`).
+See the `spocc` package documentation for available options.}
+
+\item{remove_duplicates}{Logical. If `TRUE`, removes
+duplicate records based on geometry to avoid counting the same
+location multiple times. Default is `FALSE`.}
 }
 \value{
-An sf object
+An `sf` object containing species occurrence records
+that intersect with the AOI.
+
+An `sf` object containing species occurrence records
+that intersect with the AOI.
 }
 \description{
+This function retrieves species occurrence records from
+specified data providers within a given area of interest (AOI).
+The records are returned as an `sf` object, optionally with
+duplicates removed based on geometry.
 This function is wrapper of the occ function from the
  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 }

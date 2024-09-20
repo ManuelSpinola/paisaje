@@ -1,20 +1,24 @@
 #'
 #' @name get_h3_grid
 #'
-#' @title Create an H3 grid for a spatial object
+#' @title Generate an H3 Hexagonal Grid for an sf Object
 #'
 #' @description
-#' This function allows you to create an H3 grid for a specific
-#'  region.
+#' This function generates a hexagonal grid of H3 cells at a
+#' specified resolution level that intersect with a given `sf`
+#' object. The function allows for optional removal of duplicate
+#' hexagons based on geometry.
 #'
-#' This function is a wrapper of functions from the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
+#' This function is a wrapper of functions from
+#' the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
 #'
 #' @usage get_h3_grid(sf_object, resolution)
 #'
-#' @param sf_object (\code{character}) An sf_object where to create the grid.
-#'
-#' @param resolution (\code{numeric}) The option for the resolution of image to
-#' download. Should between 1 and 16.
+#' @param sf_object `sf` object. The spatial object for which the
+#' H3 grid will be generated. Must have a valid CRS.
+#' @param resolution Integer. The H3 resolution level for the
+#' hexagonal grid. Higher values create smaller hexagons.
+#' Default is 7. It should between 1 and 16
 #'
 #' @references
 #' O'Brien L (2023). h3jsr: Access Uber's H3 Library. R
