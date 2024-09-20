@@ -2,8 +2,7 @@
 % Please edit documentation in R/get_records_by_hexagon.R
 \name{get_records_by_hexagon}
 \alias{get_records_by_hexagon}
-\title{Download species records by hexagon of a hexagonal grid
-of a specified resolution}
+\title{Get Species Records by Hexagon Grid}
 \usage{
 get_records_by_hexagon(
   species_name,
@@ -37,6 +36,13 @@ with a `record_count` column indicating the number of
 species occurrence records in each hexagon.
 }
 \description{
+This function retrieves species occurrence data
+within a specified area of interest (AOI) and aggregates
+the records into hexagonal grid cells. The function uses
+the H3 spatial index to generate hexagonal cells at a
+specified resolution, counts the number of occurrence
+records within each hexagon, and returns an `sf` object
+with the record counts.
 This function is wrapper of the occ function from the
  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 }
