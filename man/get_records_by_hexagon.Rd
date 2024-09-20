@@ -4,13 +4,8 @@
 \alias{get_records_by_hexagon}
 \title{Get Species Records by Hexagonal Grid}
 \usage{
-get_records_by_hexagon(
-  species_name,
-  aoi_sf,
-  res = NULL,
-  providers = NULL,
-  remove_duplicates = FALSE
-)
+get_records_by_hexagon(species_name, aoi_sf, res = NULL,
+providers = NULL, remove_duplicates = FALSE)
 }
 \arguments{
 \item{species_name}{Character. The scientific name of the
@@ -62,7 +57,7 @@ valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
-providers = c("gbif", "inat"))
+providers = c("gbif", "inat"), remove_duplicates = FALSE)
 
 
 

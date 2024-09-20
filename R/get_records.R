@@ -13,9 +13,7 @@
 #'  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 #'
 #'
-#' @usage get_records(species_name,
-#' aoi_sf,
-#' providers = NULL,
+#' @usage get_records(species_name, aoi_sf, providers = NULL,
 #' remove_duplicates = FALSE))
 #'
 #' @param species_name Character. The scientific name of the

@@ -5,9 +5,7 @@
 \title{Retrieve Species Occurrence Records Within an Area
 of Interest}
 \usage{
-get_records(species_name,
-aoi_sf,
-providers = NULL,
+get_records(species_name, aoi_sf, providers = NULL,
 remove_duplicates = FALSE))
 }
 \arguments{

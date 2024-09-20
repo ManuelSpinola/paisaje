@@ -14,6 +14,9 @@
 #' This function is wrapper of the occ function from the
 #'  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 #'
+#' @usage get_records_by_hexagon(species_name, aoi_sf, res = NULL,
+#' providers = NULL, remove_duplicates = FALSE)
+#'
 #' @param species_name Character. The scientific name of the
 #' species to search for.
 #' @param aoi_sf `sf` object. The area of interest as a
@@ -50,7 +53,7 @@
 #' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
-#' providers = c("gbif", "inat"))
+#' providers = c("gbif", "inat"), remove_duplicates = FALSE)
 #'
 #'
 #'
@@ -69,12 +72,12 @@ get_records_by_hexagon <- function(species_name,
   }
 
   # Ensure that the AOI has a valid CRS
-  if (is.na(st_crs(aoi_sf))) {
+  if (is.na(sf::st_crs(aoi_sf))) {
     stop("The AOI must have a valid CRS.")
   }
 
   # Transform the AOI to WGS84 if necessary
-  if (st_crs(aoi_sf)$epsg != 4326) {
+  if (sf::st_crs(aoi_sf)$epsg != 4326) {
     aoi_sf <- sf::st_transform(aoi_sf, 4326)
   }
 

@@ -27,7 +27,7 @@ Imports:
     landscapemetrics,
     spocc,
     progress
-Depends:
+Suggests:
     ggplot2,
     spDataLarge
     
