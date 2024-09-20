@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_records_by_hexagon.R
 \name{get_records_by_hexagon}
 \alias{get_records_by_hexagon}
-\title{Get Species Records by Hexagon Grid}
+\title{Get Species Records by Hexagonal Grid}
 \usage{
 get_records_by_hexagon(
   species_name,
@@ -59,7 +59,7 @@ valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if
 }
 \examples{
 
-# Get species records within the AOI using a hexagonal grid
+Get species records within the AOI using a hexagonal grid
 of resolution 6
 
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
