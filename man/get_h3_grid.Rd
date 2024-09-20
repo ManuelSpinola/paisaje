@@ -17,8 +17,7 @@ Default is 7. It should between 1 and 16}
 \description{
 This function generates a hexagonal grid of H3 cells at a
 specified resolution level that intersect with a given `sf`
-object. The function allows for optional removal of duplicate
-hexagons based on geometry.
+object.
 
 This function is a wrapper of functions from
 the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
