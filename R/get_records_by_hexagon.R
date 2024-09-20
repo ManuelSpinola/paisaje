@@ -62,10 +62,6 @@ get_records_by_hexagon <- function(species_name,
                                    providers = NULL,
                                    remove_duplicates = FALSE) {
 
-  # Load the necessary packages
-  library(sf)
-  library(spocc)
-  library(h3jsr)
 
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {

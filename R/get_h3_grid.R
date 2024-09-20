@@ -42,9 +42,6 @@
 
 get_h3_grid <- function(sf_object, resolution = 7) {
 
-  # Load the necessary packages
-  library(sf)
-  library(h3jsr)
 
   # Check if the input is an sf object
   if (!inherits(sf_object, "sf")) {
