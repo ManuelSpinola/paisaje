@@ -31,6 +31,18 @@
 #' with a `record_count` column indicating the number of
 #' species occurrence records in each hexagon.
 #'
+#' @details
+#' The function performs the following steps:
+#' 1. Converts the area of interest to H3 cells at the specified resolution.
+#' 2. Queries species occurrence data within the bounding box of the AOI from specified providers.
+#' 3. Converts the species data into an `sf` object and optionally removes duplicate records based on geometry.
+#' 4. Counts the number of occurrence points that fall within each hexagon and adds this count to the hexagon grid.
+#'
+#' @note
+#' Ensure that the AOI is provided as an `sf` object with a
+#' valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if necessary.
+#'
+#'
 #' @export
 #'
 #' @examples
