@@ -35,6 +35,8 @@
 #'
 #' @examples
 #'
+#' # Get species records within the AOI using a hexagonal grid
+#' of resolution 6
 #'
 #' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
@@ -51,6 +53,7 @@ get_records_by_hexagon <- function(species_name,
                                    providers = NULL,
                                    remove_duplicates = FALSE) {
 
+  # Load the necessary packages
   library(sf)
   library(spocc)
   library(h3jsr)

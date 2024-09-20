@@ -48,6 +48,8 @@ This function is wrapper of the occ function from the
 }
 \examples{
 
+# Get species records within the AOI using a hexagonal grid
+of resolution 6
 
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
