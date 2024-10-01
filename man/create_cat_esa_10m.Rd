@@ -2,24 +2,45 @@
 % Please edit documentation in R/create_cat_esa_10m.R
 \name{create_cat_esa_10m}
 \alias{create_cat_esa_10m}
-\title{Create a categorical land cover raster from
- \href{https://esa-worldcover.org/en}{ESA WorldCover}}
+\title{Create Categorical Land Cover Raster from Copernicus
+Land Cover Data \href{https://esa-worldcover.org/en}{ESA WorldCover}}
 \usage{
 create_cat_esa_10m(input_raster, output_raster = NULL)
 }
 \arguments{
-\item{input_raster}{Path to your input raster file, which
-should be the original Copernicus land cover raster.}
+\item{input_raster}{A character string specifying the file
+path to the input raster (Copernicus land cover raster) that
+is to be reclassified.}
 
-\item{output_raster}{(optional): Path where the categorized
-raster should be saved. If NULL, the raster is not saved to disk.}
+\item{output_raster}{A character string specifying the file
+path where the output categorical raster will be saved.
+If `NULL`, the raster will not be saved.}
 }
 \value{
-A raster
+A `SpatRaster` object containing the reclassified
+categorical land cover raster.
 }
 \description{
-Create a categorical land cover raster from
- a land cover raster from copernicus 10m resolution
+This function loads a Copernicus land cover raster,
+reclassifies it into specified land cover categories, and
+optionally saves the reclassified raster to a file. The
+reclassification is based on predefined original classes and
+their corresponding new categorical classes.
+}
+\details{
+The function defines a mapping of original land cover classes
+to new categorical classes. The reclassification is performed
+using the `levels` and `coltab` functions from the `terra`
+package. The reclassified raster will have colors associated
+with each class as defined in the `coltb` data frame.
+}
+\examples{
+\dontrun{
+# Create categorical land cover raster
+categorical_raster <- create_cat_esa_10m("path_to_input_raster.tif",
+                                           "path_to_output_raster.tif")
+}
+
 }
 \references{
 WorldCover 2020 v100
