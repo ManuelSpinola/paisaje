@@ -24,6 +24,13 @@ See the `spocc` package documentation for options.}
 \item{remove_duplicates}{Logical. If `TRUE`, removes
 duplicate records based on geometry to avoid counting
 the same location multiple times. Default is `FALSE`.}
+
+\item{expand_factor}{Numeric. A small value that expands
+the bounding box of the `sf_object` to ensure complete
+coverage by the hexagonal grid.
+This helps avoid edge cases where the grid might not fully
+cover the input object. Default is 0.001, which adjusts the
+bounding box by this amount on all sides.}
 }
 \value{
 An `sf` object representing the hexagonal grid
@@ -57,7 +64,8 @@ valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
-providers = c("gbif", "inat"), remove_duplicates = FALSE)
+providers = c("gbif", "inat"), remove_duplicates = FALSE,
+expand_factor = 0.1)
 
 
 

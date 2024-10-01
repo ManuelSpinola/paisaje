@@ -29,6 +29,12 @@
 #' @param remove_duplicates Logical. If `TRUE`, removes
 #' duplicate records based on geometry to avoid counting
 #' the same location multiple times. Default is `FALSE`.
+#' @param expand_factor Numeric. A small value that expands
+#' the bounding box of the `sf_object` to ensure complete
+#' coverage by the hexagonal grid.
+#' This helps avoid edge cases where the grid might not fully
+#' cover the input object. Default is 0.001, which adjusts the
+#' bounding box by this amount on all sides.
 #'
 #' @return An `sf` object representing the hexagonal grid
 #' with a `record_count` column indicating the number of
@@ -53,7 +59,8 @@
 #' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
-#' providers = c("gbif", "inat"), remove_duplicates = FALSE)
+#' providers = c("gbif", "inat"), remove_duplicates = FALSE,
+#' expand_factor = 0.1)
 #'
 #'
 #'
@@ -61,11 +68,10 @@
 
 get_records_by_hexagon <- function(species_name,
                                    aoi_sf,
-                                   res = NULL,
+                                   res = 6,
                                    providers = NULL,
-                                   remove_duplicates = FALSE) {
-
-
+                                   remove_duplicates = FALSE,
+                                   expand_factor = 0.1) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
@@ -81,11 +87,21 @@ get_records_by_hexagon <- function(species_name,
     aoi_sf <- sf::st_transform(aoi_sf, 4326)
   }
 
-  # Convert AOI to H3 cells
-  h3_cells <- h3jsr::polygon_to_cells(aoi_sf, res = res)
+  # Expand the bounding box slightly to ensure complete hexagon coverage
+  bbox <- sf::st_bbox(aoi_sf)
+  bbox_expanded <- bbox + c(-expand_factor, -expand_factor, expand_factor, expand_factor)
+
+  # Create a polygon from the expanded bounding box
+  bbox_poly <- sf::st_as_sfc(bbox_expanded)
+
+  # Convert AOI to H3 cells using the expanded bounding box
+  h3_cells <- h3jsr::polygon_to_cells(bbox_poly, res = res)
 
   # Convert the H3 cells back to polygons and create an sf object
   hexagons <- h3jsr::cell_to_polygon(h3_cells, simple = FALSE)
+
+  # Perform a true geometric intersection to trim hexagons to fit exactly within the original AOI
+  hexagons <- sf::st_intersection(hexagons, aoi_sf)
 
   # Create a bounding box from the AOI
   bbox <- sf::st_bbox(aoi_sf)
@@ -108,7 +124,7 @@ get_records_by_hexagon <- function(species_name,
 
   # Optionally remove duplicate geometries
   if (remove_duplicates) {
-    gbif_sf <- gbif_sf %>% dplyr::distinct(geometry, .keep_all = TRUE)
+    gbif_sf <- dplyr::distinct(gbif_sf, geometry, .keep_all = TRUE)
   }
 
   # Intersection (first argument map, then points)

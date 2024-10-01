@@ -18,6 +18,12 @@
 #' @param resolution Integer. The H3 resolution level for the
 #' hexagonal grid. Higher values create smaller hexagons.
 #' Default is 7. It should between 1 and 16
+#' @param expand_factor Numeric. A small value that expands
+#' the bounding box of the `sf_object` to ensure complete
+#' coverage by the hexagonal grid.
+#' This helps avoid edge cases where the grid might not fully
+#' cover the input object. Default is 0.001, which adjusts the
+#' bounding box by this amount on all sides.
 #'
 #' @references
 #' O'Brien L (2023). h3jsr: Access Uber's H3 Library. R
@@ -35,13 +41,14 @@
 #'
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #'
-#' h3_grid_sf <- get_h3_grid(nc, resolution = 7)
+#' h3_grid_sf <- get_h3_grid(nc, resolution = 7,
+#' expand_factor = 0.1)
 #'
 #'
 
-get_h3_grid <- function(sf_object, resolution = 7) {
-
-
+get_h3_grid <- function(sf_object,
+                        resolution = 7,
+                        expand_factor = 0.1) {
   # Check if the input is an sf object
   if (!inherits(sf_object, "sf")) {
     stop("Input must be an sf object")
@@ -50,27 +57,23 @@ get_h3_grid <- function(sf_object, resolution = 7) {
   # Ensure the sf object is in the correct CRS (WGS84)
   sf_object <- sf::st_transform(sf_object, 4326)
 
-  # Get the bounding box of the sf object
+  # Expand the bounding box slightly to ensure complete hexagon coverage
   bbox <- sf::st_bbox(sf_object)
+  bbox_expanded <- bbox + c(-expand_factor, -expand_factor, expand_factor, expand_factor)
 
-  # Create a polygon from the bounding box
-  bbox_poly <- sf::st_as_sfc(st_bbox(sf_object))
+  # Create a polygon from the expanded bounding box
+  bbox_poly <- sf::st_as_sfc(bbox_expanded)
 
-  # Get H3 hexagons for the bounding box
+  # Get H3 hexagons for the expanded bounding box
   h3_hexagons <- h3jsr::polygon_to_cells(bbox_poly, res = resolution)
 
   # Convert H3 hexagons to sf object
-  h3_sf <- h3jsr::cell_to_polygon(h3_hexagons, simple = FALSE)
+  hexagons <- h3jsr::cell_to_polygon(h3_hexagons, simple = FALSE)
 
-  # Intersect H3 hexagons with the original sf object
-  h3_intersect <- sf::st_intersects(h3_sf, sf_object)
+  # Perform a true geometric intersection to trim hexagons to fit within the original sf object
+  trimmed_hexagons <- sf::st_intersection(hexagons, sf_object)
 
-  # Keep only the hexagons that intersect with the sf object
-  h3_grid <- h3_sf[lengths(h3_intersect) > 0, ]
-
-  h3_grid <- sf::st_as_sf(h3_grid)
-
-  return(h3_grid)
+  return(trimmed_hexagons)
 }
 
 

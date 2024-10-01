@@ -2,6 +2,7 @@
 
 export(calculate_it_metrics)
 export(create_cat_esa_10m)
+export(extract_land_cover_sf)
 export(get_esa_10m)
 export(get_h3_grid)
 export(get_nightlight_data)

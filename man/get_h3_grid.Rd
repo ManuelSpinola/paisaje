@@ -13,6 +13,13 @@ H3 grid will be generated. Must have a valid CRS.}
 \item{resolution}{Integer. The H3 resolution level for the
 hexagonal grid. Higher values create smaller hexagons.
 Default is 7. It should between 1 and 16}
+
+\item{expand_factor}{Numeric. A small value that expands
+the bounding box of the `sf_object` to ensure complete
+coverage by the hexagonal grid.
+This helps avoid edge cases where the grid might not fully
+cover the input object. Default is 0.001, which adjusts the
+bounding box by this amount on all sides.}
 }
 \description{
 This function generates a hexagonal grid of H3 cells at a
@@ -31,7 +38,8 @@ library(sf)
 
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 
-h3_grid_sf <- get_h3_grid(nc, resolution = 7)
+h3_grid_sf <- get_h3_grid(nc, resolution = 7,
+expand_factor = 0.1)
 
 
 }
