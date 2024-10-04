@@ -14,7 +14,7 @@
 #'
 #'
 #' @usage get_records(species_name, aoi_sf, providers = NULL,
-#' remove_duplicates = FALSE))
+#' date = NULL, remove_duplicates = FALSE, ))
 #'
 #' @param species_name A character vector of species names to
 #' query.
@@ -46,7 +46,8 @@
 #'
 
 
-get_records <- function(species_name, aoi_sf, providers = NULL, date = NULL, remove_duplicates = FALSE) {
+get_records <- function(species_name, aoi_sf, providers = NULL,
+                        date = NULL, remove_duplicates = FALSE) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
