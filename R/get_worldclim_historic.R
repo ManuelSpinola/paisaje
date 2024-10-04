@@ -53,7 +53,7 @@
 #' of climatology} 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(sf)
 #' library(terra)
 #'
@@ -62,6 +62,7 @@
 #'
 #' climate_historic <- get_worldclim_historic(var =
 #'  "tmin", res = 5, aoi = nc)
+#'  }
 #'
 #' @export
 #'

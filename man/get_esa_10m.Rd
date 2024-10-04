@@ -26,13 +26,13 @@ This function allows you to download land cover data from
  the \href{https://esa-worldcover.org/en}{ESA WorldCover}.
 }
 \examples{
-
+\dontrun{
 library(sf)
 
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 
 get_esa_10m(nc, year = 2021, output_folder = ".")
-
+}
 
 }
 \references{

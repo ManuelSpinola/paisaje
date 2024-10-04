@@ -27,7 +27,7 @@ This is a wrapper of the function "sample_lsm" from the
  landscapemetrics package (see References)
 }
 \examples{
-
+\dontrun{
 library(sf)
 library(spDataLarge)
 
@@ -43,6 +43,7 @@ st_transform(26912)
 
 
 result_sf <- calculate_it_metrics(landscape_raster, h3_bbox)
+}
 
 }
 \references{

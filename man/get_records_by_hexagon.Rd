@@ -68,13 +68,13 @@ Ensure that the AOI is provided as an `sf` object with a
 valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if necessary.
 }
 \examples{
-
+\dontrun{
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
 providers = c("gbif", "inat"), remove_duplicates = FALSE,
 expand_factor = 0.1)
-
+}
 
 
 }

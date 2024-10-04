@@ -60,7 +60,7 @@ designed to handle download issues with retry logic
 and customizable timeouts.
 }
 \examples{
-
+\dontrun{
 library(sf)
 library(terra)
 
@@ -69,6 +69,7 @@ nc <- st_transform(nc, crs = 4326)
 
 climate_historic <- get_worldclim_historic(var =
  "tmin", res = 5, aoi = nc)
+ }
 
 }
 \references{

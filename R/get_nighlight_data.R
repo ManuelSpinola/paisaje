@@ -11,9 +11,9 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' get_nightlight_data(2024, 3, "v10", ".", timeout = 1200)
-#'
+#' }
 #'
 
 library(rvest)

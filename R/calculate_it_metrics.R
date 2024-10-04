@@ -38,7 +38,7 @@
 #'
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(sf)
 #' library(spDataLarge)
 #'
@@ -54,6 +54,7 @@
 #'
 #'
 #' result_sf <- calculate_it_metrics(landscape_raster, h3_bbox)
+#' }
 #'
 
 

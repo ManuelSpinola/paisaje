@@ -9,8 +9,8 @@ This function allows you to download night lightdata from
   Group (EOG)}.
 }
 \examples{
-
+\dontrun{
 get_nightlight_data(2024, 3, "v10", ".", timeout = 1200)
-
+}
 
 }

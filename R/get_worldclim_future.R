@@ -97,7 +97,7 @@
 #' of climatology} 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(sf)
 #' library(terra)
 #'
@@ -107,6 +107,7 @@
 #' climate_future <- get_worldclim_future(var = "tmin",
 #' res = "10m", scenario = "585", time_range = "2021-2040",
 #' gcm = "ACCESS-CM2", aoi = nc)
+#' }
 #'
 #'
 #' @export

@@ -67,13 +67,13 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
 #' providers = c("gbif", "inat"), remove_duplicates = FALSE,
 #' expand_factor = 0.1)
-#'
+#' }
 #'
 #'
 

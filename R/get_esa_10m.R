@@ -55,13 +55,13 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(sf)
 #'
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' get_esa_10m(nc, year = 2021, output_folder = ".")
-#'
+#' }
 #'
 
 get_esa_10m <- function(aoi_sf, year = NULL, output_folder = ".") {

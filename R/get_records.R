@@ -37,12 +37,12 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' records <- get_records("Lynx rufus", nc, providers = c("gbif",
 #' "inat"))
-#'
+#' }
 #'
 
 

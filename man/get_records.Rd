@@ -41,11 +41,11 @@ This function is wrapper of the occ function from the
  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 }
 \examples{
-
+\dontrun{
 nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 records <- get_records("Lynx rufus", nc, providers = c("gbif",
 "inat"))
-
+}
 
 }

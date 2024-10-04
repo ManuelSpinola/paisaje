@@ -36,14 +36,14 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(sf)
 #'
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #'
 #' h3_grid_sf <- get_h3_grid(nc, resolution = 7,
 #' expand_factor = 0.1)
-#'
+#' }
 #'
 
 get_h3_grid <- function(sf_object,
