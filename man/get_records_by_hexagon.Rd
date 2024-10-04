@@ -2,40 +2,44 @@
 % Please edit documentation in R/get_records_by_hexagon.R
 \name{get_records_by_hexagon}
 \alias{get_records_by_hexagon}
-\title{Get Species Records by Hexagonal Grid}
+\title{Get species records by hexagon}
 \usage{
-get_records_by_hexagon(species_name, aoi_sf, res = NULL,
-providers = NULL, remove_duplicates = FALSE)
+get_records_by_hexagon(species_name, aoi_sf, res = 6,
+providers = NULL, remove_duplicates = FALSE,
+expand_factor = 0.1, date = NULL)
 }
 \arguments{
-\item{species_name}{Character. The scientific name of the
-species to search for.}
+\item{species_name}{A character vector of one or more species
+names to search for.}
 
-\item{aoi_sf}{`sf` object. The area of interest as a
-simple features (sf) object. Must have a valid CRS.}
+\item{aoi_sf}{An 'sf' object representing the area of
+interest. The AOI must have a valid Coordinate Reference
+System (CRS).}
 
-\item{res}{Integer. The H3 resolution level for the
-hexagonal grid. Higher values create smaller hexagons.}
+\item{res}{An integer specifying the resolution of the
+hexagons (default is 6).}
 
-\item{providers}{Character vector. Data providers to
-query for species occurrence data (e.g., `c("gbif", "inat")`).
-See the `spocc` package documentation for options.}
+\item{providers}{A character vector specifying the data
+providers to search (e.g., "gbif", "inat"). If NULL, uses
+all available providers.}
 
-\item{remove_duplicates}{Logical. If `TRUE`, removes
-duplicate records based on geometry to avoid counting
-the same location multiple times. Default is `FALSE`.}
+\item{remove_duplicates}{A logical indicating whether to
+remove duplicate geometries from the results (default is
+FALSE).}
 
-\item{expand_factor}{Numeric. A small value that expands
-the bounding box of the `sf_object` to ensure complete
-coverage by the hexagonal grid.
-This helps avoid edge cases where the grid might not fully
-cover the input object. Default is 0.001, which adjusts the
-bounding box by this amount on all sides.}
+\item{expand_factor}{A numeric value indicating how much
+to expand the bounding box around the AOI (default is 0.1).}
+
+\item{date}{A character vector specifying the date range
+for filtering records in the
+format `c("start_date", "end_date")`. The dates should be
+in "YYYY-MM-DD" format.}
 }
 \value{
-An `sf` object representing the hexagonal grid
-with a `record_count` column indicating the number of
-species occurrence records in each hexagon.
+An 'sf' object containing hexagons with record counts
+for each species. If no records are found, the function
+returns hexagons with a count of 0. Each species will have
+its own column, with spaces replaced by underscores.
 }
 \description{
 This function retrieves species occurrence data
@@ -50,10 +54,14 @@ This function is wrapper of the occ function from the
 }
 \details{
 The function performs the following steps:
-1. Converts the area of interest to H3 cells at the specified resolution.
-2. Queries species occurrence data within the bounding box of the AOI from specified providers.
-3. Converts the species data into an `sf` object and optionally removes duplicate records based on geometry.
-4. Counts the number of occurrence points that fall within each hexagon and adds this count to the hexagon grid.
+1. Converts the area of interest to H3 cells at the
+specified resolution.
+2. Queries species occurrence data within the bounding
+box of the AOI from specified providers.
+3. Converts the species data into an `sf` object and
+optionally removes duplicate records based on geometry.
+4. Counts the number of occurrence points that fall
+within each hexagon and adds this count to the hexagon grid.
 }
 \note{
 Ensure that the AOI is provided as an `sf` object with a
