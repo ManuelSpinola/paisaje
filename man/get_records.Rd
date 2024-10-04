@@ -2,33 +2,35 @@
 % Please edit documentation in R/get_records.R
 \name{get_records}
 \alias{get_records}
-\title{Retrieve Species Occurrence Records Within an Area
+\title{Retrieve species occurrence records within an Area
 of Interest}
 \usage{
 get_records(species_name, aoi_sf, providers = NULL,
 remove_duplicates = FALSE))
 }
 \arguments{
-\item{species_name}{Character. The scientific name of the
-species to search for.}
+\item{species_name}{A character vector of species names to
+query.}
 
-\item{aoi_sf}{`sf` object. The area of interest as a simple
-features (sf) object. Must have a valid CRS.}
+\item{aoi_sf}{An `sf` object representing the area of
+interest.}
 
-\item{providers}{Character vector. Data providers to query
-for species occurrence data (e.g., `c("gbif", "inat")`).
-See the `spocc` package documentation for available options.}
+\item{providers}{A character vector of data providers
+to query (e.g., "gbif", "inat").}
 
-\item{remove_duplicates}{Logical. If `TRUE`, removes
-duplicate records based on geometry to avoid counting the same
-location multiple times. Default is `FALSE`.}
+\item{date}{A character vector of length 2 specifying the
+date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
+this range will be excluded.}
+
+\item{remove_duplicates}{A logical value indicating whether
+to remove duplicate geometries from the resulting `sf` object.
+Default is `FALSE`.}
 }
 \value{
-An `sf` object containing species occurrence records
-that intersect with the AOI.
-
-An `sf` object containing species occurrence records
-that intersect with the AOI.
+An `sf` object containing the species occurrence
+records that fall within the specified AOI and meet the
+query criteria. Returns `NULL` if no records are found or
+if there are issues with the input.
 }
 \description{
 This function retrieves species occurrence records from

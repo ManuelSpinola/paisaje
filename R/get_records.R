@@ -1,7 +1,7 @@
 #'
 #' @name get_records
 #'
-#' @title Retrieve Species Occurrence Records Within an Area
+#' @title Retrieve species occurrence records within an Area
 #' of Interest
 #'
 #' @description
@@ -16,23 +16,23 @@
 #' @usage get_records(species_name, aoi_sf, providers = NULL,
 #' remove_duplicates = FALSE))
 #'
-#' @param species_name Character. The scientific name of the
-#' species to search for.
-#' @param aoi_sf `sf` object. The area of interest as a simple
-#' features (sf) object. Must have a valid CRS.
-#' @param providers Character vector. Data providers to query
-#' for species occurrence data (e.g., `c("gbif", "inat")`).
-#' See the `spocc` package documentation for available options.
-#' @param remove_duplicates Logical. If `TRUE`, removes
-#' duplicate records based on geometry to avoid counting the same
-#' location multiple times. Default is `FALSE`.
+#' @param species_name A character vector of species names to
+#' query.
+#' @param aoi_sf An `sf` object representing the area of
+#' interest.
+#' @param providers A character vector of data providers
+#' to query (e.g., "gbif", "inat").
+#' @param date A character vector of length 2 specifying the
+#' date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
+#' this range will be excluded.
+#' @param remove_duplicates A logical value indicating whether
+#' to remove duplicate geometries from the resulting `sf` object.
+#' Default is `FALSE`.
 #'
-#' @return An `sf` object containing species occurrence records
-#' that intersect with the AOI.
-#'
-#'
-#' @return An `sf` object containing species occurrence records
-#' that intersect with the AOI.
+#' @return An `sf` object containing the species occurrence
+#' records that fall within the specified AOI and meet the
+#' query criteria. Returns `NULL` if no records are found or
+#' if there are issues with the input.
 #'
 #' @export
 #'
@@ -46,10 +46,7 @@
 #'
 
 
-get_records <- function(species_name,
-                        aoi_sf,
-                        providers = NULL,
-                        remove_duplicates = FALSE) {
+get_records <- function(species_name, aoi_sf, providers = NULL, date = NULL, remove_duplicates = FALSE) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
@@ -74,29 +71,32 @@ get_records <- function(species_name,
     from = providers,
     geometry = bbox,
     has_coords = TRUE,
-    limit = 100000
+    limit = 100000,
+    date = date  # Pass date argument directly to occ
   )
 
-  # Convert occurrences to data frame
-  df <- spocc::occ2df(species_data)
+  # Convert occurrences to a data frame
+  combined_df <- spocc::occ2df(species_data)
 
   # Check if there are any records returned
-  if (nrow(df) == 0) {
+  if (nrow(combined_df) == 0) {
     warning("No records returned for the specified species.")
     return(NULL)
   }
 
-  # Convert the data frame to an sf object
+  # Ensure longitude and latitude are numeric
+  combined_df$longitude <- as.numeric(combined_df$longitude)
+  combined_df$latitude <- as.numeric(combined_df$latitude)
+
+  # Remove rows with NA coordinates
+  combined_df <- combined_df[!is.na(combined_df$longitude) & !is.na(combined_df$latitude), ]
+
+  # Convert the combined data frame to an sf object
   df_sf <- sf::st_as_sf(
-    df,
+    combined_df,
     coords = c("longitude", "latitude"),
     crs = 4326
   )
-
-  # Ensure the geometry column is correctly set
-  if (!"geometry" %in% colnames(df_sf)) {
-    df_sf <- sf::st_set_geometry(df_sf, st_geometry(df_sf))
-  }
 
   # Intersect with the AOI
   df_sf_within_aoi <- sf::st_intersection(df_sf, aoi_sf)
