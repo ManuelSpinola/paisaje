@@ -121,38 +121,6 @@ get_records_by_hexagon <- function(species_name,
     stop("species_name must be a character vector.")
   }
 
-  # Create a query for species
-  species_query <- paste(species_name, collapse = ", ")
-
-  # Obtain species occurrence data using the spocc package
-  species_data <- spocc::occ(
-    query = species_name,
-    from = providers,
-    geometry = sf::st_bbox(aoi_sf),
-    has_coords = TRUE,
-    limit = 100000,
-    date = date
-  )
-
-  # Extract data to a data frame
-  gbif_data <- spocc::occ2df(species_data)
-
-  # Check if there are any records returned
-  if (nrow(gbif_data) == 0) {
-    warning("No records returned for the specified species.")
-    hexagons$record_count <- rep(0, nrow(hexagons))  # Set count to zero when no records are returned
-    hexagons$species_name <- species_query  # Add a species_name column with the queried species
-    return(hexagons)
-  }
-
-  # Convert the GBIF data to an sf object using the correct columns for latitude and longitude
-  gbif_sf <- sf::st_as_sf(gbif_data, coords = c("longitude", "latitude"), crs = 4326)
-
-  # Optionally remove duplicate geometries
-  if (remove_duplicates) {
-    gbif_sf <- dplyr::distinct(gbif_sf, geometry, .keep_all = TRUE)
-  }
-
   # Initialize record count columns for each species with underscores in names
   for (species in species_name) {
     # Replace spaces with underscores in species names for column names
@@ -160,15 +128,39 @@ get_records_by_hexagon <- function(species_name,
     hexagons[[species_name_fixed]] <- 0  # Create a column for each species with initial count of 0
   }
 
-  # Calculate the intersection of hexagons and occurrence data
+  # Process each species individually
   for (species in species_name) {
-    # Filter for the current species
-    species_records <- gbif_sf[gbif_data$name == species, ]
-    if (nrow(species_records) > 0) {
-      inter <- sf::st_intersects(hexagons, species_records, sparse = FALSE)
-      species_name_fixed <- gsub(" ", "_", species)
-      hexagons[[species_name_fixed]] <- rowSums(inter)  # Update the respective species count column
+    # Obtain species occurrence data using the spocc package
+    species_data <- spocc::occ(
+      query = species,
+      from = providers,
+      geometry = sf::st_bbox(aoi_sf),
+      has_coords = TRUE,
+      limit = 100000,
+      date = date
+    )
+
+    # Extract data to a data frame
+    species_df <- spocc::occ2df(species_data)
+
+    # Check if there are any records returned for this species
+    if (nrow(species_df) == 0) {
+      warning(paste("No records returned for species:", species))
+      next  # Skip to the next species if no records are returned
     }
+
+    # Convert the data to an sf object using the correct columns for latitude and longitude
+    species_sf <- sf::st_as_sf(species_df, coords = c("longitude", "latitude"), crs = 4326)
+
+    # Optionally remove duplicate geometries for this species
+    if (remove_duplicates) {
+      species_sf <- dplyr::distinct(species_sf, geometry, .keep_all = TRUE)
+    }
+
+    # Calculate the intersection of hexagons and occurrence data for this species
+    inter <- sf::st_intersects(hexagons, species_sf, sparse = FALSE)
+    species_name_fixed <- gsub(" ", "_", species)
+    hexagons[[species_name_fixed]] <- rowSums(inter)  # Update the respective species count column
   }
 
   # Return the hexagonal grid with the record counts as an sf object
