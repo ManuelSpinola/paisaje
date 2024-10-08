@@ -3,42 +3,35 @@
 \name{create_cat_esa_10m}
 \alias{create_cat_esa_10m}
 \title{Create Categorical Land Cover Raster from Copernicus
-Land Cover Data \href{https://esa-worldcover.org/en}{ESA WorldCover}}
+Land Cover Data \href{https://esa-worldcover.org/en}{ESA
+WorldCover}}
 \usage{
-create_cat_esa_10m(input_raster, output_raster = NULL)
+create_cat_esa_10m(land_cover)
 }
 \arguments{
-\item{input_raster}{A character string specifying the file
-path to the input raster (Copernicus land cover raster) that
-is to be reclassified.}
-
-\item{output_raster}{A character string specifying the file
-path where the output categorical raster will be saved.
-If `NULL`, the raster will not be saved.}
+\item{land_cover}{A SpatRaster object representing the input
+land cover raster. The raster should contain land cover
+classes defined by the Copernicus program.}
 }
 \value{
-A `SpatRaster` object containing the reclassified
+A SpatRaster object representing the reclassified
 categorical land cover raster.
 }
 \description{
-This function loads a Copernicus land cover raster,
-reclassifies it into specified land cover categories, and
-optionally saves the reclassified raster to a file. The
-reclassification is based on predefined original classes and
-their corresponding new categorical classes.
+This function takes a `SpatRaster` object representing
+Copernicus land cover data, reclassifies it into categorical
+values based on specified land cover classes, and returns
+the resulting categorical raster.
 }
 \details{
-The function defines a mapping of original land cover classes
-to new categorical classes. The reclassification is performed
-using the `levels` and `coltab` functions from the `terra`
-package. The reclassified raster will have colors associated
-with each class as defined in the `coltb` data frame.
+The function defines land cover categories and
+assigns corresponding colors. It reclassifies the input
+raster based on predefined categories.
 }
 \examples{
 \dontrun{
-# Create categorical land cover raster
-categorical_raster <- create_cat_esa_10m("path_to_input_raster.tif",
-                                           "path_to_output_raster.tif")
+# Assuming 'land_cover_raster' is a SpatRaster object
+cat_raster <- create_cat_esa_10m(land_cover_raster)
 }
 
 }
