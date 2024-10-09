@@ -26,6 +26,8 @@
 #' function then downloads this file and saves it to the specified directory.
 #' If no suitable file is found, or an error occurs, it returns NULL.
 #'
+#' @importFrom utils download.file unzip
+#' @importFrom rvest html_attr
 #'
 #' @examples
 #' \dontrun{
