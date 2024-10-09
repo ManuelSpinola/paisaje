@@ -1,20 +1,40 @@
 #'
-#' @name get_nightlight_data
+#' @name get_nighlight_data
 #'
-#' @title Download nightlight data
+#' @title Download and Retrieve Nightlight Data
 #'
 #' @description
-#' This function allows you to download night lightdata from
-#'  the \href{https://eogdata.mines.edu/}{The Earth Observation
-#'   Group (EOG)}.
+#' This function downloads nightlight data from the Earth
+#' Observation Group's website. It scrapes the website to find
+#' and download the latest available nightlight data for the
+#' specified year and month.
 #'
-#' @export
+#' @usage get_nightlight_data(year, month, version = "v10",
+#' destination_dir = ".", timeout = 1200)
+#'
+#' @param year A numeric or character year (e.g., 2020).
+#' @param month A numeric or character month (1-12). This will be formatted as two digits.
+#' @param version The version of the nightlight data (default is "v10").
+#' @param destination_dir Directory to save the downloaded .tif file (default is current directory).
+#' @param timeout Timeout in seconds for the download (default is 1200 seconds).
+#'
+#' @return The file path of the downloaded .tif file, or NULL if an error occurs.
+#'
+#' @details The function constructs the appropriate URL for the specified year,
+#' month, and data version. It scrapes the directory listing on the website
+#' to find the latest available .tif file for the requested time period. The
+#' function then downloads this file and saves it to the specified directory.
+#' If no suitable file is found, or an error occurs, it returns NULL.
+#'
 #'
 #' @examples
 #' \dontrun{
-#' get_nightlight_data(2024, 3, "v10", ".", timeout = 1200)
+#'   # Example: Download nightlight data for March 2021
+#'   file_path <- get_nightlight_data(2021, 3)
+#'   print(file_path)
 #' }
 #'
+#' @export
 
 
 get_nightlight_data <- function(year, month, version = "v10", destination_dir = ".", timeout = 1200) {
