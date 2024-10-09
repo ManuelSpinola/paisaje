@@ -1,5 +1,5 @@
 #'
-#' @name get_nighlight_data
+#' @name get_nightlight_data
 #'
 #' @title Download and Retrieve Nightlight Data
 #'
