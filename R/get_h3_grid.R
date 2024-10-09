@@ -11,7 +11,7 @@
 #' This function is a wrapper of functions from
 #' the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
 #'
-#' @usage get_h3_grid(sf_object, resolution)
+#' @usage get_h3_grid(sf_object, resolution = 7, expand_factor = 0.1)
 #'
 #' @param sf_object `sf` object. The spatial object for which the
 #' H3 grid will be generated. Must have a valid CRS.
@@ -22,7 +22,7 @@
 #' the bounding box of the `sf_object` to ensure complete
 #' coverage by the hexagonal grid.
 #' This helps avoid edge cases where the grid might not fully
-#' cover the input object. Default is 0.001, which adjusts the
+#' cover the input object. Default is 0.1, which adjusts the
 #' bounding box by this amount on all sides.
 #'
 #' @references

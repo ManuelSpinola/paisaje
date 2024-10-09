@@ -4,7 +4,7 @@
 \alias{get_esa_10m}
 \title{Download land cover data}
 \usage{
-get_esa_10m(aoi_sf, year = 2021, output_folder = ".")
+get_esa_10m(aoi_sf, year = NULL, output_folder = ".")
 }
 \arguments{
 \item{aoi_sf}{(\code{character}) an sf_object which defines

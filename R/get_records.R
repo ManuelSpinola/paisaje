@@ -14,7 +14,7 @@
 #'
 #'
 #' @usage get_records(species_name, aoi_sf, providers = NULL,
-#' date = NULL, remove_duplicates = FALSE, date = NULL)
+#' date = NULL, remove_duplicates = FALSE)
 #'
 #' @param species_name A character vector of species names to
 #' query.

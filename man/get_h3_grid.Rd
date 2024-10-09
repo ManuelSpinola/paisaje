@@ -4,7 +4,7 @@
 \alias{get_h3_grid}
 \title{Generate an H3 Hexagonal Grid for an sf Object}
 \usage{
-get_h3_grid(sf_object, resolution)
+get_h3_grid(sf_object, resolution = 7, expand_factor = 0.1)
 }
 \arguments{
 \item{sf_object}{`sf` object. The spatial object for which the
@@ -18,7 +18,7 @@ Default is 7. It should between 1 and 16}
 the bounding box of the `sf_object` to ensure complete
 coverage by the hexagonal grid.
 This helps avoid edge cases where the grid might not fully
-cover the input object. Default is 0.001, which adjusts the
+cover the input object. Default is 0.1, which adjusts the
 bounding box by this amount on all sides.}
 }
 \description{

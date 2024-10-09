@@ -26,20 +26,20 @@ the count of points.
 library(sf)
 
 # Create some example data
-points <- st_as_sf(data.frame(
+points_sf <- st_as_sf(data.frame(
  id = 1:5,
  x = c(1, 2, 3, 4, 5),
  y = c(1, 2, 3, 4, 5)
 ), coords = c("x", "y"), crs = 4326)
 
-polygons <- st_as_sf(data.frame(
+polygons_sf <- st_as_sf(data.frame(
  id = 1:2,
  wkt = c("POLYGON((0 0, 3 0, 3 3, 0 3, 0 0))",
          "POLYGON((3 3, 6 3, 6 6, 3 6, 3 3))")
 ), wkt = "wkt", crs = 4326)
 
 # Count points within polygons
-result <- count_points_in_polygons(points, polygons)
+result <- count_points_in_polygons(points_sf, polygons_sf)
 print(result)
 }
 

@@ -7,7 +7,7 @@
 #' This function allows you to download land cover data from
 #'  the \href{https://esa-worldcover.org/en}{ESA WorldCover}.
 #'
-#' @usage get_esa_10m(aoi_sf, year = 2021, output_folder = ".")
+#' @usage get_esa_10m(aoi_sf, year = NULL, output_folder = ".")
 #'
 #' @param aoi_sf (\code{character}) an sf_object which defines
 #' the area of interest (AOI). an sf object can represent any
