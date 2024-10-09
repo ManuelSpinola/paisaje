@@ -22,6 +22,8 @@
 #' @note This is a wrapper of the function "sample_lsm" from the
 #'  landscapemetrics package (see References)
 #'
+#' @importFrom rlang .data
+#'
 #' @export
 #'
 #' @references Hesselbarth, M.H.K., Sciaini, M., With, K.A.,
@@ -77,9 +79,9 @@ calculate_it_metrics <- function(landscape_raster, aoi_sf) {
 
   it_metrics_w <- it_metrics |>
     dplyr::distinct() |>
-    tidyr::pivot_wider(id_cols = plot_id,
-                names_from = metric,
-                values_from = value)
+    tidyr::pivot_wider(id_cols = .data$plot_id,
+                names_from = .data$metric,
+                values_from = .data$value)
 
   it_metrics_sf <- cbind(aoi_sf, it_metrics_w)
 

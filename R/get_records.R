@@ -34,6 +34,8 @@
 #' query criteria. Returns `NULL` if no records are found or
 #' if there are issues with the input.
 #'
+#' @importFrom rlang .data
+#'
 #' @export
 #'
 #' @examples
@@ -104,7 +106,7 @@ get_records <- function(species_name, aoi_sf, providers = NULL,
 
   # Optionally remove duplicate geometries
   if (remove_duplicates) {
-    df_sf_within_aoi <- dplyr::distinct(df_sf_within_aoi, geometry, .keep_all = TRUE)
+    df_sf_within_aoi <- dplyr::distinct(df_sf_within_aoi, .data$geometry, .keep_all = TRUE)
   }
 
   return(df_sf_within_aoi)

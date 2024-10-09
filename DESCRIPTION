@@ -17,6 +17,7 @@ LazyData: true
 RoxygenNote: 7.3.2
 URL: https://manuelspinola.github.io/paisaje/
 Imports:
+    rlang,
     dplyr,
     tidyr,
     sf,

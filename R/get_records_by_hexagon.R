@@ -63,6 +63,7 @@
 #' Ensure that the AOI is provided as an `sf` object with a
 #' valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if necessary.
 #'
+#' @importFrom rlang .data
 #'
 #' @export
 #'
@@ -154,7 +155,7 @@ get_records_by_hexagon <- function(species_name,
 
     # Optionally remove duplicate geometries for this species
     if (remove_duplicates) {
-      species_sf <- dplyr::distinct(species_sf, geometry, .keep_all = TRUE)
+      species_sf <- dplyr::distinct(species_sf, .data$geometry, .keep_all = TRUE)
     }
 
     # Calculate the intersection of hexagons and occurrence data for this species
