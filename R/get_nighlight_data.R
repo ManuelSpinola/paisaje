@@ -16,12 +16,8 @@
 #' }
 #'
 
-library(rvest)
 
 get_nightlight_data <- function(year, month, version = "v10", destination_dir = ".", timeout = 1200) {
-
-  # Load the necessary packages
-  library(rvest)
 
   # Ensure the year and month are properly formatted
   year <- as.character(year)

@@ -3,6 +3,15 @@
 \name{get_nightlight_data}
 \alias{get_nightlight_data}
 \title{Download nightlight data}
+\usage{
+get_nightlight_data(
+  year,
+  month,
+  version = "v10",
+  destination_dir = ".",
+  timeout = 1200
+)
+}
 \description{
 This function allows you to download night lightdata from
  the \href{https://eogdata.mines.edu/}{The Earth Observation

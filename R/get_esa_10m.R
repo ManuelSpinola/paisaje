@@ -66,11 +66,6 @@
 
 get_esa_10m <- function(aoi_sf, year = NULL, output_folder = ".") {
 
-  # Load the necessary packages
-  library(sf)
-  library(httr)
-  library(progress)
-
   s3_url_prefix <- "https://esa-worldcover.s3.eu-central-1.amazonaws.com"
 
   # Load the WorldCover grid
