@@ -4,7 +4,7 @@
 \alias{count_points_in_polygons}
 \title{Count Points within Polygons}
 \usage{
-count_points_in_polygons(points, polygons)
+count_points_in_polygons(points_sf, polygons_sf)
 }
 \arguments{
 \item{points_sf}{An sf object representing point geometries.}

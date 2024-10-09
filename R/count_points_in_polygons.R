@@ -9,7 +9,7 @@
 #' the polygon sf object with an additional column containing
 #' the count of points.
 #'
-#' @usage count_points_in_polygons(points, polygons)
+#' @usage count_points_in_polygons(points_sf, polygons_sf)
 #'
 #' @param points_sf An sf object representing point geometries.
 #' @param polygons_sf An sf object representing polygon geometries.
