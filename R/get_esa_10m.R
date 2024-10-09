@@ -77,7 +77,7 @@ get_esa_10m <- function(aoi_sf, year = NULL, output_folder = ".") {
   aoi_sf <- sf::st_transform(aoi_sf, crs = grid_crs)
 
   # Get grid tiles intersecting the AOI
-  intersecting_tiles <- st_intersects(grid, aoi_sf, sparse = FALSE)
+  intersecting_tiles <- sf::st_intersects(grid, aoi_sf, sparse = FALSE)
   tiles <- grid[intersecting_tiles, ]
 
   if (nrow(tiles) == 0) {
