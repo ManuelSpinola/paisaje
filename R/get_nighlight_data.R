@@ -53,7 +53,7 @@ get_nightlight_data <- function(year, month, version = "v10", destination_dir = 
   tryCatch({
     page <- rvest::read_html(base_url)
     # Extract the file names
-    file_links <- page %>% rvest::html_nodes("a") %>% html_attr("href")
+    file_links <- page |> rvest::html_nodes("a") |> html_attr("href")
     # Filter for the relevant .tif file that contains 'avg_rade9h'
     tif_files <- file_links[grepl("SVDNB_npp_.*avg_rade9h\\.tif$", file_links)]
 
