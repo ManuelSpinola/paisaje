@@ -48,7 +48,8 @@
 #'
 
 
-get_records <- function(species_name, aoi_sf, providers = NULL, date = NULL, remove_duplicates = FALSE) {
+get_records <- function(species_name, aoi_sf, providers = NULL,
+                        date = NULL, remove_duplicates = FALSE) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
@@ -93,9 +94,11 @@ get_records <- function(species_name, aoi_sf, providers = NULL, date = NULL, rem
   # Remove rows with NA coordinates
   combined_df <- combined_df[!is.na(combined_df$longitude) & !is.na(combined_df$latitude), ]
 
-  # Add a column for the species name (if not already included)
-  combined_df <- combined_df %>%
-    mutate(name = paste(species_name, "(", "Linnaeus", ",", format(Sys.Date(), "%Y"), ")", sep = ""))  # Modify this as per your needs
+  # Extracting the genus and species from the name column
+  if ("name" %in% names(combined_df)) {
+    combined_df <- combined_df %>%
+      mutate(species = sapply(strsplit(as.character(name), " "), function(x) paste(x[1:2], collapse = "_")))
+  }
 
   # Convert the combined data frame to an sf object
   df_sf <- sf::st_as_sf(
