@@ -61,7 +61,14 @@ extract_num_raster <- function(num_raster, grid_sf, fun = mean) {
   }
 
   # Use terra::extract() with the custom function passed as an argument
-  extracted_df <- terra::extract(num_raster, grid_sf, fun = fun, exact = TRUE, na.rm = TRUE, ID = TRUE)
+  extracted_df <- terra::extract(num_raster,
+                                 grid_sf,
+                                 fun = fun,
+                                 weights = TRUE,
+                                 exact = TRUE,
+                                 touches = TRUE,
+                                 na.rm = TRUE,
+                                 ID = TRUE)
 
   # Convert the ID column in the extracted_df to character
   extracted_df$ID <- as.character(extracted_df$ID)
