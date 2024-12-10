@@ -19,22 +19,25 @@
 #' @examples
 #' \dontrun{
 #' # Example usage assuming 'points' and 'polygons' are sf objects
+#'
 #' library(sf)
 #'
+#' # Create example points_sf with species column
 #' points_sf <- st_as_sf(data.frame(
-#' id = 1:6,
-#' species = c("Panthera onca", "Panthera onca", "Felis catus", #' "Felis catus", "Felis catus", "Panthera leo"),
-#' x = c(1, 2, 3, 4, 5, 6),
-#' y = c(1, 2, 3, 4, 5, 6)
+#'   id = 1:6,
+#'   species = c("Panthera onca", "Panthera onca", "Felis catus",
+#'               "Felis catus", "Felis catus", "Panthera leo"),
+#'   x = c(1, 2, 3, 4, 5, 6),
+#'   y = c(1, 2, 3, 4, 5, 6)
 #' ), coords = c("x", "y"), crs = 4326)
 #'
-#' # Example polygons_sf
+#' # Create example polygons_sf
 #' polygons_sf <- st_as_sf(data.frame(
-#'  id = 1:2,
-#'  geometry = st_sfc(
-#'    st_polygon(list(rbind(c(0, 0), c(3, 0), c(3, 3), c(0, 3), #' c(0, 0)))),
-#'     st_polygon(list(rbind(c(3, 3), c(6, 3), c(6, 6), c(3, 6), #' c(3, 3))))
-#'  )
+#'   id = 1:2,
+#'   geometry = st_sfc(
+#'     st_polygon(list(rbind(c(0, 0), c(3, 0), c(3, 3), c(0, 3), c(0, 0)))),
+#'     st_polygon(list(rbind(c(3, 3), c(6, 3), c(6, 6), c(3, 6), c(3, 3))))
+#'   )
 #' ), crs = 4326)
 #'
 #' # Run the function
@@ -42,6 +45,7 @@
 #'
 #' # View the result
 #' print(result)
+#' }
 #'
 #' @export
 #'

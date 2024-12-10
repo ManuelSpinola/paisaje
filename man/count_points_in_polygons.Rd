@@ -23,23 +23,31 @@ the count of points.
 \examples{
 \dontrun{
 # Example usage assuming 'points' and 'polygons' are sf objects
+
 library(sf)
 
-# Create some example data
+# Create example points_sf with species column
 points_sf <- st_as_sf(data.frame(
- id = 1:5,
- x = c(1, 2, 3, 4, 5),
- y = c(1, 2, 3, 4, 5)
+  id = 1:6,
+  species = c("Panthera onca", "Panthera onca", "Felis catus",
+              "Felis catus", "Felis catus", "Panthera leo"),
+  x = c(1, 2, 3, 4, 5, 6),
+  y = c(1, 2, 3, 4, 5, 6)
 ), coords = c("x", "y"), crs = 4326)
 
+# Create example polygons_sf
 polygons_sf <- st_as_sf(data.frame(
- id = 1:2,
- wkt = c("POLYGON((0 0, 3 0, 3 3, 0 3, 0 0))",
-         "POLYGON((3 3, 6 3, 6 6, 3 6, 3 3))")
-), wkt = "wkt", crs = 4326)
+  id = 1:2,
+  geometry = st_sfc(
+    st_polygon(list(rbind(c(0, 0), c(3, 0), c(3, 3), c(0, 3), c(0, 0)))),
+    st_polygon(list(rbind(c(3, 3), c(6, 3), c(6, 6), c(3, 6), c(3, 3))))
+  )
+), crs = 4326)
 
-# Count points within polygons
+# Run the function
 result <- count_points_in_polygons(points_sf, polygons_sf)
+
+# View the result
 print(result)
 }
 
