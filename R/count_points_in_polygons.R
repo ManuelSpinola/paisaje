@@ -4,17 +4,16 @@
 #' @title Count Points within Polygons
 #'
 #' @description
-#' This function takes an sf point object and an sf polygon object,
-#' counts the number of points within each polygon, and returns
-#' the polygon sf object with an additional column containing
-#' the count of points.
+#' This function counts the number of points within each polygon and creates separate columns for each species if a `species` column is present in the points dataset. Spaces in species
+#'names are replaced with underscores for column naming.
+#'
 #'
 #' @usage count_points_in_polygons(points_sf, polygons_sf)
 #'
-#' @param points_sf An sf object representing point geometries.
+#' @param points_sf points_sf An `sf` object representing point geometries. Must contain a `species` column.
 #' @param polygons_sf An sf object representing polygon geometries.
 #'
-#' @return An sf polygon object with an additional column `point_count` representing the number of points within each polygon.
+#' @return An `sf` object containing the original polygon geometries and additional columns, one for each species, indicating the count of points of that species within each polygon.
 #'
 #' @examples
 #' \dontrun{

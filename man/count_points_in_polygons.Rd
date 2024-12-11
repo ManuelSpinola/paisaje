@@ -7,18 +7,16 @@
 count_points_in_polygons(points_sf, polygons_sf)
 }
 \arguments{
-\item{points_sf}{An sf object representing point geometries.}
+\item{points_sf}{points_sf An `sf` object representing point geometries. Must contain a `species` column.}
 
 \item{polygons_sf}{An sf object representing polygon geometries.}
 }
 \value{
-An sf polygon object with an additional column `point_count` representing the number of points within each polygon.
+An `sf` object containing the original polygon geometries and additional columns, one for each species, indicating the count of points of that species within each polygon.
 }
 \description{
-This function takes an sf point object and an sf polygon object,
-counts the number of points within each polygon, and returns
-the polygon sf object with an additional column containing
-the count of points.
+This function counts the number of points within each polygon and creates separate columns for each species if a `species` column is present in the points dataset. Spaces in species
+names are replaced with underscores for column naming.
 }
 \examples{
 \dontrun{
