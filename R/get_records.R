@@ -51,8 +51,12 @@
 #'
 
 
-get_records <- function(species_name, aoi_sf, providers = NULL,
-                        limit = 500, date = NULL, remove_duplicates = FALSE) {
+get_records <- function(species_name,
+                        aoi_sf,
+                        providers = NULL,
+                        limit = 500,
+                        date = NULL,
+                        remove_duplicates = FALSE) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
