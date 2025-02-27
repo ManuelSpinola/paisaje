@@ -22,6 +22,9 @@
 #' interest.
 #' @param providers A character vector of data providers
 #' to query (e.g., "gbif", "inat").
+#'
+#' @param limit An integer specifying the maximum number of
+#' records to retrieve from each provider. Default is 500.
 #' @param date A character vector of length 2 specifying the
 #' date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
 #' this range will be excluded.
@@ -49,7 +52,7 @@
 
 
 get_records <- function(species_name, aoi_sf, providers = NULL,
-                        date = NULL, remove_duplicates = FALSE) {
+                        limit = 500, date = NULL, remove_duplicates = FALSE) {
   # Ensure the AOI is an sf object
   if (!inherits(aoi_sf, "sf")) {
     stop("The AOI must be an 'sf' object.")
@@ -74,7 +77,7 @@ get_records <- function(species_name, aoi_sf, providers = NULL,
     from = providers,
     geometry = bbox,
     has_coords = TRUE,
-    limit = 100000,
+    limit = limit,
     date = date  # Pass date argument directly to occ
   )
 
