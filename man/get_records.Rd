@@ -18,6 +18,9 @@ interest.}
 \item{providers}{A character vector of data providers
 to query (e.g., "gbif", "inat").}
 
+\item{limit}{An integer specifying the maximum number of
+records to retrieve from each provider. Default is 500.}
+
 \item{date}{A character vector of length 2 specifying the
 date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
 this range will be excluded.}
