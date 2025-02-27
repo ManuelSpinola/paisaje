@@ -103,7 +103,7 @@ get_records <- function(species_name,
 
   # Extracting the genus and species from the name column
   if ("name" %in% names(combined_df)) {
-    combined_df <- combined_df %>%
+    combined_df <- combined_df |>
       mutate(species = sapply(strsplit(as.character(name), " "), function(x) paste(x[1:2], collapse = "_")))
   }
 
