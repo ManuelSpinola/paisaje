@@ -13,8 +13,7 @@
 #'  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 #'
 #'
-#' @usage get_records(species_name, aoi_sf, providers = NULL,
-#' date = NULL, remove_duplicates = FALSE)
+#' @usage get_records(species_name, aoi_sf, providers = NULL, limit = 500, date = NULL, remove_duplicates = FALSE)
 #'
 #' @param species_name A character vector of species names to
 #' query.
