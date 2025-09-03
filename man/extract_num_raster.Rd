@@ -29,6 +29,6 @@ poly <- st_as_sf(st_sfc(st_polygon(list(rbind(
   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
 ))), crs = crs(r)))
 
-result <- extract_num_raster(r, poly, fun = mean)
+result <- extract_num_raster(r, poly)
 }
 }
