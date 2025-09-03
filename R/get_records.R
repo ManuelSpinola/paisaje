@@ -51,76 +51,36 @@
 #'
 
 
-get_records <- function(species_name,
+get_records <- function(species,
                         aoi_sf,
                         providers = NULL,
                         limit = 500,
-                        date = NULL,
-                        remove_duplicates = FALSE) {
-  # Ensure the AOI is an sf object
-  if (!inherits(aoi_sf, "sf")) {
-    stop("The AOI must be an 'sf' object.")
-  }
+                        remove_duplicates = FALSE,
+                        date = NULL) {
 
-  # Ensure that the AOI has a valid CRS
-  if (is.na(sf::st_crs(aoi_sf))) {
-    stop("The AOI must have a valid CRS.")
-  }
+  stopifnot(inherits(aoi_sf, "sf"))
 
-  # Transform the AOI to WGS84 if necessary
   if (sf::st_crs(aoi_sf)$epsg != 4326) {
     aoi_sf <- sf::st_transform(aoi_sf, 4326)
   }
 
-  # Create a bounding box from the AOI
-  bbox <- sf::st_bbox(aoi_sf)
-
-  # Obtain species occurrence data from specified providers
-  species_data <- spocc::occ(
-    query = species_name,
+  # Query species occurrences
+  records <- spocc::occ(
+    query = species,
     from = providers,
-    geometry = bbox,
+    geometry = sf::st_bbox(aoi_sf),
     has_coords = TRUE,
     limit = limit,
-    date = date  # Pass date argument directly to occ
-  )
+    date = date
+  ) |> spocc::occ2df()
 
-  # Convert occurrences to a data frame
-  combined_df <- spocc::occ2df(species_data)
+  records <- records[!is.na(records$longitude) & !is.na(records$latitude), ]
 
-  # Check if there are any records returned
-  if (nrow(combined_df) == 0) {
-    warning("No records returned for the specified species.")
-    return(NULL)
-  }
+  records_sf <- sf::st_as_sf(records, coords = c("longitude","latitude"), crs = 4326)
 
-  # Ensure longitude and latitude are numeric
-  combined_df$longitude <- as.numeric(combined_df$longitude)
-  combined_df$latitude <- as.numeric(combined_df$latitude)
-
-  # Remove rows with NA coordinates
-  combined_df <- combined_df[!is.na(combined_df$longitude) & !is.na(combined_df$latitude), ]
-
-  # Extracting the genus and species from the name column
-  if ("name" %in% names(combined_df)) {
-    combined_df <- combined_df |>
-      dplyr::mutate(species = sapply(strsplit(as.character(name), " "), function(x) paste(x[1:2], collapse = "_")))
-  }
-
-  # Convert the combined data frame to an sf object
-  df_sf <- sf::st_as_sf(
-    combined_df,
-    coords = c("longitude", "latitude"),
-    crs = 4326
-  )
-
-  # Intersect with the AOI
-  df_sf_within_aoi <- sf::st_intersection(df_sf, aoi_sf)
-
-  # Optionally remove duplicate geometries
   if (remove_duplicates) {
-    df_sf_within_aoi <- dplyr::distinct(df_sf_within_aoi, .data$geometry, .keep_all = TRUE)
+    records_sf <- dplyr::distinct(records_sf, .data$geometry, .keep_all = TRUE)
   }
 
-  return(df_sf_within_aoi)
+  sf::st_intersection(records_sf, aoi_sf)
 }

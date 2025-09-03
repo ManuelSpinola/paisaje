@@ -1,71 +1,72 @@
-#'
 #' @name extract_cat_raster
-#'
-#' @title Extract Categorical Raster Data and Summarize by Grid
-#'
+#' @title Extract Categorical Raster Values by Polygons
 #' @description
-#' This function extracts categorical data (e.g., land cover or land use) from a raster using a spatial grid object (in `sf` format) and summarizes the number or proportion of pixels for each category in each grid cell.
+#' Extract values from a categorical raster for each polygon in an sf object.
+#' Returns the proportion of each category within each polygon, accurately
+#' accounting for partial coverage using exactextractr.
 #'
-#' @usage
-#' extract_cat_raster(cat_raster, grid_sf, proportion = FALSE)
+#' @param cat_raster A categorical raster (RasterLayer, SpatRaster, etc.).
+#' @param grid_sf An sf object with polygon geometries.
+#' @param proportion Logical, whether to return proportions (default TRUE).
 #'
-#' @param cat_raster A categorical raster layer (e.g., land cover or land use) from which the values will be extracted.
-#' @param grid_sf A spatial grid object of class `sf` that defines the areas over which the raster values will be summarized. The geometries should be `POLYGON` or `MULTIPOLYGON`.
-#' @param proportion Logical. If `TRUE`, the function returns the proportion of each land cover category in each grid cell. If `FALSE`, it returns the raw pixel counts. Default is `FALSE`.
-#'
-#' @return An `sf` object with the original grid geometries and additional columns for each land cover category, containing either the number of pixels or the proportion of pixels in each category per grid cell.
-#'
-#' @details
-#' The function first checks that the geometries in the `grid_sf` object are valid, and ensures that the geometries are either `POLYGON` or `MULTIPOLYGON`. It then uses the `terra::extract()` function to extract the categorical data from the raster and aggregates the results either as counts or proportions, depending on the value of the `proportion` argument.
+#' @return An sf object with additional columns, one per raster category,
+#' representing proportion of coverage (or raw counts if proportion = FALSE).
 #'
 #' @examples
 #' \dontrun{
-#' # Load a categorical raster (e.g., land cover)
-#' land_cover_raster <- terra::rast("path_to_land_cover_raster.tif")
+#' library(sf)
+#' library(terra)
+#' library(paisaje)
 #'
-#' # Load an sf grid object
-#' grid_sf <- sf::st_read("path_to_grid_shapefile.shp")
+#' # Load example categorical raster
+#' r <- terra::rast(system.file("raster/nlcd.tif", package = "spDataLarge"))
 #'
-#' # Extract land cover counts for each grid cell
-#' result_sf <- extract_cat_raster(land_cover_raster, grid_sf, proportion = FALSE)
+#' # Create example polygon grid (H3 grid or any polygons)
+#' bbox <- st_bbox(r) |> st_as_sfc(crs = st_crs(4326)) |> st_as_sf()
+#' grid_sf <- get_h3_grid(bbox, resolution = 6)
 #'
-#' # Extract land cover proportions for each grid cell
-#' result_sf_proportion <- extract_cat_raster(land_cover_raster, grid_sf, proportion = TRUE)
+#' # Extract category proportions
+#' result_sf <- extract_cat_raster(r, grid_sf)
+#'
+#' # View first rows
+#' head(result_sf)
 #' }
 #'
 #' @export
-#'
-#'
+extract_cat_raster <- function(spat_raster_cat, sf_hex_grid) {
 
-extract_cat_raster <- function(cat_raster, grid_sf, proportion = FALSE) {
-
-  # Validate geometries
-  grid_sf <- sf::st_make_valid(grid_sf)  # Ensure geometries are valid
-
-  # Check if geometries are POLYGON or MULTIPOLYGON; no need to extract if already these types
-  geom_types <- sf::st_geometry_type(grid_sf)
-
-  if (!all(geom_types %in% c("POLYGON", "MULTIPOLYGON"))) {
-    # If there are geometry collections or other types, extract only polygons
-    grid_sf <- sf::st_collection_extract(grid_sf, type = "POLYGON")
+  # 1. Obtener la tabla de categorías
+  if (is.factor(spat_raster_cat)) {
+    categories_df <- terra::cats(spat_raster_cat)[[1]]
+  } else {
+    stop("El raster no tiene una tabla de colores. Asumimos que es numérico.")
   }
 
-  # Ensure grid has an ID field of type character
-  if (!"ID" %in% colnames(grid_sf)) {
-    grid_sf$ID <- as.character(1:nrow(grid_sf))
-  }
+  # 2. Convertir el raster a numérico
+  spat_raster_num <- terra::as.numeric(spat_raster_cat)
 
-  # Use terra::extract() directly on the sf object
-  extracted_df <- terra::extract(cat_raster, grid_sf, fun = table, na.rm = TRUE, ID = TRUE)
+  # 3. Extraer la fracción de área para cada categoría con el raster numérico
+  extracted_fractions <- exactextractr::exact_extract(
+    x = spat_raster_num,
+    y = sf_hex_grid,
+    fun = 'frac',
+    progress = TRUE
+  )
 
-  # If proportion is TRUE, convert counts to proportions
-  if (proportion) {
-    total_pixels <- rowSums(extracted_df[,-1])  # Sum across land cover columns, excluding ID
-    extracted_df[,-1] <- extracted_df[,-1] / total_pixels  # Convert counts to proportions
-  }
+  # 4. Unir los resultados y dar formato
+  extracted_df <- as.data.frame(extracted_fractions)
 
-  # Join the extracted data back to the original sf object
-  result_sf <- dplyr::left_join(grid_sf, extracted_df, by = "ID")
+  # 5. Renombrar las columnas con las etiquetas de las categorías
+  # `names(extracted_fractions)` ya contiene los valores numericos
+  # Buscamos en categories_df los nombres de las etiquetas para cada valor
+  new_names <- paste0(
+    "frac_",
+    categories_df$category[match(as.integer(names(extracted_df)), categories_df$ID)]
+  )
+  colnames(extracted_df) <- new_names
 
-  return(result_sf)
+  # 6. Unir los resultados a la geometría original
+  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
+
+  return(sf_hex_grid_with_data)
 }

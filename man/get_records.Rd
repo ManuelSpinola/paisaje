@@ -9,9 +9,6 @@ get_records(species_name, aoi_sf, providers = NULL,
 limit = 500, date = NULL, remove_duplicates = FALSE)
 }
 \arguments{
-\item{species_name}{A character vector of species names to
-query.}
-
 \item{aoi_sf}{An `sf` object representing the area of
 interest.}
 
@@ -21,13 +18,16 @@ to query (e.g., "gbif", "inat").}
 \item{limit}{An integer specifying the maximum number of
 records to retrieve from each provider. Default is 500.}
 
+\item{remove_duplicates}{A logical value indicating whether
+to remove duplicate geometries from the resulting `sf` object.
+Default is `FALSE`.}
+
 \item{date}{A character vector of length 2 specifying the
 date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
 this range will be excluded.}
 
-\item{remove_duplicates}{A logical value indicating whether
-to remove duplicate geometries from the resulting `sf` object.
-Default is `FALSE`.}
+\item{species_name}{A character vector of species names to
+query.}
 }
 \value{
 An `sf` object containing the species occurrence

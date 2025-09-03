@@ -2,39 +2,44 @@
 % Please edit documentation in R/extract_cat_raster.R
 \name{extract_cat_raster}
 \alias{extract_cat_raster}
-\title{Extract Categorical Raster Data and Summarize by Grid}
+\title{Extract Categorical Raster Values by Polygons}
 \usage{
-extract_cat_raster(cat_raster, grid_sf, proportion = FALSE)
+extract_cat_raster(spat_raster_cat, sf_hex_grid)
 }
 \arguments{
-\item{cat_raster}{A categorical raster layer (e.g., land cover or land use) from which the values will be extracted.}
+\item{cat_raster}{A categorical raster (RasterLayer, SpatRaster, etc.).}
 
-\item{grid_sf}{A spatial grid object of class `sf` that defines the areas over which the raster values will be summarized. The geometries should be `POLYGON` or `MULTIPOLYGON`.}
+\item{grid_sf}{An sf object with polygon geometries.}
 
-\item{proportion}{Logical. If `TRUE`, the function returns the proportion of each land cover category in each grid cell. If `FALSE`, it returns the raw pixel counts. Default is `FALSE`.}
+\item{proportion}{Logical, whether to return proportions (default TRUE).}
 }
 \value{
-An `sf` object with the original grid geometries and additional columns for each land cover category, containing either the number of pixels or the proportion of pixels in each category per grid cell.
+An sf object with additional columns, one per raster category,
+representing proportion of coverage (or raw counts if proportion = FALSE).
 }
 \description{
-This function extracts categorical data (e.g., land cover or land use) from a raster using a spatial grid object (in `sf` format) and summarizes the number or proportion of pixels for each category in each grid cell.
-}
-\details{
-The function first checks that the geometries in the `grid_sf` object are valid, and ensures that the geometries are either `POLYGON` or `MULTIPOLYGON`. It then uses the `terra::extract()` function to extract the categorical data from the raster and aggregates the results either as counts or proportions, depending on the value of the `proportion` argument.
+Extract values from a categorical raster for each polygon in an sf object.
+Returns the proportion of each category within each polygon, accurately
+accounting for partial coverage using exactextractr.
 }
 \examples{
 \dontrun{
-# Load a categorical raster (e.g., land cover)
-land_cover_raster <- terra::rast("path_to_land_cover_raster.tif")
+library(sf)
+library(terra)
+library(paisaje)
 
-# Load an sf grid object
-grid_sf <- sf::st_read("path_to_grid_shapefile.shp")
+# Load example categorical raster
+r <- terra::rast(system.file("raster/nlcd.tif", package = "spDataLarge"))
 
-# Extract land cover counts for each grid cell
-result_sf <- extract_cat_raster(land_cover_raster, grid_sf, proportion = FALSE)
+# Create example polygon grid (H3 grid or any polygons)
+bbox <- st_bbox(r) |> st_as_sfc(crs = st_crs(4326)) |> st_as_sf()
+grid_sf <- get_h3_grid(bbox, resolution = 6)
 
-# Extract land cover proportions for each grid cell
-result_sf_proportion <- extract_cat_raster(land_cover_raster, grid_sf, proportion = TRUE)
+# Extract category proportions
+result_sf <- extract_cat_raster(r, grid_sf)
+
+# View first rows
+head(result_sf)
 }
 
 }

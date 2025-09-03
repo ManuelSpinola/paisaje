@@ -4,77 +4,36 @@
 \alias{get_records_by_hexagon}
 \title{Get species records by hexagon}
 \usage{
-get_records_by_hexagon(species_name, aoi_sf, res = 6,
+get_records_by_hexagon(species_names, aoi_sf, res = 6,
 providers = NULL, remove_duplicates = FALSE,
 expand_factor = 0.1, date = NULL)
 }
 \arguments{
-\item{species_name}{A character vector of one or more species
-names to search for.}
+\item{species_names}{Character vector of species names.}
 
-\item{aoi_sf}{An 'sf' object representing the area of
-interest. The AOI must have a valid Coordinate Reference
-System (CRS).}
+\item{aoi_sf}{`sf` polygon of the AOI.}
 
-\item{res}{An integer specifying the resolution of the
-hexagons (default is 6).}
+\item{res}{H3 resolution (1–16). Default 6.}
 
-\item{providers}{A character vector specifying the data
-providers to search (e.g., "gbif", "inat"). If NULL, uses
-all available providers.}
+\item{providers}{Character vector of data providers (e.g., "gbif").}
 
-\item{remove_duplicates}{A logical indicating whether to
-remove duplicate geometries from the results (default is
-FALSE).}
+\item{remove_duplicates}{Logical. Remove duplicate geometries. Default FALSE.}
 
-\item{expand_factor}{A numeric value indicating how much
-to expand the bounding box around the AOI (default is 0.1).}
+\item{date}{Character vector c("start","end") to filter by date.}
 
-\item{date}{A character vector specifying the date range
-for filtering records in the
-format `c("start_date", "end_date")`. The dates should be
-in "YYYY-MM-DD" format.}
+\item{expand_factor}{Numeric. Expand AOI bbox for full hex coverage. Default 0.1.}
 }
 \value{
-An 'sf' object containing hexagons with record counts
-for each species. If no records are found, the function
-returns hexagons with a count of 0. Each species will have
-its own column, with spaces replaced by underscores.
+`sf` object with hexagons and counts per species.
 }
 \description{
-This function retrieves species occurrence data
-within a specified area of interest (AOI) and aggregates
-the records into hexagonal grid cells. The function uses
-the H3 spatial index to generate hexagonal cells at a
-specified resolution, counts the number of occurrence
-records within each hexagon, and returns an `sf` object
-with the record counts.
-This function is wrapper of the occ function from the
- \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
-}
-\details{
-The function performs the following steps:
-1. Converts the area of interest to H3 cells at the
-specified resolution.
-2. Queries species occurrence data within the bounding
-box of the AOI from specified providers.
-3. Converts the species data into an `sf` object and
-optionally removes duplicate records based on geometry.
-4. Counts the number of occurrence points that fall
-within each hexagon and adds this count to the hexagon grid.
-}
-\note{
-Ensure that the AOI is provided as an `sf` object with a
-valid CRS. The function automatically transforms the AOI to WGS84 (EPSG:4326) if necessary.
+Retrieves species occurrence data within a given AOI and aggregates
+the records into H3 hexagonal grid cells. Counts the number of occurrences
+per species within each hexagon. Returns an `sf` object.
 }
 \examples{
 \dontrun{
-nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
-
-rec_hex <- get_records_by_hexagon("Lynx rufus", nc, res = 6,
-providers = c("gbif", "inat"), remove_duplicates = FALSE,
-expand_factor = 0.1)
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+hex_counts <- get_records_by_hexagon(c("Lynx rufus"), nc, res = 6)
 }
-
-
 }

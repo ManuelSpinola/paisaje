@@ -1,7 +1,7 @@
 Package: paisaje
 Type: Package
 Title: Tools for landscape analysis
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
   person(given = "Manuel",
            family = "Spínola",
@@ -27,6 +27,7 @@ Imports:
     httr,
     landscapemetrics,
     spocc,
+    exactextractr,
     progress
 Suggests:
     ggplot2,

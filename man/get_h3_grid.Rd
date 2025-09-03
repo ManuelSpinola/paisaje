@@ -7,44 +7,20 @@
 get_h3_grid(sf_object, resolution = 7, expand_factor = 0.1)
 }
 \arguments{
-\item{sf_object}{`sf` object. The spatial object for which the
-H3 grid will be generated. Must have a valid CRS.}
+\item{sf_object}{`sf` object. Must have a valid CRS.}
 
-\item{resolution}{Integer. The H3 resolution level for the
-hexagonal grid. Higher values create smaller hexagons.
-Default is 7. It should between 1 and 16}
+\item{resolution}{Integer. H3 resolution level (1–16). Default 7.}
 
-\item{expand_factor}{Numeric. A small value that expands
-the bounding box of the `sf_object` to ensure complete
-coverage by the hexagonal grid.
-This helps avoid edge cases where the grid might not fully
-cover the input object. Default is 0.1, which adjusts the
-bounding box by this amount on all sides.}
+\item{expand_factor}{Numeric. Expands bounding box to ensure coverage. Default 0.1.}
 }
 \description{
-This function generates a hexagonal grid of H3 cells at a
-specified resolution level that intersect with a given `sf`
-object.
-
-This function is a wrapper of functions from
-the \href{https://obrl-soil.github.io/h3jsr/}{h3jsr} package.
-}
-\details{
-\href{https://h3geo.org}{H3, a hexagonal hierarchical geospatial indexing system}
+Generates a hexagonal grid of H3 cells at a specified resolution
+that intersect with a given `sf` object. Wrapper for h3jsr functions.
 }
 \examples{
 \dontrun{
 library(sf)
-
-nc = st_read(system.file("shape/nc.shp", package="sf"))
-
-h3_grid_sf <- get_h3_grid(nc, resolution = 7,
-expand_factor = 0.1)
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+h3_grid_sf <- get_h3_grid(nc, resolution = 7)
 }
-
-}
-\references{
-O'Brien L (2023). h3jsr: Access Uber's H3 Library. R
-package version 1.3.1,
-<https://CRAN.R-project.org/package=h3jsr>.
 }

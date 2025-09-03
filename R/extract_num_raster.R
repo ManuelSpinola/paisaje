@@ -1,80 +1,57 @@
-#'
 #' @name extract_num_raster
-#'
-#' @title Extract Numerical Raster Data and Summarize by Grid
-#' with Custom Function
-#'
-#' @description
-#' This function extracts numerical data (e.g., temperature,
-#' elevation) from a raster using a spatial grid object (in `sf`
-#' format) and applies a custom function (e.g., mean, sum,
-#' median) to summarize the raster values for each grid cell.
-#'
-#' @usage
-#' extract_num_raster(num_raster, grid_sf, fun = mean)
-#'
-#' @param num_raster A numerical raster layer (e.g., temperature, elevation) from which the values will be extracted.
-#' @param grid_sf A spatial grid object of class `sf` that defines the areas over which the raster values will be summarized. The geometries should be `POLYGON` or `MULTIPOLYGON`.
-#' @param fun The summary function to apply to the raster values for each grid cell (e.g., mean, sum, median). Default is `mean`.
-#'
-#' @return An `sf` object with the original grid geometries and an additional column containing the summarized raster values for each grid cell.
-#'
-#' @details
-#' The function first checks that the geometries in the `grid_sf` object are valid, and ensures that the geometries are either `POLYGON` or `MULTIPOLYGON`. It then uses the `terra::extract()` function to extract the numerical data from the raster and applies the specified function to summarize the raster values for each grid cell.
-#'
+#' @title Extract raster values using weighted mean
+#' @description Extracts numeric raster values for each polygon in `grid_sf`
+#'   and computes a weighted mean using `exactextractr`.
+#' @param num_raster A numeric SpatRaster
+#' @param grid_sf An sf object with polygons
+#' @return An sf object with raster values added
+#' @importFrom dplyr left_join
+#' @importFrom purrr map
+#' @importFrom sf st_make_valid st_geometry_type st_collection_extract
+#' @importFrom exactextractr exact_extract
+#' @export
 #' @examples
 #' \dontrun{
-#' # Load a numerical raster (e.g., temperature)
-#' temp_raster <- terra::rast("path_to_temp_raster.tif")
+#' library(terra)
+#' library(sf)
+#' library(exactextractr)
 #'
-#' # Load an sf grid object
-#' grid_sf <- sf::st_read("path_to_grid_shapefile.shp")
+#' r <- rast(system.file("ex/elev.tif", package = "terra"))
+#' poly <- st_as_sf(st_sfc(st_polygon(list(rbind(
+#'   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
+#' ))), crs = crs(r)))
 #'
-#' # Extract mean temperature for each grid cell
-#' result_sf_mean <- extract_num_raster(temp_raster, grid_sf, fun = mean)
-#'
-#' # Extract sum of temperature values for each grid cell
-#' result_sf_sum <- extract_num_raster(temp_raster, grid_sf, fun = sum)
+#' result <- extract_num_raster(r, poly, fun = mean)
 #' }
-#'
-#' @export
 
+extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
 
-extract_num_raster <- function(num_raster, grid_sf, fun = mean) {
-
-  # Validate geometries
-  grid_sf <- sf::st_make_valid(grid_sf)  # Ensure geometries are valid
-
-  # Check if geometries are POLYGON or MULTIPOLYGON
-  geom_types <- sf::st_geometry_type(grid_sf)
-
-  if (!all(geom_types %in% c("POLYGON", "MULTIPOLYGON"))) {
-    # If there are geometry collections or other types, extract only polygons
-    grid_sf <- sf::st_collection_extract(grid_sf, type = "POLYGON")
+  if (!inherits(spat_raster_multi, "SpatRaster")) {
+    stop("El primer argumento debe ser un objeto SpatRaster.")
+  }
+  if (!inherits(sf_hex_grid, "sf")) {
+    stop("El segundo argumento debe ser un objeto sf de polígonos.")
   }
 
-  # Ensure grid has an ID field of type character
-  if (!"ID" %in% colnames(grid_sf)) {
-    grid_sf$ID <- as.character(1:nrow(grid_sf))  # Create ID as character
+  # Cambiar 'fraction' por 'area'
+  extracted_values <- exactextractr::exact_extract(
+    x = spat_raster_multi,
+    y = sf_hex_grid,
+    fun = 'weighted_mean',
+    weights = 'area'
+  )
+
+  # El resto de la función para formatear y unir los datos
+  if (is.matrix(extracted_values)) {
+    extracted_df <- as.data.frame(extracted_values)
+    colnames(extracted_df) <- names(spat_raster_multi)
+  } else if (is.data.frame(extracted_values)) {
+    extracted_df <- extracted_values
   } else {
-    grid_sf$ID <- as.character(grid_sf$ID)  # Convert existing ID to character
+    extracted_df <- as.data.frame(extracted_values)
   }
 
-  # Use terra::extract() with the custom function passed as an argument
-  extracted_df <- terra::extract(num_raster,
-                                 grid_sf,
-                                 fun = fun,
-                                 weights = TRUE,
-                                 exact = TRUE,
-                                 touches = TRUE,
-                                 na.rm = TRUE,
-                                 ID = TRUE)
+  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
 
-  # Convert the ID column in the extracted_df to character
-  extracted_df$ID <- as.character(extracted_df$ID)
-
-  # Join the extracted summarized values back to the original sf object
-  result_sf <- dplyr::left_join(grid_sf, extracted_df, by = "ID")
-
-  return(result_sf)
+  return(sf_hex_grid_with_data)
 }

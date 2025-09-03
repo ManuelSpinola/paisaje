@@ -7,24 +7,24 @@
 count_points_in_polygons(points_sf, polygons_sf)
 }
 \arguments{
-\item{points_sf}{points_sf An `sf` object representing point geometries. Must contain a `species` column.}
+\item{points_sf}{An `sf` object containing point geometries. Must contain a `species` column.}
 
-\item{polygons_sf}{An sf object representing polygon geometries.}
+\item{polygons_sf}{An `sf` object containing polygon geometries.}
 }
 \value{
-An `sf` object containing the original polygon geometries and additional columns, one for each species, indicating the count of points of that species within each polygon.
+An `sf` object containing the original polygons and additional columns for each species count.
 }
 \description{
-This function counts the number of points within each polygon and creates separate columns for each species if a `species` column is present in the points dataset. Spaces in species
-names are replaced with underscores for column naming.
+Counts the number of points per species within each polygon.
+If the points dataset has a `species` column, a separate column
+is created for each species with counts. Spaces in species names
+are replaced with underscores for column naming.
 }
 \examples{
 \dontrun{
-# Example usage assuming 'points' and 'polygons' are sf objects
-
 library(sf)
 
-# Create example points_sf with species column
+# Example points
 points_sf <- st_as_sf(data.frame(
   id = 1:6,
   species = c("Panthera onca", "Panthera onca", "Felis catus",
@@ -33,19 +33,17 @@ points_sf <- st_as_sf(data.frame(
   y = c(1, 2, 3, 4, 5, 6)
 ), coords = c("x", "y"), crs = 4326)
 
-# Create example polygons_sf
+# Example polygons
 polygons_sf <- st_as_sf(data.frame(
   id = 1:2,
   geometry = st_sfc(
-    st_polygon(list(rbind(c(0, 0), c(3, 0), c(3, 3), c(0, 3), c(0, 0)))),
-    st_polygon(list(rbind(c(3, 3), c(6, 3), c(6, 6), c(3, 6), c(3, 3))))
+    st_polygon(list(rbind(c(0,0), c(3,0), c(3,3), c(0,3), c(0,0)))),
+    st_polygon(list(rbind(c(3,3), c(6,3), c(6,6), c(3,6), c(3,3))))
   )
 ), crs = 4326)
 
-# Run the function
+# Count points per species within polygons
 result <- count_points_in_polygons(points_sf, polygons_sf)
-
-# View the result
 print(result)
 }
 

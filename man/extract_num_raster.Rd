@@ -2,43 +2,33 @@
 % Please edit documentation in R/extract_num_raster.R
 \name{extract_num_raster}
 \alias{extract_num_raster}
-\title{Extract Numerical Raster Data and Summarize by Grid
-with Custom Function}
+\title{Extract raster values using weighted mean}
 \usage{
-extract_num_raster(num_raster, grid_sf, fun = mean)
+extract_num_raster(spat_raster_multi, sf_hex_grid)
 }
 \arguments{
-\item{num_raster}{A numerical raster layer (e.g., temperature, elevation) from which the values will be extracted.}
+\item{num_raster}{A numeric SpatRaster}
 
-\item{grid_sf}{A spatial grid object of class `sf` that defines the areas over which the raster values will be summarized. The geometries should be `POLYGON` or `MULTIPOLYGON`.}
-
-\item{fun}{The summary function to apply to the raster values for each grid cell (e.g., mean, sum, median). Default is `mean`.}
+\item{grid_sf}{An sf object with polygons}
 }
 \value{
-An `sf` object with the original grid geometries and an additional column containing the summarized raster values for each grid cell.
+An sf object with raster values added
 }
 \description{
-This function extracts numerical data (e.g., temperature,
-elevation) from a raster using a spatial grid object (in `sf`
-format) and applies a custom function (e.g., mean, sum,
-median) to summarize the raster values for each grid cell.
-}
-\details{
-The function first checks that the geometries in the `grid_sf` object are valid, and ensures that the geometries are either `POLYGON` or `MULTIPOLYGON`. It then uses the `terra::extract()` function to extract the numerical data from the raster and applies the specified function to summarize the raster values for each grid cell.
+Extracts numeric raster values for each polygon in `grid_sf`
+  and computes a weighted mean using `exactextractr`.
 }
 \examples{
 \dontrun{
-# Load a numerical raster (e.g., temperature)
-temp_raster <- terra::rast("path_to_temp_raster.tif")
+library(terra)
+library(sf)
+library(exactextractr)
 
-# Load an sf grid object
-grid_sf <- sf::st_read("path_to_grid_shapefile.shp")
+r <- rast(system.file("ex/elev.tif", package = "terra"))
+poly <- st_as_sf(st_sfc(st_polygon(list(rbind(
+  c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
+))), crs = crs(r)))
 
-# Extract mean temperature for each grid cell
-result_sf_mean <- extract_num_raster(temp_raster, grid_sf, fun = mean)
-
-# Extract sum of temperature values for each grid cell
-result_sf_sum <- extract_num_raster(temp_raster, grid_sf, fun = sum)
+result <- extract_num_raster(r, poly, fun = mean)
 }
-
 }
