@@ -21,7 +21,7 @@
 #'   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
 #' ))), crs = crs(r)))
 #'
-#' result <- extract_num_raster(r, poly, fun = mean)
+#' result <- extract_num_raster(r, poly)
 #' }
 
 extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
