@@ -2,15 +2,13 @@
 #' @title Extract Categorical Raster Values by Polygons
 #' @description
 #' Extract values from a categorical raster for each polygon in an sf object.
-#' Returns the proportion of each category within each polygon, accurately
-#' accounting for partial coverage using exactextractr.
+#' Returns the proportion of each category within each polygon using exactextractr.
 #'
-#' @param cat_raster A categorical raster (RasterLayer, SpatRaster, etc.).
-#' @param grid_sf An sf object with polygon geometries.
-#' @param proportion Logical, whether to return proportions (default TRUE).
+#' @param spat_raster_cat A categorical raster (SpatRaster).
+#' @param sf_hex_grid An sf object with polygon geometries.
 #'
 #' @return An sf object with additional columns, one per raster category,
-#' representing proportion of coverage (or raw counts if proportion = FALSE).
+#' representing proportion of coverage.
 #'
 #' @examples
 #' \dontrun{
@@ -18,55 +16,47 @@
 #' library(terra)
 #' library(paisaje)
 #'
-#' # Load example categorical raster
-#' r <- terra::rast(system.file("raster/nlcd.tif", package = "spDataLarge"))
-#'
-#' # Create example polygon grid (H3 grid or any polygons)
+#' r <- rast("landcover.tif")
 #' bbox <- st_bbox(r) |> st_as_sfc(crs = st_crs(4326)) |> st_as_sf()
 #' grid_sf <- get_h3_grid(bbox, resolution = 6)
-#'
-#' # Extract category proportions
 #' result_sf <- extract_cat_raster(r, grid_sf)
-#'
-#' # View first rows
 #' head(result_sf)
 #' }
 #'
 #' @export
 extract_cat_raster <- function(spat_raster_cat, sf_hex_grid) {
 
-  # 1. Obtener la tabla de categorías
-  if (is.factor(spat_raster_cat)) {
-    categories_df <- terra::cats(spat_raster_cat)[[1]]
-  } else {
-    stop("El raster no tiene una tabla de colores. Asumimos que es numérico.")
+  if (!inherits(spat_raster_cat, "SpatRaster")) {
+    stop("spat_raster_cat must be a SpatRaster object.")
+  }
+  if (!inherits(sf_hex_grid, "sf")) {
+    stop("sf_hex_grid must be an sf object.")
   }
 
-  # 2. Convertir el raster a numérico
-  spat_raster_num <- terra::as.numeric(spat_raster_cat)
+  # 1. Get unique categories from raster
+  raster_values <- terra::values(spat_raster_cat)
+  categories <- sort(unique(raster_values[!is.na(raster_values)]))
 
-  # 3. Extraer la fracción de área para cada categoría con el raster numérico
+  # 2. Create a numeric copy to pass to exact_extract
+  spat_raster_num <- spat_raster_cat
+  terra::values(spat_raster_num) <- raster_values
+
+  # 3. Extract fractional coverage for each category
   extracted_fractions <- exactextractr::exact_extract(
     x = spat_raster_num,
     y = sf_hex_grid,
-    fun = 'frac',
+    fun = function(values, coverage_fractions) {
+      sapply(categories, function(cat) sum(coverage_fractions[values == cat], na.rm = TRUE))
+    },
     progress = TRUE
   )
 
-  # 4. Unir los resultados y dar formato
-  extracted_df <- as.data.frame(extracted_fractions)
+  # 4. Convert to data.frame and name columns
+  extracted_df <- do.call(rbind, extracted_fractions)
+  colnames(extracted_df) <- paste0("frac_", categories)
 
-  # 5. Renombrar las columnas con las etiquetas de las categorías
-  # `names(extracted_fractions)` ya contiene los valores numericos
-  # Buscamos en categories_df los nombres de las etiquetas para cada valor
-  new_names <- paste0(
-    "frac_",
-    categories_df$category[match(as.integer(names(extracted_df)), categories_df$ID)]
-  )
-  colnames(extracted_df) <- new_names
-
-  # 6. Unir los resultados a la geometría original
-  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
+  # 5. Bind results to original polygons
+  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, as.data.frame(extracted_df))
 
   return(sf_hex_grid_with_data)
 }

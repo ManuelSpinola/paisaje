@@ -2,33 +2,32 @@
 % Please edit documentation in R/extract_num_raster.R
 \name{extract_num_raster}
 \alias{extract_num_raster}
-\title{Extract raster values using weighted mean}
+\title{Extract Numeric Raster Values by Polygons}
 \usage{
-extract_num_raster(spat_raster_multi, sf_hex_grid)
+extract_num_raster(spat_raster, polygons_sf)
 }
 \arguments{
-\item{num_raster}{A numeric SpatRaster}
+\item{spat_raster}{A `SpatRaster` object (single or multilayer numeric raster).}
 
-\item{grid_sf}{An sf object with polygons}
+\item{polygons_sf}{An `sf` object with polygon geometries (e.g., H3 hexagons).}
 }
 \value{
-An sf object with raster values added
+An `sf` object with additional columns for each raster layer.
 }
 \description{
-Extracts numeric raster values for each polygon in `grid_sf`
-  and computes a weighted mean using `exactextractr`.
+Extract numeric raster values for each polygon in an `sf` object.
+Uses `exactextractr` to compute the weighted mean based on area overlap.
 }
 \examples{
 \dontrun{
-library(terra)
 library(sf)
+library(terra)
 library(exactextractr)
 
-r <- rast(system.file("ex/elev.tif", package = "terra"))
-poly <- st_as_sf(st_sfc(st_polygon(list(rbind(
-  c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
-))), crs = crs(r)))
-
-result <- extract_num_raster(r, poly)
+r <- rast(system.file("raster/bio.tif", package = "spData"))
+grid_sf <- get_h3_grid(st_as_sf(st_bbox(r)), resolution = 6)
+result_sf <- extract_num_raster(r, grid_sf)
+head(result_sf)
 }
+
 }

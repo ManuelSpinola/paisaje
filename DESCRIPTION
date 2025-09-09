@@ -14,7 +14,7 @@ Description: This package contains functions to perform landscape analysis
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://manuelspinola.github.io/paisaje/
 Imports:
     rlang,
@@ -28,9 +28,7 @@ Imports:
     landscapemetrics,
     spocc,
     exactextractr,
-    progress
+    progress,
+    magrittr
 Suggests:
-    ggplot2,
-    spDataLarge
-    
-
+    ggplot2

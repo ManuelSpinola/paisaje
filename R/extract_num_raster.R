@@ -1,57 +1,59 @@
 #' @name extract_num_raster
-#' @title Extract raster values using weighted mean
-#' @description Extracts numeric raster values for each polygon in `grid_sf`
-#'   and computes a weighted mean using `exactextractr`.
-#' @param num_raster A numeric SpatRaster
-#' @param grid_sf An sf object with polygons
-#' @return An sf object with raster values added
-#' @importFrom dplyr left_join
-#' @importFrom purrr map
-#' @importFrom sf st_make_valid st_geometry_type st_collection_extract
-#' @importFrom exactextractr exact_extract
-#' @export
+#' @title Extract Numeric Raster Values by Polygons
+#' @description
+#' Extract numeric raster values for each polygon in an `sf` object.
+#' Uses `exactextractr` to compute the weighted mean based on area overlap.
+#'
+#' @param spat_raster A `SpatRaster` object (single or multilayer numeric raster).
+#' @param polygons_sf An `sf` object with polygon geometries (e.g., H3 hexagons).
+#'
+#' @return An `sf` object with additional columns for each raster layer.
+#'
 #' @examples
 #' \dontrun{
-#' library(terra)
 #' library(sf)
+#' library(terra)
 #' library(exactextractr)
 #'
-#' r <- rast(system.file("ex/elev.tif", package = "terra"))
-#' poly <- st_as_sf(st_sfc(st_polygon(list(rbind(
-#'   c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)
-#' ))), crs = crs(r)))
-#'
-#' result <- extract_num_raster(r, poly)
+#' r <- rast(system.file("raster/bio.tif", package = "spData"))
+#' grid_sf <- get_h3_grid(st_as_sf(st_bbox(r)), resolution = 6)
+#' result_sf <- extract_num_raster(r, grid_sf)
+#' head(result_sf)
 #' }
+#'
+#' @importFrom dplyr bind_cols
+#' @importFrom exactextractr exact_extract
+#' @export
+extract_num_raster <- function(spat_raster, polygons_sf) {
 
-extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
-
-  if (!inherits(spat_raster_multi, "SpatRaster")) {
-    stop("El primer argumento debe ser un objeto SpatRaster.")
+  # Input checks
+  if (!inherits(spat_raster, "SpatRaster")) {
+    stop("`spat_raster` must be a SpatRaster object.")
   }
-  if (!inherits(sf_hex_grid, "sf")) {
-    stop("El segundo argumento debe ser un objeto sf de polígonos.")
+  if (!inherits(polygons_sf, "sf")) {
+    stop("`polygons_sf` must be an sf object with polygons.")
   }
 
-  # Cambiar 'fraction' por 'area'
-  extracted_values <- exactextractr::exact_extract(
-    x = spat_raster_multi,
-    y = sf_hex_grid,
-    fun = 'weighted_mean',
-    weights = 'area'
+  # Extract weighted mean for each polygon
+  extracted_list <- exactextractr::exact_extract(
+    x = spat_raster,
+    y = polygons_sf,
+    fun = "weighted_mean",
+    weights = "area"
   )
 
-  # El resto de la función para formatear y unir los datos
-  if (is.matrix(extracted_values)) {
-    extracted_df <- as.data.frame(extracted_values)
-    colnames(extracted_df) <- names(spat_raster_multi)
-  } else if (is.data.frame(extracted_values)) {
-    extracted_df <- extracted_values
-  } else {
-    extracted_df <- as.data.frame(extracted_values)
+  # Combine list into a data.frame
+  extracted_df <- do.call(rbind, lapply(extracted_list, as.data.frame))
+
+  # Assign layer names
+  layer_names <- names(spat_raster)
+  if (is.null(layer_names)) {
+    layer_names <- paste0("layer_", seq_len(terra::nlyr(spat_raster)))
   }
+  colnames(extracted_df) <- layer_names
 
-  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
+  # Bind results to polygons
+  polygons_sf <- dplyr::bind_cols(polygons_sf, extracted_df)
 
-  return(sf_hex_grid_with_data)
+  return(polygons_sf)
 }

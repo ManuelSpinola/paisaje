@@ -13,10 +13,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-# paisaje <img align="right" width="180" src="man/figures/paisaje_logo.png">
+<div style="display: flex; align-items: center; margin-bottom: 20px;">
+  <img src="man/figures/paisaje_logo.png" width="120" style="margin-right: 20px;" />
+  <h1 style="margin: 0; border: none; padding: 0;">paisaje</h1>
+</div>
 
-<!-- badges: start -->
-<!-- badges: end -->
 
 The goal of paisaje is to provide tools for landscape analysis.
 
@@ -24,7 +25,7 @@ The goal of paisaje is to provide tools for landscape analysis.
 
 You can install the development version of paisaje from [GitHub](https://github.com/) with:
 
-``` r
+```{r, eval=FALSE}
 install.packages("devtools")
 devtools::install_github("ManuelSpinola/paisaje")
 ```

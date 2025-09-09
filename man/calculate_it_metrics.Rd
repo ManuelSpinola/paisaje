@@ -29,20 +29,21 @@ This is a wrapper of the function "sample_lsm" from the
 \examples{
 \dontrun{
 library(sf)
-library(spDataLarge)
+library(terra)
+library(exactextractr)
 
-landscape_raster <- terra::rast(system.file("raster/nlcd.tif",
-package = "spDataLarge"))
+clc <- rast(system.file('sao_miguel/clc2018_v2020_20u1.tif',
+package = 'exactextractr'))
 
-bbox <- st_bbox(landscape_raster) |>
-st_as_sfc(crs = EPSG:26912) |>
+
+bbox <- st_bbox(clc) |>
+st_as_sfc() |>
 st_as_sf()
 
-h3_bbox <- get_h3_grid(bbox, resolution = 6) |>
-st_transform(26912)
+h3_bbox <- get_h3_grid(bbox, resolution = 6)
 
 
-result_sf <- calculate_it_metrics(landscape_raster, h3_bbox)
+result_sf <- calculate_it_metrics(clc, h3_bbox)
 }
 
 }

@@ -1,10 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# paisaje <img align="right" width="180" src="man/figures/paisaje_logo.png">
+<div style="display: flex; align-items: center; margin-bottom: 20px;">
 
-<!-- badges: start -->
-<!-- badges: end -->
+<img src="man/figures/paisaje_logo.png" width="120" style="margin-right: 20px;" />
+<h1 style="margin: 0; border: none; padding: 0;">
+
+paisaje
+</h1>
+
+</div>
 
 The goal of paisaje is to provide tools for landscape analysis.
 
@@ -34,7 +39,7 @@ Let’s bring an sf object
 ``` r
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 #> Reading layer `nc' from data source 
-#>   `/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/sf/shape/nc.shp' 
+#>   `/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/sf/shape/nc.shp' 
 #>   using driver `ESRI Shapefile'
 #> Simple feature collection with 100 features and 14 fields
 #> Geometry type: MULTIPOLYGON
@@ -58,4 +63,4 @@ ggplot() +
   geom_sf(data = h3_grid_nc, alpha = 0.4, color = "coral", linewidth = 0.5)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />

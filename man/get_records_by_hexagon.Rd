@@ -4,12 +4,12 @@
 \alias{get_records_by_hexagon}
 \title{Get species records by hexagon}
 \usage{
-get_records_by_hexagon(species_names, aoi_sf, res = 6,
-providers = NULL, remove_duplicates = FALSE,
-expand_factor = 0.1, date = NULL)
+get_records_by_hexagon(species, aoi_sf, res = 6,
+providers = NULL, remove_duplicates = FALSE, date = NULL,
+expand_factor = 0.1, limit = 500)
 }
 \arguments{
-\item{species_names}{Character vector of species names.}
+\item{species}{Character vector of species names.}
 
 \item{aoi_sf}{`sf` polygon of the AOI.}
 
@@ -22,6 +22,8 @@ expand_factor = 0.1, date = NULL)
 \item{date}{Character vector c("start","end") to filter by date.}
 
 \item{expand_factor}{Numeric. Expand AOI bbox for full hex coverage. Default 0.1.}
+
+\item{limit}{Integer. Maximum number of records to download per species. Default 500.}
 }
 \value{
 `sf` object with hexagons and counts per species.
@@ -33,7 +35,13 @@ per species within each hexagon. Returns an `sf` object.
 }
 \examples{
 \dontrun{
+library(sf)
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
-hex_counts <- get_records_by_hexagon(c("Lynx rufus"), nc, res = 6)
+hex_counts <- get_records_by_hexagon(
+  species = c("Lynx rufus"),
+  aoi_sf = nc,
+  res = 6,
+  limit = 200
+)
 }
 }

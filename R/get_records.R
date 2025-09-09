@@ -1,55 +1,35 @@
-#'
 #' @name get_records
-#'
-#' @title Retrieve species occurrence records within an Area
-#' of Interest
-#'
+#' @title Retrieve species occurrence records within an Area of Interest
 #' @description
 #' This function retrieves species occurrence records from
 #' specified data providers within a given area of interest (AOI).
 #' The records are returned as an `sf` object, optionally with
 #' duplicates removed based on geometry.
-#' This function is wrapper of the occ function from the
-#'  \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
+#' This function is a wrapper of the occ function from the
+#' \href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
 #'
+#' @usage get_records(species, aoi_sf, providers = NULL,
+#' limit = 500, remove_duplicates = FALSE, date = NULL)
 #'
-#' @usage get_records(species_name, aoi_sf, providers = NULL,
-#' limit = 500, date = NULL, remove_duplicates = FALSE)
+#' @param species A character vector of species names to query.
+#' @param aoi_sf An `sf` object representing the area of interest.
+#' @param providers A character vector of data providers to query (e.g., "gbif", "inat").
+#' @param limit An integer specifying the maximum number of records to retrieve from each provider. Default is 500.
+#' @param remove_duplicates A logical value indicating whether to remove duplicate geometries from the resulting `sf` object. Default is FALSE.
+#' @param date A character vector of length 2 specifying the date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside this range will be excluded.
 #'
-#' @param species_name A character vector of species names to
-#' query.
-#' @param aoi_sf An `sf` object representing the area of
-#' interest.
-#' @param providers A character vector of data providers
-#' to query (e.g., "gbif", "inat").
-#'
-#' @param limit An integer specifying the maximum number of
-#' records to retrieve from each provider. Default is 500.
-#' @param date A character vector of length 2 specifying the
-#' date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside
-#' this range will be excluded.
-#' @param remove_duplicates A logical value indicating whether
-#' to remove duplicate geometries from the resulting `sf` object.
-#' Default is `FALSE`.
-#'
-#' @return An `sf` object containing the species occurrence
-#' records that fall within the specified AOI and meet the
-#' query criteria. Returns `NULL` if no records are found or
-#' if there are issues with the input.
+#' @return An `sf` object containing the species occurrence records that fall within the specified AOI and meet the query criteria. Returns `NULL` if no records are found or if there are issues with the input.
 #'
 #' @importFrom rlang .data
+#' @importFrom magrittr %>%
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' nc = sf::st_read(system.file("shape/nc.shp", package="sf"))
-#'
-#' records <- get_records("Lynx rufus", nc, providers = c("gbif",
-#' "inat"))
+#' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+#' records <- get_records(species = "Lynx rufus", nc, providers = c("gbif", "inat"))
 #' }
-#'
-
 
 get_records <- function(species,
                         aoi_sf,

@@ -7,20 +7,17 @@
 extract_cat_raster(spat_raster_cat, sf_hex_grid)
 }
 \arguments{
-\item{cat_raster}{A categorical raster (RasterLayer, SpatRaster, etc.).}
+\item{spat_raster_cat}{A categorical raster (SpatRaster).}
 
-\item{grid_sf}{An sf object with polygon geometries.}
-
-\item{proportion}{Logical, whether to return proportions (default TRUE).}
+\item{sf_hex_grid}{An sf object with polygon geometries.}
 }
 \value{
 An sf object with additional columns, one per raster category,
-representing proportion of coverage (or raw counts if proportion = FALSE).
+representing proportion of coverage.
 }
 \description{
 Extract values from a categorical raster for each polygon in an sf object.
-Returns the proportion of each category within each polygon, accurately
-accounting for partial coverage using exactextractr.
+Returns the proportion of each category within each polygon using exactextractr.
 }
 \examples{
 \dontrun{
@@ -28,17 +25,10 @@ library(sf)
 library(terra)
 library(paisaje)
 
-# Load example categorical raster
-r <- terra::rast(system.file("raster/nlcd.tif", package = "spDataLarge"))
-
-# Create example polygon grid (H3 grid or any polygons)
+r <- rast("landcover.tif")
 bbox <- st_bbox(r) |> st_as_sfc(crs = st_crs(4326)) |> st_as_sf()
 grid_sf <- get_h3_grid(bbox, resolution = 6)
-
-# Extract category proportions
 result_sf <- extract_cat_raster(r, grid_sf)
-
-# View first rows
 head(result_sf)
 }
 
