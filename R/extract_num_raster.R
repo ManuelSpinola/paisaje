@@ -1,13 +1,13 @@
 #' @name extract_num_raster
 #' @title Extract Numeric Raster Values by Polygons
 #' @description
-#' Extract numeric raster values for each polygon in an `sf` object.
-#' Uses `exactextractr` to compute the weighted mean based on area overlap.
+#' Extracts numeric raster values for each polygon in an sf object.
+#' Uses exactextractr to compute the weighted mean using the area of overlap.
 #'
-#' @param spat_raster A `SpatRaster` object (single or multilayer numeric raster).
-#' @param polygons_sf An `sf` object with polygon geometries (e.g., H3 hexagons).
+#' @param spat_raster_multi A SpatRaster object (single or multilayer numeric raster).
+#' @param sf_hex_grid An sf object with polygon geometries (e.g., H3 hexagons).
 #'
-#' @return An `sf` object with additional columns for each raster layer.
+#' @return An sf object with additional columns for each raster layer.
 #'
 #' @examples
 #' \dontrun{
@@ -24,36 +24,30 @@
 #' @importFrom dplyr bind_cols
 #' @importFrom exactextractr exact_extract
 #' @export
-extract_num_raster <- function(spat_raster, polygons_sf) {
 
-  # Input checks
-  if (!inherits(spat_raster, "SpatRaster")) {
-    stop("`spat_raster` must be a SpatRaster object.")
+extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
+
+  if (!inherits(spat_raster_multi, "SpatRaster")) {
+    stop("El primer argumento debe ser un objeto SpatRaster.")
   }
-  if (!inherits(polygons_sf, "sf")) {
-    stop("`polygons_sf` must be an sf object with polygons.")
+  if (!inherits(sf_hex_grid, "sf")) {
+    stop("El segundo argumento debe ser un objeto sf con polígonos.")
   }
 
-  # Extract weighted mean for each polygon
-  extracted_list <- exactextractr::exact_extract(
-    x = spat_raster,
-    y = polygons_sf,
+  # Extraer valores ponderados por área, forzando data.frame
+  extracted_df <- exactextractr::exact_extract(
+    x = spat_raster_multi,
+    y = sf_hex_grid,
     fun = "weighted_mean",
-    weights = "area"
+    weights = "area",
+    force_df = TRUE
   )
 
-  # Combine list into a data.frame
-  extracted_df <- do.call(rbind, lapply(extracted_list, as.data.frame))
+  # Asegurar nombres de columnas correctos
+  colnames(extracted_df) <- names(spat_raster_multi)[seq_len(ncol(extracted_df))]
 
-  # Assign layer names
-  layer_names <- names(spat_raster)
-  if (is.null(layer_names)) {
-    layer_names <- paste0("layer_", seq_len(terra::nlyr(spat_raster)))
-  }
-  colnames(extracted_df) <- layer_names
+  # Combinar con la grilla sf original
+  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
 
-  # Bind results to polygons
-  polygons_sf <- dplyr::bind_cols(polygons_sf, extracted_df)
-
-  return(polygons_sf)
+  return(sf_hex_grid_with_data)
 }

@@ -4,19 +4,19 @@
 \alias{extract_num_raster}
 \title{Extract Numeric Raster Values by Polygons}
 \usage{
-extract_num_raster(spat_raster, polygons_sf)
+extract_num_raster(spat_raster_multi, sf_hex_grid)
 }
 \arguments{
-\item{spat_raster}{A `SpatRaster` object (single or multilayer numeric raster).}
+\item{spat_raster_multi}{A SpatRaster object (single or multilayer numeric raster).}
 
-\item{polygons_sf}{An `sf` object with polygon geometries (e.g., H3 hexagons).}
+\item{sf_hex_grid}{An sf object with polygon geometries (e.g., H3 hexagons).}
 }
 \value{
-An `sf` object with additional columns for each raster layer.
+An sf object with additional columns for each raster layer.
 }
 \description{
-Extract numeric raster values for each polygon in an `sf` object.
-Uses `exactextractr` to compute the weighted mean based on area overlap.
+Extracts numeric raster values for each polygon in an sf object.
+Uses exactextractr to compute the weighted mean using the area of overlap.
 }
 \examples{
 \dontrun{
