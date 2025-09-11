@@ -4,14 +4,16 @@
 \name{paisaje-package}
 \alias{paisaje}
 \alias{paisaje-package}
-\title{paisaje: Tools for landscape analysis}
+\title{paisaje: Tools for Landscape Analysis}
 \description{
-This package contains functions to perform landscape analysis Some of the functions allows to get data for landscape analysis.
+Provides functions for landscape analysis. Includes tools to retrieve environmental data and compute landscape metrics.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://manuelspinola.github.io/paisaje/}
+  \item \url{https://github.com/ManuelSpinola/paisaje}
+  \item Report bugs at \url{https://github.com/ManuelSpinola/paisaje/issues}
 }
 
 }

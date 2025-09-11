@@ -28,13 +28,13 @@
 extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
 
   if (!inherits(spat_raster_multi, "SpatRaster")) {
-    stop("El primer argumento debe ser un objeto SpatRaster.")
+    stop("The first argument must be a SpatRaster object.")
   }
   if (!inherits(sf_hex_grid, "sf")) {
-    stop("El segundo argumento debe ser un objeto sf con polígonos.")
+    stop("The second argument must be an sf object with polygons.")
   }
 
-  # Extraer valores ponderados por área, forzando data.frame
+  # Extract area-weighted values, forcing data.frame
   extracted_df <- exactextractr::exact_extract(
     x = spat_raster_multi,
     y = sf_hex_grid,
@@ -43,10 +43,10 @@ extract_num_raster <- function(spat_raster_multi, sf_hex_grid) {
     force_df = TRUE
   )
 
-  # Asegurar nombres de columnas correctos
+  # Ensure correct column names
   colnames(extracted_df) <- names(spat_raster_multi)[seq_len(ncol(extracted_df))]
 
-  # Combinar con la grilla sf original
+  # Combine with the original sf grid
   sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, extracted_df)
 
   return(sf_hex_grid_with_data)
