@@ -29,7 +29,7 @@ specified data providers within a given area of interest (AOI).
 The records are returned as an `sf` object, optionally with
 duplicates removed based on geometry.
 This function is a wrapper of the occ function from the
-\href{https://cran.r-project.org/web/packages/spocc/index.html}{spocc package}.
+\href{https://CRAN.R-project.org/package=spocc}{spocc package}
 }
 \examples{
 \dontrun{

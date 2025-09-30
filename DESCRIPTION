@@ -29,8 +29,10 @@ Imports:
     magrittr
 Suggests:
     ggplot2,
-    knitr,
-    rmarkdown
+    rmarkdown,
+    knitr
+VignetteBuilder: 
+    knitr
 Depends: 
     R (>= 4.1.0)
 LazyData: true

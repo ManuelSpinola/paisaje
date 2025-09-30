@@ -11,7 +11,13 @@ paisaje
 
 </div>
 
-The goal of paisaje is to provide tools for landscape analysis.
+[![R-CMD-check](https://github.com/ManuelSpinola/paisaje/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ManuelSpinola/paisaje/actions/workflows/R-CMD-check.yaml)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+The goal of **paisaje** is to provide tools for spatial and landscape
+analysis in R. It includes functions for working with landscape metrics,
+spatial data manipulation, and biodiversity conservation applications.
 
 ## Installation
 
@@ -23,44 +29,6 @@ install.packages("devtools")
 devtools::install_github("ManuelSpinola/paisaje")
 ```
 
-## Example
+## License
 
-This is a basic example which shows you how to use the package:
-
-``` r
-library(paisaje)
-library(tidyverse)
-library(sf)
-library(h3jsr)
-```
-
-Let’s bring an sf object
-
-``` r
-nc = st_read(system.file("shape/nc.shp", package="sf"))
-#> Reading layer `nc' from data source 
-#>   `/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/sf/shape/nc.shp' 
-#>   using driver `ESRI Shapefile'
-#> Simple feature collection with 100 features and 14 fields
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#> Geodetic CRS:  NAD27
-```
-
-Create an h3 grid of resolution 4
-
-``` r
-h3_grid_nc <- get_h3_grid(nc, resolution = 4)
-```
-
-Make a map
-
-``` r
-ggplot() +
-  theme_minimal() +
-  geom_sf(data = nc, color = "blue", linewidth = 0.5) +
-  geom_sf(data = h3_grid_nc, alpha = 0.4, color = "coral", linewidth = 0.5)
-```
-
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+This package is released under the MIT License.
