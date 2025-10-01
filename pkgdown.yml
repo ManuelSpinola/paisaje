@@ -3,8 +3,8 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   paisaje: paisaje.html
-  tutorial1: tutorial1.html
-last_built: 2025-09-12T20:51Z
+  articles/tutorial1: tutorial1.html
+last_built: 2025-10-01T01:11Z
 urls:
   reference: https://manuelspinola.github.io/paisaje/reference
   article: https://manuelspinola.github.io/paisaje/articles
