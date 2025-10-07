@@ -1,67 +1,50 @@
-#'
 #' @name create_cat_esa_10m
-#'
-#' @title Create Categorical Land Cover Raster from Copernicus
-#' Land Cover Data \href{https://esa-worldcover.org/en}{ESA
-#' WorldCover}
-#'
+#' @title Create Categorical Land Cover Raster from Copernicus ESA WorldCover Data
 #' @description
-#' This function takes a `SpatRaster` object representing
-#' Copernicus land cover data, reclassifies it into categorical
-#' values based on specified land cover classes, and returns
-#' the resulting categorical raster.
+#' This function takes a `SpatRaster` object containing Copernicus
+#' ESA WorldCover land cover data, reclassifies it into
+#' categorical land cover classes based on predefined schemes,
+#' and returns the resulting categorical raster.
 #'
-#' @usage
-#' create_cat_esa_10m(land_cover)
+#' @usage create_cat_esa_10m(land_cover)
 #'
-#' @param land_cover A SpatRaster object representing the input
-#' land cover raster. The raster should contain land cover
-#' classes defined by the Copernicus program.
+#' @param land_cover A `SpatRaster` object representing the
+#'   input land cover raster from Copernicus ESA WorldCover.
+#'   This raster should contain land cover classes as defined
+#'   by the Copernicus program.
 #'
-#' @return A SpatRaster object representing the reclassified
-#' categorical land cover raster.
+#' @return A `SpatRaster` object containing the reclassified
+#'   categorical land cover raster. Each pixel will have a
+#'   category corresponding to a defined land cover type.
 #'
-#' @details The function defines land cover categories and
-#' assigns corresponding colors. It reclassifies the input
-#' raster based on predefined categories.
+#' @details
+#' The function uses a predefined classification scheme for
+#' ESA WorldCover data, assigning numeric or categorical
+#' values to represent different land cover types. The
+#' resulting raster can be used for further spatial analysis
+#' or landscape ecology studies.
 #'
 #' @references
-#'
-#' WorldCover 2020 v100
-#'
-#' Zanaga, D., Van De Kerchove, R., De Keersmaecker, W.,
-#' Souverijns, N., Brockmann, C., Quast, R., Wevers, J.,
-#' Grosu, A., Paccini, A., Vergnaud, S., Cartus, O., Santoro,
-#' M., Fritz, S., Georgieva, I., Lesiv, M., Carter, S., Herold,
-#' M., Li, Linlin, Tsendbazar, N.E., Ramoino, F., Arino, O.,
-#' 2021. ESA WorldCover 10 m 2020 v100.
-#' https://doi.org/10.5281/zenodo.5571936
-#'
-#'
-#' WorldCover 2021 v200
-#'
-#' Zanaga, D., Van De Kerchove, R., Daems, D., De Keersmaecker,
-#'  W., Brockmann, C., Kirches, G., Wevers, J., Cartus, O.,
-#'  Santoro, M., Fritz, S., Lesiv, M., Herold, M., Tsendbazar,
-#'  N.E., Xu, P., Ramoino, F., Arino, O., 2022. ESA WorldCover
-#'  10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
-#'
-#' ESA WorldCover project 2020 and 2021 / Contains modified
-#' Copernicus Sentinel data (2020 and 2021) processed by ESA
-#' WorldCover consortium
-#' With year either 2020 or 2021 for the WorldCover 2020
-#' and 2021 map, respectively.
-#'
-#' \href{https://esa-worldcover.org/en}{ESA WorldCover}
+#' Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., et al. (2021).
+#'   ESA WorldCover 10 m 2020 v100.
+#'   https://doi.org/10.5281/zenodo.5571936
+#' Zanaga, D., Van De Kerchove, R., Daems, D., et al. (2022).
+#'   ESA WorldCover 10 m 2021 v200.
+#'   https://doi.org/10.5281/zenodo.7254221
+#' ESA WorldCover project 2020 and 2021.
+#'   Contains modified Copernicus Sentinel data processed by ESA WorldCover consortium.
+#'   \href{https://esa-worldcover.org/en}{ESA WorldCover}
 #'
 #' @examples
-#' \dontrun{
-#' # Assuming 'land_cover_raster' is a SpatRaster object
+#' \donttest{
+#' # Assuming 'land_cover_raster' is a SpatRaster object from ESA WorldCover
 #' cat_raster <- create_cat_esa_10m(land_cover_raster)
 #' }
 #'
-#' @export
+#' @value A reclassified `SpatRaster` object where each value
+#' corresponds to a categorical land cover type.
 #'
+#' @export
 
 
 

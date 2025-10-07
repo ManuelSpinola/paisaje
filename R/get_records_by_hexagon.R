@@ -1,27 +1,42 @@
 #' @name get_records_by_hexagon
-#' @title Get species records by hexagon
+#' @title Retrieve species records aggregated by H3 hexagons
 #' @description
-#' Retrieves species occurrence data within a given AOI and aggregates
-#' the records into H3 hexagonal grid cells. Counts the number of occurrences
-#' per species within each hexagon. Returns an `sf` object.
+#' Downloads species occurrence data within a specified Area of Interest (AOI)
+#' and aggregates these records into H3 hexagonal grid cells at a given resolution.
+#' Returns an `sf` object with one polygon per hexagon and columns containing
+#' species occurrence counts.
 #'
 #' @usage get_records_by_hexagon(species, aoi_sf, res = 6,
-#' providers = NULL, remove_duplicates = FALSE, date = NULL,
-#' expand_factor = 0.1, limit = 500)
+#'   providers = NULL, remove_duplicates = FALSE, date = NULL,
+#'   expand_factor = 0.1, limit = 500)
 #'
-#' @param species Character vector of species names.
-#' @param aoi_sf `sf` polygon of the AOI.
-#' @param res H3 resolution (1–16). Default 6.
-#' @param providers Character vector of data providers (e.g., "gbif").
-#' @param remove_duplicates Logical. Remove duplicate geometries. Default FALSE.
-#' @param date Character vector c("start","end") to filter by date.
-#' @param expand_factor Numeric. Expand AOI bbox for full hex coverage. Default 0.1.
-#' @param limit Integer. Maximum number of records to download per species. Default 500.
+#' @param species (`character`) Vector of species names to query.
+#' @param aoi_sf (`sf`) Polygon defining the Area of Interest (AOI).
+#'   Must have a valid CRS.
+#' @param res (`integer`) H3 resolution level (1–16). Default is 6.
+#' @param providers (`character`) Data providers to query (e.g., `"gbif"`).
+#'   Default is `NULL` (all available providers).
+#' @param remove_duplicates (`logical`) Whether to remove duplicate geometries.
+#'   Default is `FALSE`.
+#' @param date (`character`) Vector of length two: start and end dates
+#'   (e.g., `c("2020-01-01", "2021-01-01")`) for filtering occurrences.
+#' @param expand_factor (`numeric`) Expand AOI bounding box to ensure full hexagon
+#'   coverage. Default is 0.1 (10%).
+#' @param limit (`integer`) Maximum number of occurrence records to download
+#'   per species. Default is 500.
 #'
-#' @return `sf` object with hexagons and counts per species.
+#' @return (`sf`) An `sf` object containing H3 hexagonal polygons
+#'   covering the AOI. Each polygon includes counts of occurrences
+#'   for each species.
+#'
+#' @details
+#' This function is useful for spatial biodiversity analyses where
+#' data should be aggregated into a uniform spatial grid.
+#' The H3 grid system enables multi-resolution analysis and efficient
+#' spatial summarization of point occurrence data.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
 #' hex_counts <- get_records_by_hexagon(
@@ -30,7 +45,13 @@
 #'   res = 6,
 #'   limit = 200
 #' )
+#' print(hex_counts)
 #' }
+#'
+#' @value
+#' An `sf` object with hexagon polygons and columns representing
+#' occurrence counts for each species.
+#'
 #' @export
 
 get_records_by_hexagon <- function(species,

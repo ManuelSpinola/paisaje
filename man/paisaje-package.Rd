@@ -4,9 +4,9 @@
 \name{paisaje-package}
 \alias{paisaje}
 \alias{paisaje-package}
-\title{paisaje: Tools for Landscape Analysis}
+\title{paisaje: Spatial and Environmental Data Tools for Landscape Ecology}
 \description{
-Provides functions for landscape analysis. Includes tools to retrieve environmental data and compute landscape metrics.
+Provides functions for landscape analysis and data retrieval. The package allows users to download environmental variables from global datasets (e.g., WorldClim, ESA WorldCover, Nighttime Lights), and to compute spatial and landscape metrics using a hexagonal grid system based on the H3 spatial index. It is useful for ecological modeling, biodiversity studies, and spatial data processing in landscape ecology. References: Fick and Hijmans (2017) \doi{10.1002/joc.5086} Zanaga et al. (2022) ESA WorldCover 10 m 2021 v200 \url{https://esa-worldcover.org/} Uber Technologies Inc. (2022) "H3: Hexagonal hierarchical spatial index" \url{https://h3geo.org}
 }
 \seealso{
 Useful links:

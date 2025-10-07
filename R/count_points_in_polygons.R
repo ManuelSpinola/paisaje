@@ -1,21 +1,33 @@
 #' @name count_points_in_polygons
-#' @title Count Points within Polygons
+#' @title Count Points within Polygons by Species
 #' @description
 #' Counts the number of points per species within each polygon.
-#' If the points dataset has a `species` column, a separate column
-#' is created for each species with counts. Spaces in species names
-#' are replaced with underscores for column naming.
+#' If the points dataset contains a `species` column, a separate
+#' column is created for each species with the counts inside each polygon.
+#' Spaces in species names are replaced with underscores for naming columns.
 #'
-#' @param points_sf An `sf` object containing point geometries. Must contain a `species` column.
+#' This function is particularly useful in ecological studies where
+#' species have different spatial distributions. It accounts for the
+#' possibility that some species may not be present in all polygons,
+#' producing zero counts in those cases.
+#'
+#' @param points_sf An `sf` object containing point geometries. Must include a `species` column.
 #' @param polygons_sf An `sf` object containing polygon geometries.
 #'
-#' @return An `sf` object containing the original polygons and additional columns for each species count.
+#' @return An `sf` object containing the original polygons and additional
+#' columns for each species count. Column names follow the format
+#' `species_name_count`, with spaces replaced by underscores.
+#'
+#' @details
+#' The function performs a spatial join to count occurrences of each species
+#' within each polygon. For species absent in a polygon, the count will be zero.
+#' This approach allows for flexible analysis of species distributions
+#' across landscape units.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #'
-#' # Example points
 #' points_sf <- st_as_sf(data.frame(
 #'   id = 1:6,
 #'   species = c("Panthera onca", "Panthera onca", "Felis catus",
@@ -24,7 +36,6 @@
 #'   y = c(1, 2, 3, 4, 5, 6)
 #' ), coords = c("x", "y"), crs = 4326)
 #'
-#' # Example polygons
 #' polygons_sf <- st_as_sf(data.frame(
 #'   id = 1:2,
 #'   geometry = st_sfc(
@@ -33,12 +44,12 @@
 #'   )
 #' ), crs = 4326)
 #'
-#' # Count points per species within polygons
 #' result <- count_points_in_polygons(points_sf, polygons_sf)
 #' print(result)
 #' }
 #'
 #' @export
+
 count_points_in_polygons <- function(points_sf, polygons_sf) {
   # Validate inputs
   if (!inherits(points_sf, "sf") || !inherits(polygons_sf, "sf")) {

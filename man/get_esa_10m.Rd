@@ -2,64 +2,46 @@
 % Please edit documentation in R/get_esa_10m.R
 \name{get_esa_10m}
 \alias{get_esa_10m}
-\title{Download land cover data}
+\title{Download ESA WorldCover land cover data}
 \usage{
 get_esa_10m(aoi_sf, year = NULL, output_folder = ".")
 }
 \arguments{
-\item{aoi_sf}{(\code{character}) an sf_object which defines
-the area of interest (AOI). an sf object can represent any
-geographical area, such as a country, state, or custom boundary.}
+\item{aoi_sf}{(\code{sf}) An sf object defining the area of interest (AOI).
+This can be a country, state, or custom boundary.}
 
-\item{year}{the Copernicus Global Land Service has different
-versions of its land cover data for different years. As of now,
-the available years are: 2020: This corresponds to the v100
-product version, and 2021: This corresponds to the v200
-product version.}
+\item{year}{(\code{numeric}) Year of the land cover data. Available:
+- 2020: ESA WorldCover 10 m 2020 v100
+- 2021: ESA WorldCover 10 m 2021 v200}
 
-\item{output_folder}{specifies the directory where data files
-will be saved. The default value for output_folder is ".",
-which represents the current working directory.}
+\item{output_folder}{(\code{character}) Directory where data files will be saved.
+Default is "." (current working directory).}
+}
+\value{
+(\code{RasterLayer}) A raster object containing land cover classification
+  for the specified AOI and year. The raster values correspond to land cover classes
+  as defined by the ESA WorldCover classification scheme.
 }
 \description{
-This function allows you to download land cover data from
- the \href{https://esa-worldcover.org/en}{ESA WorldCover}.
+Downloads ESA WorldCover land cover data at 10 m resolution for a specified
+area of interest (AOI) and year. Useful for landscape ecology studies,
+environmental analyses, and habitat mapping.
+}
+\details{
+This function downloads global land cover raster data produced by the ESA WorldCover project.
+The downloaded file can be large (hundreds of MB), and processing may take several minutes
+depending on the AOI size and internet connection speed.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
-
-nc = st_read(system.file("shape/nc.shp", package="sf"))
-
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
 get_esa_10m(nc, year = 2021, output_folder = ".")
 }
-
 }
 \references{
-WorldCover 2020 v100
-
-Zanaga, D., Van De Kerchove, R., De Keersmaecker, W.,
-Souverijns, N., Brockmann, C., Quast, R., Wevers, J.,
-Grosu, A., Paccini, A., Vergnaud, S., Cartus, O., Santoro,
-M., Fritz, S., Georgieva, I., Lesiv, M., Carter, S., Herold,
-M., Li, Linlin, Tsendbazar, N.E., Ramoino, F., Arino, O.,
-2021. ESA WorldCover 10 m 2020 v100.
-https://doi.org/10.5281/zenodo.5571936
-
-
-WorldCover 2021 v200
-
-Zanaga, D., Van De Kerchove, R., Daems, D., De Keersmaecker,
- W., Brockmann, C., Kirches, G., Wevers, J., Cartus, O.,
- Santoro, M., Fritz, S., Lesiv, M., Herold, M., Tsendbazar,
- N.E., Xu, P., Ramoino, F., Arino, O., 2022. ESA WorldCover
- 10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
-
-ESA WorldCover project 2020 and 2021 / Contains modified
-Copernicus Sentinel data (2020 and 2021) processed by ESA
-WorldCover consortium
-With year either 2020 or 2021 for the WorldCover 2020
-and 2021 map, respectively.
-
-\href{https://esa-worldcover.org/en}{ESA WorldCover}
+Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., et al. (2021).
+  ESA WorldCover 10 m 2020 v100. https://doi.org/10.5281/zenodo.5571936
+Zanaga, D., Van De Kerchove, R., Daems, D., et al. (2022).
+  ESA WorldCover 10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
 }

@@ -7,27 +7,47 @@
 extract_cat_raster(spat_raster_cat, sf_hex_grid)
 }
 \arguments{
-\item{spat_raster_cat}{A categorical raster (SpatRaster).}
+\item{spat_raster_cat}{A categorical raster (`SpatRaster`),
+where pixel values represent discrete land cover classes.}
 
-\item{sf_hex_grid}{An sf object with polygon geometries.}
+\item{sf_hex_grid}{An `sf` object containing polygon geometries
+over which the raster values will be extracted.}
 }
 \value{
-An sf object with additional columns, one per raster category,
-representing proportion of coverage.
+An `sf` object containing the original polygons
+  and additional columns — one per raster category —
+  representing the proportion of coverage for that category
+  within each polygon.
 }
 \description{
-Extract values from a categorical raster for each polygon in an sf object.
-Returns the proportion of each category within each polygon using exactextractr.
+Extracts values from a categorical raster for each polygon
+in an sf object. The function calculates the proportion
+of each land cover category within each polygon using
+exactextractr for precise zonal statistics.
+}
+\details{
+This function uses the \pkg{exactextractr} package to compute
+precise proportions of categorical raster values within
+polygon boundaries. It is useful for landscape ecology studies,
+habitat analysis, and spatial modeling where category proportions
+are important explanatory variables.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 library(terra)
 library(paisaje)
 
+# Load categorical raster
 r <- rast("landcover.tif")
-bbox <- st_bbox(r) |> st_as_sfc(crs = st_crs(4326)) |> st_as_sf()
+
+# Create polygon grid
+bbox <- st_bbox(r) |>
+  st_as_sfc(crs = st_crs(4326)) |>
+  st_as_sf()
 grid_sf <- get_h3_grid(bbox, resolution = 6)
+
+# Extract category proportions
 result_sf <- extract_cat_raster(r, grid_sf)
 head(result_sf)
 }

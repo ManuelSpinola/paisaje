@@ -4,23 +4,37 @@
 \alias{get_h3_grid}
 \title{Generate an H3 Hexagonal Grid for an sf Object}
 \usage{
-get_h3_grid(sf_object, resolution = 7, expand_factor = 0.1)
+get_h3_grid(sf_object, resolution = 6, expand_factor = 0.1)
 }
 \arguments{
-\item{sf_object}{`sf` object. Must have a valid CRS.}
+\item{sf_object}{(\code{sf}) An sf object defining the area of interest.
+Must have a valid coordinate reference system (CRS).}
 
-\item{resolution}{Integer. H3 resolution level (1–16). Default 7.}
+\item{resolution}{(\code{integer}) H3 resolution level (1–16). Default is 6.
+Lower values produce fewer, larger hexagons (faster processing, coarser grid).}
 
-\item{expand_factor}{Numeric. Expands bounding box to ensure coverage. Default 0.1.}
+\item{expand_factor}{(\code{numeric}) Expands bounding box to ensure coverage.
+Default is 0.1.}
+}
+\value{
+(\code{sf}) An sf object containing the hexagonal grid polygons
+  covering the input area. Each polygon represents an H3 cell at the specified
+  resolution, with a column containing the H3 index.
 }
 \description{
 Generates a hexagonal grid of H3 cells at a specified resolution
-that intersect with a given `sf` object. Wrapper for h3jsr functions.
+that intersect with a given `sf` object. This is a wrapper for
+functions from the \pkg{h3jsr} package.
+}
+\details{
+Reducing the resolution (e.g., 5 or 6) can greatly reduce processing time and memory
+usage, especially for large AOIs. Each decrease in resolution increases the size of
+individual hexagons exponentially.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
-h3_grid_sf <- get_h3_grid(nc, resolution = 7)
+h3_grid_sf <- get_h3_grid(nc, resolution = 6)
 }
 }

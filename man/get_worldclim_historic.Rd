@@ -2,79 +2,66 @@
 % Please edit documentation in R/get_worldclim_historic.R
 \name{get_worldclim_historic}
 \alias{get_worldclim_historic}
-\title{Download and process environmental variables made by worldclim
-version 2.1.}
+\title{Download and process historic environmental variables from WorldClim v2.1}
 \usage{
 get_worldclim_historic(
-  var = "bio",
-  res = 10,
-  aoi = NULL,
-  retries = 3,
-  timeout = 300
+  var = "bio", res = "30s", aoi = NULL,
+  retries = 3, timeout = 300
 )
 }
 \arguments{
-\item{var}{A character string specifying the
-climate variable to download. Possible values are:
-.  \itemize{
-    \item "tavg": Average temperature
-    \item "tmin": Minimum temperature
-    \item "tmax": Maximum temperature
-    \item "prec": Precipitation
-    \item "srad": Solar radiation
-    \item "wind": Wind speed
-    \item "vapr": Vapor pressure
-    \item "bio": Bioclimatic variables
- }}
+\item{var}{Character. Climate variable to download. Options:
+\itemize{
+  \item "bio" — Bioclimatic variables
+  \item "tavg" — Average temperature
+  \item "tmin" — Minimum temperature
+  \item "tmax" — Maximum temperature
+  \item "prec" — Precipitation
+  \item "srad" — Solar radiation
+  \item "wind" — Wind speed
+  \item "vapr" — Vapor pressure
+}
+Default is "bio".}
 
-\item{res}{A numeric value indicating the resolution of the
-data. Valid options are:
-  \itemize{
-    \item 0.5: 30 arc-seconds (~1 km)
-    \item 2.5: 2.5 arc-minutes (~5 km)
-    \item   5: 5 arc-minutes (~10 km)
-    \item  10: 10 arc-minutes (~20 km)
- }}
+\item{res}{Character. Spatial resolution of the data. Options:
+\itemize{
+  \item "30s" — ~1 km (30 arc-seconds)
+  \item "2.5m" — ~5 km (2.5 arc-minutes)
+  \item "5m" — ~10 km (5 arc-minutes)
+  \item "10m" — ~20 km (10 arc-minutes)
+}
+Default is "30s".}
 
-\item{aoi}{A spatial object representing the area of
-interest. Can be an `sf` or `terra` vector.}
+\item{aoi}{An `sf` or `SpatRaster` object representing the area of interest. Default is NULL (no clipping).}
 
-\item{retries}{An integer specifying the number of times
-to retry the download if it fails. Default is 3.}
+\item{retries}{Integer. Number of attempts to retry download in case of failure. Default is 3.}
 
-\item{timeout}{A numeric value specifying the maximum
-time (in seconds) to wait for a server response. Default is
-300 seconds.}
+\item{timeout}{Numeric. Download timeout in seconds. Default is 300.}
 }
 \value{
-A `SpatRaster` object containing the downloaded
- climate data, clipped to the specified AOI.
+A `SpatRaster` object containing the selected historic climate variables,
+optionally clipped to the specified AOI.
 }
 \description{
-This function downloads historic worldclim version 2.1
-and processes it according to the specified
-parameters. It supports various climate variables and
-resolutions, and can clip the downloaded data to a
-specified area of interest (AOI). The function is
-designed to handle download issues with retry logic
-and customizable timeouts.
+Downloads historic climate data from WorldClim v2.1 and processes
+it according to the specified parameters. Supports a variety of
+climate variables and resolutions. Optionally clips data to a specified
+area of interest (AOI) and includes retry logic for download reliability.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 library(terra)
-
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 nc <- st_transform(nc, crs = 4326)
 
-climate_historic <- get_worldclim_historic(var =
- "tmin", res = 5, aoi = nc)
- }
+climate_historic <- get_worldclim_historic(
+  var = "tmin", res = "5m", aoi = nc
+)
+}
 
 }
 \references{
-Fick, Stephen E., and Robert J.
-Hijmans. "WorldClim 2: new 1-km spatial resolution climate
-surfaces for global land areas." \emph{International journal
-of climatology} 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
+Fick, S. E., & Hijmans, R. J. (2017). WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas.
+International Journal of Climatology, 37(12), 4302–4315. \doi{10.1002/joc.5086}
 }

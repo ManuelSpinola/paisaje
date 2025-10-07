@@ -1,95 +1,104 @@
-#'
 #' @name get_nightlight_data
-#'
 #' @title Download and Retrieve Nightlight Data
-#'
 #' @description
-#' This function downloads nightlight data from the Earth
-#' Observation Group's website. It scrapes the website to find
-#' and download the latest available nightlight data for the
-#' specified year and month.
+#' Downloads nightlight data from the Earth Observation Group's website.
+#' It scrapes the website to locate and download the latest available
+#' nightlight dataset for the specified year and month.
 #'
 #' @usage get_nightlight_data(year, month, version = "v10",
-#' destination_dir = ".", timeout = 1200)
+#'   destination_dir = ".", timeout = 1200)
 #'
-#' @param year A numeric or character year (e.g., 2020).
-#' @param month A numeric or character month (1-12). This will be formatted as two digits.
-#' @param version The version of the nightlight data (default is "v10").
-#' @param destination_dir Directory to save the downloaded .tif file (default is current directory).
-#' @param timeout Timeout in seconds for the download (default is 1200 seconds).
+#' @param year (`numeric` or `character`) The year for which to download
+#'   nightlight data (e.g., 2020).
+#' @param month (`numeric` or `character`) Month of the year (1–12).
+#'   Will be formatted as two digits (e.g., `"03"` for March).
+#' @param version (`character`) Nightlight data version. Default is `"v10"`.
+#' @param destination_dir (`character`) Directory where the downloaded
+#'   `.tif` file will be saved. Default is the current working directory `"."`.
+#' @param timeout (`numeric`) Timeout in seconds for the download. Default is `1200` seconds.
 #'
-#' @return The file path of the downloaded .tif file, or NULL if an error occurs.
+#' @return (`character` or `NULL`) Path to the downloaded `.tif` file.
+#'   Returns `NULL` if no file was found or if an error occurred.
 #'
-#' @details The function constructs the appropriate URL for the specified year,
-#' month, and data version. It scrapes the directory listing on the website
-#' to find the latest available .tif file for the requested time period. The
-#' function then downloads this file and saves it to the specified directory.
-#' If no suitable file is found, or an error occurs, it returns NULL.
+#' @details
+#' The function constructs the appropriate URL for the specified year,
+#' month, and data version, then scrapes the directory listing to locate
+#' the latest available `.tif` file. It downloads and saves the file to
+#' the `destination_dir`. This function is useful for retrieving
+#' nightlight data for studies involving human activity, urbanization,
+#' and environmental monitoring.
 #'
 #' @importFrom utils download.file unzip
 #' @importFrom rvest html_attr
 #'
 #' @examples
-#' \dontrun{
-#'   # Example: Download nightlight data for March 2021
+#' \donttest{
+#'   # Download nightlight data for March 2021
 #'   file_path <- get_nightlight_data(2021, 3)
 #'   print(file_path)
 #' }
 #'
+#' @value
+#' A string with the file path of the downloaded `.tif` file,
+#' or `NULL` if no file was found or if there was an error.
+#'
 #' @export
 
 
-get_nightlight_data <- function(year, month, version = "v10", destination_dir = ".", timeout = 1200) {
+get_nightlight_data <- function(year,
+                                month,
+                                version = "v10",
+                                destination_dir = NULL,
+                                timeout = 1200) {
 
-  # Ensure the year and month are properly formatted
+  # Restaurar opción timeout al salir
+  old_timeout <- getOption("timeout")
+  on.exit(options(timeout = old_timeout), add = TRUE)
+
+  # Definir carpeta por defecto segura
+  if (is.null(destination_dir)) {
+    destination_dir <- tempdir()
+    message("No destination_dir provided. Using temporary directory: ", destination_dir)
+  }
+
+  # Formato año y mes
   year <- as.character(year)
   month <- sprintf("%02d", as.integer(month))
 
-  # Construct the URL to the directory listing
   base_url <- sprintf("https://eogdata.mines.edu/nighttime_light/monthly_notile/%s/%s/%s/vcmslcfg/",
                       version, year, paste0(year, month))
 
-  # Scrape the directory to find available files
-  cat("Scraping URL:", base_url, "\n")
+  message("Scraping URL: ", base_url)
 
   tryCatch({
     page <- rvest::read_html(base_url)
-    # Extract the file names
-    file_links <- page |> rvest::html_nodes("a") |> html_attr("href")
-    # Filter for the relevant .tif file that contains 'avg_rade9h'
+    file_links <- page |> rvest::html_nodes("a") |> rvest::html_attr("href")
     tif_files <- file_links[grepl("SVDNB_npp_.*avg_rade9h\\.tif$", file_links)]
 
     if (length(tif_files) == 0) {
       stop("No suitable .tif files found for the specified year and month.")
     }
 
-    # Extract the date codes from the file names
     date_codes <- sub(".*_v10_(c[0-9]+)\\.avg_rade9h\\.tif", "\\1", tif_files)
-
-    # Find the latest date code (assumes lexicographical order is sufficient)
     latest_date_code <- max(date_codes)
-
-    # Find the corresponding file with the latest date code
     latest_file <- tif_files[grep(latest_date_code, tif_files)]
 
     if (length(latest_file) == 0) {
       stop("Could not find a matching file for the latest date code.")
     }
 
-    # Construct the full URL to the latest file
     url <- paste0(base_url, latest_file)
     destfile <- file.path(destination_dir, latest_file)
 
-    # Download the file
-    cat("Downloading latest file from URL:", url, "\n")
-    options(timeout = timeout)
-    download.file(url, destfile, mode = "wb")
-    cat("File downloaded successfully:", destfile, "\n")
+    message("Downloading latest file from: ", url)
+    options(timeout = timeout)  # Cambio temporal
+    utils::download.file(url, destfile, mode = "wb")
 
-    # Return the file path
+    message("File downloaded successfully: ", destfile)
     return(destfile)
+
   }, error = function(e) {
-    cat("Error during web scraping or downloading:", e$message, "\n")
+    message("Error during web scraping or downloading: ", e$message)
     return(NULL)
   })
 }

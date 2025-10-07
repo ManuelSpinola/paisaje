@@ -1,125 +1,123 @@
-#'
 #' @name get_worldclim_historic
-#'
-#' @title Download and process environmental variables made by worldclim
-#' version 2.1.
+#' @title Download and process historic environmental variables from WorldClim v2.1
 #'
 #' @description
-#' This function downloads historic worldclim version 2.1
-#' and processes it according to the specified
-#' parameters. It supports various climate variables and
-#' resolutions, and can clip the downloaded data to a
-#' specified area of interest (AOI). The function is
-#' designed to handle download issues with retry logic
-#' and customizable timeouts.
+#' Downloads historic climate data from WorldClim v2.1 and processes
+#' it according to the specified parameters. Supports a variety of
+#' climate variables and resolutions. Optionally clips data to a specified
+#' area of interest (AOI) and includes retry logic for download reliability.
 #'
-#' @param var A character string specifying the
-#' climate variable to download. Possible values are:
-#'.  \itemize{
-#'     \item "tavg": Average temperature
-#'     \item "tmin": Minimum temperature
-#'     \item "tmax": Maximum temperature
-#'     \item "prec": Precipitation
-#'     \item "srad": Solar radiation
-#'     \item "wind": Wind speed
-#'     \item "vapr": Vapor pressure
-#'     \item "bio": Bioclimatic variables
-#'  }
+#' @usage get_worldclim_historic(
+#'   var = "bio", res = "30s", aoi = NULL,
+#'   retries = 3, timeout = 300
+#' )
 #'
-#' @param res A numeric value indicating the resolution of the
-#' data. Valid options are:
+#' @param var Character. Climate variable to download. Options:
 #'   \itemize{
-#'     \item 0.5: 30 arc-seconds (~1 km)
-#'     \item 2.5: 2.5 arc-minutes (~5 km)
-#'     \item   5: 5 arc-minutes (~10 km)
-#'     \item  10: 10 arc-minutes (~20 km)
-#'  }
-#' @param aoi A spatial object representing the area of
-#'  interest. Can be an `sf` or `terra` vector.
-#' @param retries An integer specifying the number of times
-#'  to retry the download if it fails. Default is 3.
-#' @param timeout A numeric value specifying the maximum
-#'  time (in seconds) to wait for a server response. Default is
-#'  300 seconds.
+#'     \item "bio" — Bioclimatic variables
+#'     \item "tavg" — Average temperature
+#'     \item "tmin" — Minimum temperature
+#'     \item "tmax" — Maximum temperature
+#'     \item "prec" — Precipitation
+#'     \item "srad" — Solar radiation
+#'     \item "wind" — Wind speed
+#'     \item "vapr" — Vapor pressure
+#'   }
+#'   Default is "bio".
+#' @param res Character. Spatial resolution of the data. Options:
+#'   \itemize{
+#'     \item "30s" — ~1 km (30 arc-seconds)
+#'     \item "2.5m" — ~5 km (2.5 arc-minutes)
+#'     \item "5m" — ~10 km (5 arc-minutes)
+#'     \item "10m" — ~20 km (10 arc-minutes)
+#'   }
+#'   Default is "30s".
+#' @param aoi An `sf` or `SpatRaster` object representing the area of interest. Default is NULL (no clipping).
+#' @param retries Integer. Number of attempts to retry download in case of failure. Default is 3.
+#' @param timeout Numeric. Download timeout in seconds. Default is 300.
 #'
-#' @return A `SpatRaster` object containing the downloaded
-#'  climate data, clipped to the specified AOI.
-#'
+#' @return A `SpatRaster` object containing the selected historic climate variables,
+#' optionally clipped to the specified AOI.
 #'
 #' @references
-#' Fick, Stephen E., and Robert J.
-#' Hijmans. "WorldClim 2: new 1-km spatial resolution climate
-#' surfaces for global land areas." \emph{International journal
-#' of climatology} 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
+#' Fick, S. E., & Hijmans, R. J. (2017). WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas.
+#' International Journal of Climatology, 37(12), 4302–4315. \doi{10.1002/joc.5086}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(sf)
 #' library(terra)
-#'
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #' nc <- st_transform(nc, crs = 4326)
 #'
-#' climate_historic <- get_worldclim_historic(var =
-#'  "tmin", res = 5, aoi = nc)
-#'  }
+#' climate_historic <- get_worldclim_historic(
+#'   var = "tmin", res = "5m", aoi = nc
+#' )
+#' }
 #'
 #' @export
-#'
 
 
-get_worldclim_historic <- function(var = "bio", res = 10,
-                                   aoi = NULL, retries = 3,
-                                   timeout = 300) {
+get_worldclim_historic <- function(var = "bio",
+                                   res = 10,
+                                   aoi = NULL,
+                                   retries = 3,
+                                   timeout = 300,
+                                   destination_dir = NULL) {
 
-  # Validate inputs
+  # Restaurar opción timeout al salir
+  old_timeout <- getOption("timeout")
+  on.exit(options(timeout = old_timeout), add = TRUE)
+  options(timeout = timeout)
+
+  # Carpeta segura por defecto
+  if (is.null(destination_dir)) {
+    destination_dir <- tempdir()
+    message("No destination_dir provided. Using temporary directory: ", destination_dir)
+  }
+
+  # Validar inputs
   stopifnot(var %in% c("tavg", "tmin", "tmax", "prec", "srad", "wind", "vapr", "bio"))
   stopifnot(res %in% c(0.5, 2.5, 5, 10))
 
-  # Set timeout option
-  options(timeout = timeout)
+  # Manejar resolución
+  res_str <- if (res == 0.5) "30s" else sprintf("%sm", res)
 
-  # Handle resolution input
-  if (res == 0.5) {
-    res <- "30s"
-  } else {
-    res <- sprintf("%sm", res)
-  }
-
-  # Prepare download URL with updated base URL
   base_url <- "https://geodata.ucdavis.edu/climate/worldclim/2_1/base"
-  zip_name <- sprintf("wc2.1_%s_%s.zip", res, var)
+  zip_name <- sprintf("wc2.1_%s_%s.zip", res_str, var)
   url <- file.path(base_url, zip_name)
 
-  # Retry logic for downloading the file
-  download_success <- NULL
-  for (i in 1:retries) {
+  message("Download URL: ", url)
+
+  # Lógica de reintentos
+  download_success <- FALSE
+  for (i in seq_len(retries)) {
     try({
       temp_file <- tempfile(fileext = ".zip")
-      download_success <- download.file(url, temp_file, mode = "wb")
-      break  # Exit the loop if download succeeds
+      utils::download.file(url, temp_file, mode = "wb")
+      download_success <- TRUE
+      break
     }, silent = TRUE)
 
-    if (inherits(download_success, "try-error")) {
+    if (!download_success) {
       message("Attempt ", i, " failed. Retrying...")
-      Sys.sleep(5)  # Wait before retrying
+      Sys.sleep(5)
     }
   }
 
-  # Check if download was successful after retries
-  if (inherits(download_success, "try-error")) {
+  if (!download_success) {
     stop("Failed to download data after ", retries, " attempts.")
   }
 
-  # Unzip the file to a temporary directory
-  unzip_dir <- tempfile()  # Use a temporary directory
-  unzip(temp_file, exdir = unzip_dir)
+  # Descomprimir en carpeta temporal
+  unzip_dir <- tempfile()
+  utils::unzip(temp_file, exdir = unzip_dir)
 
-  # Load raster data using terra
+  # Cargar rasters
   raster_files <- list.files(unzip_dir, pattern = "\\.tif$", full.names = TRUE)
   climate_rasters <- terra::rast(raster_files)
 
-  # If AOI is provided, crop and mask the data
+  # Si hay AOI, recortar y aplicar máscara
   if (!is.null(aoi)) {
     if (inherits(aoi, "sf")) {
       aoi <- terra::vect(aoi)
@@ -128,7 +126,10 @@ get_worldclim_historic <- function(var = "bio", res = 10,
     climate_rasters <- terra::mask(climate_rasters, aoi)
   }
 
-  # Return the terra raster object
+  # Guardar si se especifica carpeta válida
+  destfile <- file.path(destination_dir, zip_name)
+  terra::writeRaster(climate_rasters, destfile, overwrite = TRUE)
+  message("Raster saved at: ", destfile)
+
   return(climate_rasters)
 }
-

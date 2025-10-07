@@ -5,38 +5,42 @@
 \title{Download and Retrieve Nightlight Data}
 \usage{
 get_nightlight_data(year, month, version = "v10",
-destination_dir = ".", timeout = 1200)
+  destination_dir = ".", timeout = 1200)
 }
 \arguments{
-\item{year}{A numeric or character year (e.g., 2020).}
+\item{year}{(`numeric` or `character`) The year for which to download
+nightlight data (e.g., 2020).}
 
-\item{month}{A numeric or character month (1-12). This will be formatted as two digits.}
+\item{month}{(`numeric` or `character`) Month of the year (1–12).
+Will be formatted as two digits (e.g., `"03"` for March).}
 
-\item{version}{The version of the nightlight data (default is "v10").}
+\item{version}{(`character`) Nightlight data version. Default is `"v10"`.}
 
-\item{destination_dir}{Directory to save the downloaded .tif file (default is current directory).}
+\item{destination_dir}{(`character`) Directory where the downloaded
+`.tif` file will be saved. Default is the current working directory `"."`.}
 
-\item{timeout}{Timeout in seconds for the download (default is 1200 seconds).}
+\item{timeout}{(`numeric`) Timeout in seconds for the download. Default is `1200` seconds.}
 }
 \value{
-The file path of the downloaded .tif file, or NULL if an error occurs.
+(`character` or `NULL`) Path to the downloaded `.tif` file.
+  Returns `NULL` if no file was found or if an error occurred.
 }
 \description{
-This function downloads nightlight data from the Earth
-Observation Group's website. It scrapes the website to find
-and download the latest available nightlight data for the
-specified year and month.
+Downloads nightlight data from the Earth Observation Group's website.
+It scrapes the website to locate and download the latest available
+nightlight dataset for the specified year and month.
 }
 \details{
 The function constructs the appropriate URL for the specified year,
-month, and data version. It scrapes the directory listing on the website
-to find the latest available .tif file for the requested time period. The
-function then downloads this file and saves it to the specified directory.
-If no suitable file is found, or an error occurs, it returns NULL.
+month, and data version, then scrapes the directory listing to locate
+the latest available `.tif` file. It downloads and saves the file to
+the `destination_dir`. This function is useful for retrieving
+nightlight data for studies involving human activity, urbanization,
+and environmental monitoring.
 }
 \examples{
-\dontrun{
-  # Example: Download nightlight data for March 2021
+\donttest{
+  # Download nightlight data for March 2021
   file_path <- get_nightlight_data(2021, 3)
   print(file_path)
 }

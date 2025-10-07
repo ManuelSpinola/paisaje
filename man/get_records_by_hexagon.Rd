@@ -2,39 +2,54 @@
 % Please edit documentation in R/get_records_by_hexagon.R
 \name{get_records_by_hexagon}
 \alias{get_records_by_hexagon}
-\title{Get species records by hexagon}
+\title{Retrieve species records aggregated by H3 hexagons}
 \usage{
 get_records_by_hexagon(species, aoi_sf, res = 6,
-providers = NULL, remove_duplicates = FALSE, date = NULL,
-expand_factor = 0.1, limit = 500)
+  providers = NULL, remove_duplicates = FALSE, date = NULL,
+  expand_factor = 0.1, limit = 500)
 }
 \arguments{
-\item{species}{Character vector of species names.}
+\item{species}{(`character`) Vector of species names to query.}
 
-\item{aoi_sf}{`sf` polygon of the AOI.}
+\item{aoi_sf}{(`sf`) Polygon defining the Area of Interest (AOI).
+Must have a valid CRS.}
 
-\item{res}{H3 resolution (1–16). Default 6.}
+\item{res}{(`integer`) H3 resolution level (1–16). Default is 6.}
 
-\item{providers}{Character vector of data providers (e.g., "gbif").}
+\item{providers}{(`character`) Data providers to query (e.g., `"gbif"`).
+Default is `NULL` (all available providers).}
 
-\item{remove_duplicates}{Logical. Remove duplicate geometries. Default FALSE.}
+\item{remove_duplicates}{(`logical`) Whether to remove duplicate geometries.
+Default is `FALSE`.}
 
-\item{date}{Character vector c("start","end") to filter by date.}
+\item{date}{(`character`) Vector of length two: start and end dates
+(e.g., `c("2020-01-01", "2021-01-01")`) for filtering occurrences.}
 
-\item{expand_factor}{Numeric. Expand AOI bbox for full hex coverage. Default 0.1.}
+\item{expand_factor}{(`numeric`) Expand AOI bounding box to ensure full hexagon
+coverage. Default is 0.1 (10%).}
 
-\item{limit}{Integer. Maximum number of records to download per species. Default 500.}
+\item{limit}{(`integer`) Maximum number of occurrence records to download
+per species. Default is 500.}
 }
 \value{
-`sf` object with hexagons and counts per species.
+(`sf`) An `sf` object containing H3 hexagonal polygons
+  covering the AOI. Each polygon includes counts of occurrences
+  for each species.
 }
 \description{
-Retrieves species occurrence data within a given AOI and aggregates
-the records into H3 hexagonal grid cells. Counts the number of occurrences
-per species within each hexagon. Returns an `sf` object.
+Downloads species occurrence data within a specified Area of Interest (AOI)
+and aggregates these records into H3 hexagonal grid cells at a given resolution.
+Returns an `sf` object with one polygon per hexagon and columns containing
+species occurrence counts.
+}
+\details{
+This function is useful for spatial biodiversity analyses where
+data should be aggregated into a uniform spatial grid.
+The H3 grid system enables multi-resolution analysis and efficient
+spatial summarization of point occurrence data.
 }
 \examples{
-\dontrun{
+\donttest{
 library(sf)
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
 hex_counts <- get_records_by_hexagon(
@@ -43,5 +58,7 @@ hex_counts <- get_records_by_hexagon(
   res = 6,
   limit = 200
 )
+print(hex_counts)
 }
+
 }

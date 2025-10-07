@@ -5,35 +5,55 @@
 \title{Retrieve species occurrence records within an Area of Interest}
 \usage{
 get_records(species, aoi_sf, providers = NULL,
-limit = 500, remove_duplicates = FALSE, date = NULL)
+  limit = 500, remove_duplicates = FALSE, date = NULL)
 }
 \arguments{
-\item{species}{A character vector of species names to query.}
+\item{species}{(`character`) Vector of species names to query.}
 
-\item{aoi_sf}{An `sf` object representing the area of interest.}
+\item{aoi_sf}{(`sf`) An `sf` object representing the Area of Interest.
+Must have a valid CRS.}
 
-\item{providers}{A character vector of data providers to query (e.g., "gbif", "inat").}
+\item{providers}{(`character`) Data providers to query (e.g., `"gbif"`, `"inat"`).
+Default is `NULL`, which queries all available providers.}
 
-\item{limit}{An integer specifying the maximum number of records to retrieve from each provider. Default is 500.}
+\item{limit}{(`integer`) Maximum number of records to retrieve per provider.
+Default is 500.}
 
-\item{remove_duplicates}{A logical value indicating whether to remove duplicate geometries from the resulting `sf` object. Default is FALSE.}
+\item{remove_duplicates}{(`logical`) Whether to remove duplicate geometries.
+Default is `FALSE`.}
 
-\item{date}{A character vector of length 2 specifying the date range (e.g., c("YYYY-MM-DD", "YYYY-MM-DD")). Records outside this range will be excluded.}
+\item{date}{(`character`) Vector of length two specifying the date range
+(e.g., `c("YYYY-MM-DD", "YYYY-MM-DD")`). Records outside this range will
+be excluded. Default is `NULL` (no date filtering).}
 }
 \value{
-An `sf` object containing the species occurrence records that fall within the specified AOI and meet the query criteria. Returns `NULL` if no records are found or if there are issues with the input.
+(`sf`) An `sf` object containing species occurrence records
+  within the specified AOI that match the query criteria. Returns `NULL`
+  if no records are found or if input parameters are invalid.
 }
 \description{
-This function retrieves species occurrence records from
-specified data providers within a given area of interest (AOI).
-The records are returned as an `sf` object, optionally with
-duplicates removed based on geometry.
-This function is a wrapper of the occ function from the
-\href{https://CRAN.R-project.org/package=spocc}{spocc package}
+Retrieves species occurrence records from specified data providers
+within a given Area of Interest (AOI). The results are returned as
+an `sf` object containing point geometries. Duplicates can be removed
+based on geometry. This is a wrapper of the `occ` function from the
+\href{https://CRAN.R-project.org/package=spocc}{spocc package}.
+}
+\details{
+This function simplifies retrieving occurrence records by wrapping the
+functionality of the `spocc::occ` function. It handles AOI spatial
+filtering and optional removal of duplicates.
 }
 \examples{
-\dontrun{
+\donttest{
+library(sf)
 nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
-records <- get_records(species = "Lynx rufus", nc, providers = c("gbif", "inat"))
+records <- get_records(
+  species = "Lynx rufus",
+  aoi_sf = nc,
+  providers = c("gbif", "inat"),
+  limit = 200
+)
+head(records)
 }
+
 }
