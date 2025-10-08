@@ -4,21 +4,21 @@
 \alias{get_esa_10m}
 \title{Download ESA WorldCover land cover data}
 \usage{
-get_esa_10m(aoi_sf, year = NULL, output_folder = ".")
+get_esa_10m(aoi_sf, year = 2020, output_folder = NULL)
 }
 \arguments{
-\item{aoi_sf}{(\code{sf}) An sf object defining the area of interest (AOI).
+\item{aoi_sf}{`sf` An sf object defining the area of interest (AOI).
 This can be a country, state, or custom boundary.}
 
-\item{year}{(\code{numeric}) Year of the land cover data. Available:
+\item{year}{`numeric` Year of the land cover data. Available:
 - 2020: ESA WorldCover 10 m 2020 v100
 - 2021: ESA WorldCover 10 m 2021 v200}
 
-\item{output_folder}{(\code{character}) Directory where data files will be saved.
+\item{output_folder}{`character` Directory where data files will be saved.
 Default is "." (current working directory).}
 }
 \value{
-(\code{RasterLayer}) A raster object containing land cover classification
+`SpatRaster` A raster object containing land cover classification
   for the specified AOI and year. The raster values correspond to land cover classes
   as defined by the ESA WorldCover classification scheme.
 }
@@ -36,8 +36,9 @@ depending on the AOI size and internet connection speed.
 \donttest{
 library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
-get_esa_10m(nc, year = 2021, output_folder = ".")
+get_esa_10m(nc, year = 2021, output_folder = tempdir())
 }
+
 }
 \references{
 Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., et al. (2021).

@@ -36,13 +36,11 @@
 #'   \href{https://esa-worldcover.org/en}{ESA WorldCover}
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Assuming 'land_cover_raster' is a SpatRaster object from ESA WorldCover
 #' cat_raster <- create_cat_esa_10m(land_cover_raster)
 #' }
 #'
-#' @value A reclassified `SpatRaster` object where each value
-#' corresponds to a categorical land cover type.
 #'
 #' @export
 

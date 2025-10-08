@@ -2,61 +2,71 @@
 % Please edit documentation in R/get_worldclim_historic.R
 \name{get_worldclim_historic}
 \alias{get_worldclim_historic}
-\title{Download and process historic environmental variables from WorldClim v2.1}
+\title{Descargar y procesar variables climáticas históricas de WorldClim v2.1}
 \usage{
 get_worldclim_historic(
-  var = "bio", res = "30s", aoi = NULL,
-  retries = 3, timeout = 300
+  var = "bio",
+  res = 10,
+  aoi = NULL,
+  retries = 3,
+  timeout = 300,
+  destination_dir = NULL
 )
 }
 \arguments{
-\item{var}{Character. Climate variable to download. Options:
+\item{var}{Character. Variable climática a descargar. Opciones:
 \itemize{
-  \item "bio" — Bioclimatic variables
-  \item "tavg" — Average temperature
-  \item "tmin" — Minimum temperature
-  \item "tmax" — Maximum temperature
-  \item "prec" — Precipitation
-  \item "srad" — Solar radiation
-  \item "wind" — Wind speed
-  \item "vapr" — Vapor pressure
+  \item "bio" — Variables bioclimáticas.
+  \item "tavg" — Temperatura media.
+  \item "tmin" — Temperatura mínima.
+  \item "tmax" — Temperatura máxima.
+  \item "prec" — Precipitación.
+  \item "srad" — Radiación solar.
+  \item "wind" — Velocidad del viento.
+  \item "vapr" — Presión de vapor.
 }
-Default is "bio".}
+Por defecto: `"bio"`.}
 
-\item{res}{Character. Spatial resolution of the data. Options:
+\item{res}{Numeric. Resolución espacial en minutos de arco.
+Valores válidos: `0.5`, `2.5`, `5`, `10`.
+Estos valores se mapean internamente a cadenas aceptadas por WorldClim:
 \itemize{
-  \item "30s" — ~1 km (30 arc-seconds)
-  \item "2.5m" — ~5 km (2.5 arc-minutes)
-  \item "5m" — ~10 km (5 arc-minutes)
-  \item "10m" — ~20 km (10 arc-minutes)
+  \item 0.5 → "30s"
+  \item 2.5 → "2.5m"
+  \item 5   → "5m"
+  \item 10  → "10m"
 }
-Default is "30s".}
+Por defecto: `10`.}
 
-\item{aoi}{An `sf` or `SpatRaster` object representing the area of interest. Default is NULL (no clipping).}
+\item{aoi}{sf o SpatRaster opcional. Área de interés para recortar los datos.}
 
-\item{retries}{Integer. Number of attempts to retry download in case of failure. Default is 3.}
+\item{retries}{Integer. Número de intentos de descarga en caso de fallo.
+Por defecto: `3`.}
 
-\item{timeout}{Numeric. Download timeout in seconds. Default is 300.}
+\item{timeout}{Numeric. Tiempo máximo de descarga en segundos.
+Por defecto: `300`.}
+
+\item{destination_dir}{Character. Carpeta donde guardar los datos descargados.
+Si NULL, se usa un directorio temporal.}
 }
 \value{
-A `SpatRaster` object containing the selected historic climate variables,
-optionally clipped to the specified AOI.
+Un objeto `SpatRaster` con las variables climáticas históricas.
+  Si se especifica `aoi`, los datos se recortan a esa área.
 }
 \description{
-Downloads historic climate data from WorldClim v2.1 and processes
-it according to the specified parameters. Supports a variety of
-climate variables and resolutions. Optionally clips data to a specified
-area of interest (AOI) and includes retry logic for download reliability.
+Descarga datos climáticos históricos de WorldClim v2.1 y los procesa
+según los parámetros especificados. Soporta múltiples variables climáticas
+y resoluciones espaciales. Opcionalmente recorta los datos a un área de interés (AOI).
 }
 \examples{
 \donttest{
-library(sf)
-library(terra)
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
-nc <- st_transform(nc, crs = 4326)
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+nc <- sf::st_transform(nc, crs = 4326)
 
 climate_historic <- get_worldclim_historic(
-  var = "tmin", res = "5m", aoi = nc
+  var = "tmin",
+  res = 5,
+  aoi = nc
 )
 }
 

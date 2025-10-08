@@ -1,43 +1,51 @@
 #' @name get_worldclim_historic
-#' @title Download and process historic environmental variables from WorldClim v2.1
-#'
+#' @title Descargar y procesar variables climáticas históricas de WorldClim v2.1
 #' @description
-#' Downloads historic climate data from WorldClim v2.1 and processes
-#' it according to the specified parameters. Supports a variety of
-#' climate variables and resolutions. Optionally clips data to a specified
-#' area of interest (AOI) and includes retry logic for download reliability.
+#' Descarga datos climáticos históricos de WorldClim v2.1 y los procesa
+#' según los parámetros especificados. Soporta múltiples variables climáticas
+#' y resoluciones espaciales. Opcionalmente recorta los datos a un área de interés (AOI).
 #'
 #' @usage get_worldclim_historic(
-#'   var = "bio", res = "30s", aoi = NULL,
-#'   retries = 3, timeout = 300
+#'   var = "bio",
+#'   res = 10,
+#'   aoi = NULL,
+#'   retries = 3,
+#'   timeout = 300,
+#'   destination_dir = NULL
 #' )
 #'
-#' @param var Character. Climate variable to download. Options:
+#' @param var Character. Variable climática a descargar. Opciones:
 #'   \itemize{
-#'     \item "bio" — Bioclimatic variables
-#'     \item "tavg" — Average temperature
-#'     \item "tmin" — Minimum temperature
-#'     \item "tmax" — Maximum temperature
-#'     \item "prec" — Precipitation
-#'     \item "srad" — Solar radiation
-#'     \item "wind" — Wind speed
-#'     \item "vapr" — Vapor pressure
+#'     \item "bio" — Variables bioclimáticas.
+#'     \item "tavg" — Temperatura media.
+#'     \item "tmin" — Temperatura mínima.
+#'     \item "tmax" — Temperatura máxima.
+#'     \item "prec" — Precipitación.
+#'     \item "srad" — Radiación solar.
+#'     \item "wind" — Velocidad del viento.
+#'     \item "vapr" — Presión de vapor.
 #'   }
-#'   Default is "bio".
-#' @param res Character. Spatial resolution of the data. Options:
+#'   Por defecto: `"bio"`.
+#' @param res Numeric. Resolución espacial en minutos de arco.
+#'   Valores válidos: `0.5`, `2.5`, `5`, `10`.
+#'   Estos valores se mapean internamente a cadenas aceptadas por WorldClim:
 #'   \itemize{
-#'     \item "30s" — ~1 km (30 arc-seconds)
-#'     \item "2.5m" — ~5 km (2.5 arc-minutes)
-#'     \item "5m" — ~10 km (5 arc-minutes)
-#'     \item "10m" — ~20 km (10 arc-minutes)
+#'     \item 0.5 → "30s"
+#'     \item 2.5 → "2.5m"
+#'     \item 5   → "5m"
+#'     \item 10  → "10m"
 #'   }
-#'   Default is "30s".
-#' @param aoi An `sf` or `SpatRaster` object representing the area of interest. Default is NULL (no clipping).
-#' @param retries Integer. Number of attempts to retry download in case of failure. Default is 3.
-#' @param timeout Numeric. Download timeout in seconds. Default is 300.
+#'   Por defecto: `10`.
+#' @param aoi sf o SpatRaster opcional. Área de interés para recortar los datos.
+#' @param retries Integer. Número de intentos de descarga en caso de fallo.
+#'   Por defecto: `3`.
+#' @param timeout Numeric. Tiempo máximo de descarga en segundos.
+#'   Por defecto: `300`.
+#' @param destination_dir Character. Carpeta donde guardar los datos descargados.
+#'   Si NULL, se usa un directorio temporal.
 #'
-#' @return A `SpatRaster` object containing the selected historic climate variables,
-#' optionally clipped to the specified AOI.
+#' @return Un objeto `SpatRaster` con las variables climáticas históricas.
+#'   Si se especifica `aoi`, los datos se recortan a esa área.
 #'
 #' @references
 #' Fick, S. E., & Hijmans, R. J. (2017). WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas.
@@ -45,13 +53,13 @@
 #'
 #' @examples
 #' \donttest{
-#' library(sf)
-#' library(terra)
-#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
-#' nc <- st_transform(nc, crs = 4326)
+#' nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- sf::st_transform(nc, crs = 4326)
 #'
 #' climate_historic <- get_worldclim_historic(
-#'   var = "tmin", res = "5m", aoi = nc
+#'   var = "tmin",
+#'   res = 5,
+#'   aoi = nc
 #' )
 #' }
 #'
@@ -78,10 +86,17 @@ get_worldclim_historic <- function(var = "bio",
 
   # Validar inputs
   stopifnot(var %in% c("tavg", "tmin", "tmax", "prec", "srad", "wind", "vapr", "bio"))
+  stopifnot(is.numeric(res))
   stopifnot(res %in% c(0.5, 2.5, 5, 10))
 
-  # Manejar resolución
-  res_str <- if (res == 0.5) "30s" else sprintf("%sm", res)
+  # Mapear resolución numérica a cadena válida
+  res_map <- c(
+    "0.5" = "30s",
+    "2.5" = "2.5m",
+    "5"   = "5m",
+    "10"  = "10m"
+  )
+  res_str <- res_map[as.character(res)]
 
   base_url <- "https://geodata.ucdavis.edu/climate/worldclim/2_1/base"
   zip_name <- sprintf("wc2.1_%s_%s.zip", res_str, var)
@@ -126,8 +141,8 @@ get_worldclim_historic <- function(var = "bio",
     climate_rasters <- terra::mask(climate_rasters, aoi)
   }
 
-  # Guardar si se especifica carpeta válida
-  destfile <- file.path(destination_dir, zip_name)
+  # Guardar raster como .tif
+  destfile <- file.path(destination_dir, sprintf("wc2.1_%s_%s.tif", res_str, var))
   terra::writeRaster(climate_rasters, destfile, overwrite = TRUE)
   message("Raster saved at: ", destfile)
 

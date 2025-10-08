@@ -4,37 +4,31 @@
 \alias{get_records_by_hexagon}
 \title{Retrieve species records aggregated by H3 hexagons}
 \usage{
-get_records_by_hexagon(species, aoi_sf, res = 6,
-  providers = NULL, remove_duplicates = FALSE, date = NULL,
-  expand_factor = 0.1, limit = 500)
+get_records_by_hexagon(
+  species, aoi_sf, res = 6,
+  providers = NULL, remove_duplicates = FALSE,
+  date = NULL, expand_factor = 0.1, limit = 500
+)
 }
 \arguments{
-\item{species}{(`character`) Vector of species names to query.}
+\item{species}{character vector. Species names to query.}
 
-\item{aoi_sf}{(`sf`) Polygon defining the Area of Interest (AOI).
-Must have a valid CRS.}
+\item{aoi_sf}{sf object. Area of Interest polygon.}
 
-\item{res}{(`integer`) H3 resolution level (1–16). Default is 6.}
+\item{res}{integer. H3 resolution level (1–16). Default: 6.}
 
-\item{providers}{(`character`) Data providers to query (e.g., `"gbif"`).
-Default is `NULL` (all available providers).}
+\item{providers}{character vector. Data providers to query. Default: NULL (all).}
 
-\item{remove_duplicates}{(`logical`) Whether to remove duplicate geometries.
-Default is `FALSE`.}
+\item{remove_duplicates}{logical. Remove duplicate records. Default: FALSE.}
 
-\item{date}{(`character`) Vector of length two: start and end dates
-(e.g., `c("2020-01-01", "2021-01-01")`) for filtering occurrences.}
+\item{date}{character vector of length two. Start and end dates for filtering records.}
 
-\item{expand_factor}{(`numeric`) Expand AOI bounding box to ensure full hexagon
-coverage. Default is 0.1 (10%).}
+\item{expand_factor}{numeric. Expand AOI bounding box. Default: 0.1.}
 
-\item{limit}{(`integer`) Maximum number of occurrence records to download
-per species. Default is 500.}
+\item{limit}{integer. Maximum number of occurrence records per species. Default: 500.}
 }
 \value{
-(`sf`) An `sf` object containing H3 hexagonal polygons
-  covering the AOI. Each polygon includes counts of occurrences
-  for each species.
+sf object. H3 hex grid with species occurrence counts.
 }
 \description{
 Downloads species occurrence data within a specified Area of Interest (AOI)

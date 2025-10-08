@@ -2,54 +2,48 @@
 % Please edit documentation in R/extract_cat_raster.R
 \name{extract_cat_raster}
 \alias{extract_cat_raster}
-\title{Extract Categorical Raster Values by Polygons}
+\title{Extract categorical raster values by polygons or hexagons}
 \usage{
-extract_cat_raster(spat_raster_cat, sf_hex_grid)
+extract_cat_raster(spat_raster_cat, sf_hex_grid, proportion = TRUE)
 }
 \arguments{
-\item{spat_raster_cat}{A categorical raster (`SpatRaster`),
-where pixel values represent discrete land cover classes.}
+\item{spat_raster_cat}{A categorical raster of class `SpatRaster` from the **terra** package.}
 
-\item{sf_hex_grid}{An `sf` object containing polygon geometries
-over which the raster values will be extracted.}
+\item{sf_hex_grid}{An object of class `sf` representing the polygons (e.g., hexagonal grid).}
+
+\item{proportion}{Logical. If `TRUE` (default), returns the proportion of each
+category within each polygon. If `FALSE`, returns counts instead.}
 }
 \value{
-An `sf` object containing the original polygons
-  and additional columns — one per raster category —
-  representing the proportion of coverage for that category
-  within each polygon.
+An `sf` object with the extracted values joined to the input grid.
+Each polygon will contain the calculated proportions or counts of the categorical
+raster values that fall within its area.
 }
 \description{
-Extracts values from a categorical raster for each polygon
-in an sf object. The function calculates the proportion
-of each land cover category within each polygon using
-exactextractr for precise zonal statistics.
+Extracts categorical raster values (e.g., land cover classes) for each polygon
+in a given grid (e.g., H3 hexagons or administrative units). It returns either
+the proportion of each category within each polygon or the raw counts.
 }
 \details{
-This function uses the \pkg{exactextractr} package to compute
-precise proportions of categorical raster values within
-polygon boundaries. It is useful for landscape ecology studies,
-habitat analysis, and spatial modeling where category proportions
-are important explanatory variables.
+This function uses `exactextractr::exact_extract()` to accurately compute the
+overlap between polygons and raster cells. Invalid geometries are automatically
+fixed using `sf::st_make_valid()`, and only `POLYGON` or `MULTIPOLYGON`
+geometries are processed.
 }
 \examples{
-\donttest{
-library(sf)
-library(terra)
-library(paisaje)
+\dontrun{
 
-# Load categorical raster
-r <- rast("landcover.tif")
+# Example categorical raster
+r <- terra::rast(nrows = 10, ncols = 10)
+terra::values(r) <- sample(1:3, terra::ncell(r), replace = TRUE)
 
-# Create polygon grid
-bbox <- st_bbox(r) |>
-  st_as_sfc(crs = st_crs(4326)) |>
-  st_as_sf()
-grid_sf <- get_h3_grid(bbox, resolution = 6)
+# Example grid (hexagons)
+bbox <- sf::st_as_sfc(sf::st_bbox(terra::as.polygons(r)))
+hex <- sf::st_make_grid(bbox, cellsize = 0.2, square = FALSE)
+hex_sf <- sf::st_sf(ID = 1:length(hex), geometry = hex)
 
-# Extract category proportions
-result_sf <- extract_cat_raster(r, grid_sf)
-head(result_sf)
+# Extract proportions of land cover classes per hexagon
+result <- extract_cat_raster(r, hex_sf, proportion = TRUE)
 }
 
 }

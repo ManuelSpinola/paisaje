@@ -1,22 +1,16 @@
 #' @name get_esa_10m
-#'
 #' @title Download ESA WorldCover land cover data
-#'
 #' @description
 #' Downloads ESA WorldCover land cover data at 10 m resolution for a specified
 #' area of interest (AOI) and year. Useful for landscape ecology studies,
 #' environmental analyses, and habitat mapping.
 #'
-#' @usage get_esa_10m(aoi_sf, year = NULL, output_folder = ".")
-#'
-#' @param aoi_sf (\code{sf}) An sf object defining the area of interest (AOI).
+#' @param aoi_sf `sf` An sf object defining the area of interest (AOI).
 #'   This can be a country, state, or custom boundary.
-#'
-#' @param year (\code{numeric}) Year of the land cover data. Available:
+#' @param year `numeric` Year of the land cover data. Available:
 #'   - 2020: ESA WorldCover 10 m 2020 v100
 #'   - 2021: ESA WorldCover 10 m 2021 v200
-#'
-#' @param output_folder (\code{character}) Directory where data files will be saved.
+#' @param output_folder `character` Directory where data files will be saved.
 #'   Default is "." (current working directory).
 #'
 #' @details
@@ -24,12 +18,9 @@
 #' The downloaded file can be large (hundreds of MB), and processing may take several minutes
 #' depending on the AOI size and internet connection speed.
 #'
-#' @return (\code{RasterLayer}) A raster object containing land cover classification
+#' @return `SpatRaster` A raster object containing land cover classification
 #'   for the specified AOI and year. The raster values correspond to land cover classes
 #'   as defined by the ESA WorldCover classification scheme.
-#'
-#' @value
-#' A \code{RasterLayer} object from the raster package with land cover classification data.
 #'
 #' @references
 #' Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., et al. (2021).
@@ -37,14 +28,14 @@
 #' Zanaga, D., Van De Kerchove, R., Daems, D., et al. (2022).
 #'   ESA WorldCover 10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
 #'
-#' @export
-#'
 #' @examples
 #' \donttest{
 #' library(sf)
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
-#' get_esa_10m(nc, year = 2021, output_folder = ".")
+#' get_esa_10m(nc, year = 2021, output_folder = tempdir())
 #' }
+#'
+#' @export
 
 get_esa_10m <- function(aoi_sf,
                         year = 2020,

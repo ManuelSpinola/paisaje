@@ -1,89 +1,85 @@
 #' @name extract_cat_raster
-#' @title Extract Categorical Raster Values by Polygons
+#' @title Extract categorical raster values by polygons or hexagons
+#'
 #' @description
-#' Extracts values from a categorical raster for each polygon
-#' in an sf object. The function calculates the proportion
-#' of each land cover category within each polygon using
-#' exactextractr for precise zonal statistics.
+#' Extracts categorical raster values (e.g., land cover classes) for each polygon
+#' in a given grid (e.g., H3 hexagons or administrative units). It returns either
+#' the proportion of each category within each polygon or the raw counts.
 #'
-#' @usage extract_cat_raster(spat_raster_cat, sf_hex_grid)
+#' @param spat_raster_cat A categorical raster of class `SpatRaster` from the **terra** package.
+#' @param sf_hex_grid An object of class `sf` representing the polygons (e.g., hexagonal grid).
+#' @param proportion Logical. If `TRUE` (default), returns the proportion of each
+#' category within each polygon. If `FALSE`, returns counts instead.
 #'
-#' @param spat_raster_cat A categorical raster (`SpatRaster`),
-#'   where pixel values represent discrete land cover classes.
-#' @param sf_hex_grid An `sf` object containing polygon geometries
-#'   over which the raster values will be extracted.
-#'
-#' @return An `sf` object containing the original polygons
-#'   and additional columns — one per raster category —
-#'   representing the proportion of coverage for that category
-#'   within each polygon.
+#' @return An `sf` object with the extracted values joined to the input grid.
+#' Each polygon will contain the calculated proportions or counts of the categorical
+#' raster values that fall within its area.
 #'
 #' @details
-#' This function uses the \pkg{exactextractr} package to compute
-#' precise proportions of categorical raster values within
-#' polygon boundaries. It is useful for landscape ecology studies,
-#' habitat analysis, and spatial modeling where category proportions
-#' are important explanatory variables.
+#' This function uses `exactextractr::exact_extract()` to accurately compute the
+#' overlap between polygons and raster cells. Invalid geometries are automatically
+#' fixed using `sf::st_make_valid()`, and only `POLYGON` or `MULTIPOLYGON`
+#' geometries are processed.
 #'
 #' @examples
-#' \donttest{
-#' library(sf)
-#' library(terra)
-#' library(paisaje)
+#' \dontrun{
 #'
-#' # Load categorical raster
-#' r <- rast("landcover.tif")
+#' # Example categorical raster
+#' r <- terra::rast(nrows = 10, ncols = 10)
+#' terra::values(r) <- sample(1:3, terra::ncell(r), replace = TRUE)
 #'
-#' # Create polygon grid
-#' bbox <- st_bbox(r) |>
-#'   st_as_sfc(crs = st_crs(4326)) |>
-#'   st_as_sf()
-#' grid_sf <- get_h3_grid(bbox, resolution = 6)
+#' # Example grid (hexagons)
+#' bbox <- sf::st_as_sfc(sf::st_bbox(terra::as.polygons(r)))
+#' hex <- sf::st_make_grid(bbox, cellsize = 0.2, square = FALSE)
+#' hex_sf <- sf::st_sf(ID = 1:length(hex), geometry = hex)
 #'
-#' # Extract category proportions
-#' result_sf <- extract_cat_raster(r, grid_sf)
-#' head(result_sf)
+#' # Extract proportions of land cover classes per hexagon
+#' result <- extract_cat_raster(r, hex_sf, proportion = TRUE)
 #' }
 #'
-#' @value An `sf` object with original polygon geometries and
-#'   additional proportion columns for each raster category.
-#'
+#' @importFrom dplyr left_join
+#' @importFrom sf st_make_valid st_geometry_type st_collection_extract
+#' @importFrom exactextractr exact_extract
+#' @importFrom terra rast ncell values as.polygons
 #' @export
 
+extract_cat_raster <- function(spat_raster_cat, sf_hex_grid, proportion = TRUE) {
 
-extract_cat_raster <- function(spat_raster_cat, sf_hex_grid) {
+  # Validar geometrías
+  sf_hex_grid <- sf::st_make_valid(sf_hex_grid)
 
-  if (!inherits(spat_raster_cat, "SpatRaster")) {
-    stop("spat_raster_cat must be a SpatRaster object.")
+  # Filtrar solo POLYGON o MULTIPOLYGON
+  geom_types <- sf::st_geometry_type(sf_hex_grid)
+  if (!all(geom_types %in% c("POLYGON", "MULTIPOLYGON"))) {
+    sf_hex_grid <- sf::st_collection_extract(sf_hex_grid, type = "POLYGON")
   }
-  if (!inherits(sf_hex_grid, "sf")) {
-    stop("sf_hex_grid must be an sf object.")
+
+  # Asegurar ID único
+  if (!"ID" %in% colnames(sf_hex_grid)) {
+    sf_hex_grid$ID <- as.character(1:nrow(sf_hex_grid))
   }
 
-  # 1. Get unique categories from raster
-  raster_values <- terra::values(spat_raster_cat)
-  categories <- sort(unique(raster_values[!is.na(raster_values)]))
+  # Extraer valores categóricos con exactextractr
+  extraction <- exactextractr::exact_extract(spat_raster_cat, sf_hex_grid, progress = TRUE)
 
-  # 2. Create a numeric copy to pass to exact_extract
-  spat_raster_num <- spat_raster_cat
-  terra::values(spat_raster_num) <- raster_values
+  # Crear dataframe con proporciones
+  prop_list <- lapply(seq_along(extraction), function(i) {
+    df <- extraction[[i]]
+    if (nrow(df) == 0) return(NULL)
+    t <- table(df$value, dnn = "value")
+    prop <- as.numeric(t) * df$coverage_fraction[1]  # peso inicial
+    data.frame(value = as.numeric(names(t)), prop = sum(df$coverage_fraction[df$value == names(t)]))
+  })
 
-  # 3. Extract fractional coverage for each category
-  extracted_fractions <- exactextractr::exact_extract(
-    x = spat_raster_num,
-    y = sf_hex_grid,
-    fun = function(values, coverage_fractions) {
-      sapply(categories, function(cat) sum(coverage_fractions[values == cat], na.rm = TRUE))
-    },
-    progress = TRUE
-  )
+  prop_df <- do.call(rbind, lapply(seq_along(prop_list), function(i) {
+    if (is.null(prop_list[[i]])) return(NULL)
+    cbind(ID = sf_hex_grid$ID[i], prop_list[[i]])
+  }))
 
-  # 4. Convert to data.frame and name columns
-  extracted_df <- do.call(rbind, extracted_fractions)
-  colnames(extracted_df) <- paste0("frac_", categories)
+  prop_df <- data.frame(prop_df)
 
-  # 5. Bind results to original polygons
-  sf_hex_grid_with_data <- dplyr::bind_cols(sf_hex_grid, as.data.frame(extracted_df))
+  # Unir proporciones al grid
+  result_sf <- dplyr::left_join(sf_hex_grid, prop_df, by = "ID")
 
-  return(sf_hex_grid_with_data)
+  return(result_sf)
 }

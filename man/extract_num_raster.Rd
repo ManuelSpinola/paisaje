@@ -20,11 +20,8 @@ Uses exactextractr to compute the weighted mean using the area of overlap.
 }
 \examples{
 \dontrun{
-library(sf)
-library(terra)
-library(exactextractr)
 
-r <- rast(system.file("raster/bio.tif", package = "spData"))
+r <- terra::rast(system.file("raster/bio.tif", package = "spData"))
 grid_sf <- get_h3_grid(st_as_sf(st_bbox(r)), resolution = 6)
 result_sf <- extract_num_raster(r, grid_sf)
 head(result_sf)

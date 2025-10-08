@@ -32,10 +32,6 @@
 #' functionality of the `spocc::occ` function. It handles AOI spatial
 #' filtering and optional removal of duplicates.
 #'
-#' @value
-#' An `sf` object of class `sf` with point geometries representing
-#' species occurrence records. Additional attributes include metadata
-#' about the source provider and date of observation.
 #'
 #' @examples
 #' \donttest{

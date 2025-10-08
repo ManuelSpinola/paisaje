@@ -27,23 +27,20 @@ This is a wrapper of the function "sample_lsm" from the
  landscapemetrics package (see References)
 }
 \examples{
-\dontrun{
-library(sf)
-library(terra)
-library(exactextractr)
+\donttest{
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+nc <- sf::st_transform(nc, crs = 4326)
 
-clc <- rast(system.file('sao_miguel/clc2018_v2020_20u1.tif',
-package = 'exactextractr'))
+clc <- terra::rast(system.file("sao_miguel/clc2018_v2020_20u1.tif",
+  package = "exactextractr"))
 
+bbox <- sf::st_bbox(clc) |>
+  sf::st_as_sfc() |>
+  sf::st_as_sf()
 
-bbox <- st_bbox(clc) |>
-st_as_sfc() |>
-st_as_sf()
+h3_bbox <- paisaje::get_h3_grid(bbox, resolution = 6)
 
-h3_bbox <- get_h3_grid(bbox, resolution = 6)
-
-
-result_sf <- calculate_it_metrics(clc, h3_bbox)
+result_sf <- paisaje::calculate_it_metrics(clc, h3_bbox)
 }
 
 }

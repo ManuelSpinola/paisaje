@@ -31,10 +31,11 @@ resulting raster can be used for further spatial analysis
 or landscape ecology studies.
 }
 \examples{
-\donttest{
+\dontrun{
 # Assuming 'land_cover_raster' is a SpatRaster object from ESA WorldCover
 cat_raster <- create_cat_esa_10m(land_cover_raster)
 }
+
 
 }
 \references{

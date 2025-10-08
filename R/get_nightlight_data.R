@@ -5,19 +5,16 @@
 #' It scrapes the website to locate and download the latest available
 #' nightlight dataset for the specified year and month.
 #'
-#' @usage get_nightlight_data(year, month, version = "v10",
-#'   destination_dir = ".", timeout = 1200)
-#'
-#' @param year (`numeric` or `character`) The year for which to download
+#' @param year `numeric` o `character` The year for which to download
 #'   nightlight data (e.g., 2020).
-#' @param month (`numeric` or `character`) Month of the year (1–12).
+#' @param month `numeric` o `character` Month of the year (1–12).
 #'   Will be formatted as two digits (e.g., `"03"` for March).
-#' @param version (`character`) Nightlight data version. Default is `"v10"`.
-#' @param destination_dir (`character`) Directory where the downloaded
+#' @param version `character` Nightlight data version. Default is `"v10"`.
+#' @param destination_dir `character` Directory where the downloaded
 #'   `.tif` file will be saved. Default is the current working directory `"."`.
-#' @param timeout (`numeric`) Timeout in seconds for the download. Default is `1200` seconds.
+#' @param timeout `numeric` Timeout in seconds for the download. Default is `1200` seconds.
 #'
-#' @return (`character` or `NULL`) Path to the downloaded `.tif` file.
+#' @return `character` o `NULL` Path to the downloaded `.tif` file.
 #'   Returns `NULL` if no file was found or if an error occurred.
 #'
 #' @details
@@ -28,19 +25,12 @@
 #' nightlight data for studies involving human activity, urbanization,
 #' and environmental monitoring.
 #'
-#' @importFrom utils download.file unzip
-#' @importFrom rvest html_attr
-#'
 #' @examples
 #' \donttest{
 #'   # Download nightlight data for March 2021
 #'   file_path <- get_nightlight_data(2021, 3)
 #'   print(file_path)
 #' }
-#'
-#' @value
-#' A string with the file path of the downloaded `.tif` file,
-#' or `NULL` if no file was found or if there was an error.
 #'
 #' @export
 

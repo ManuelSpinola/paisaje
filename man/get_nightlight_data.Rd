@@ -4,25 +4,30 @@
 \alias{get_nightlight_data}
 \title{Download and Retrieve Nightlight Data}
 \usage{
-get_nightlight_data(year, month, version = "v10",
-  destination_dir = ".", timeout = 1200)
+get_nightlight_data(
+  year,
+  month,
+  version = "v10",
+  destination_dir = NULL,
+  timeout = 1200
+)
 }
 \arguments{
-\item{year}{(`numeric` or `character`) The year for which to download
+\item{year}{`numeric` o `character` The year for which to download
 nightlight data (e.g., 2020).}
 
-\item{month}{(`numeric` or `character`) Month of the year (1–12).
+\item{month}{`numeric` o `character` Month of the year (1–12).
 Will be formatted as two digits (e.g., `"03"` for March).}
 
-\item{version}{(`character`) Nightlight data version. Default is `"v10"`.}
+\item{version}{`character` Nightlight data version. Default is `"v10"`.}
 
-\item{destination_dir}{(`character`) Directory where the downloaded
+\item{destination_dir}{`character` Directory where the downloaded
 `.tif` file will be saved. Default is the current working directory `"."`.}
 
-\item{timeout}{(`numeric`) Timeout in seconds for the download. Default is `1200` seconds.}
+\item{timeout}{`numeric` Timeout in seconds for the download. Default is `1200` seconds.}
 }
 \value{
-(`character` or `NULL`) Path to the downloaded `.tif` file.
+`character` o `NULL` Path to the downloaded `.tif` file.
   Returns `NULL` if no file was found or if an error occurred.
 }
 \description{

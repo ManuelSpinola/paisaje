@@ -6,28 +6,23 @@
 #' Returns an `sf` object with one polygon per hexagon and columns containing
 #' species occurrence counts.
 #'
-#' @usage get_records_by_hexagon(species, aoi_sf, res = 6,
-#'   providers = NULL, remove_duplicates = FALSE, date = NULL,
-#'   expand_factor = 0.1, limit = 500)
+#' @usage
+#' get_records_by_hexagon(
+#'   species, aoi_sf, res = 6,
+#'   providers = NULL, remove_duplicates = FALSE,
+#'   date = NULL, expand_factor = 0.1, limit = 500
+#' )
 #'
-#' @param species (`character`) Vector of species names to query.
-#' @param aoi_sf (`sf`) Polygon defining the Area of Interest (AOI).
-#'   Must have a valid CRS.
-#' @param res (`integer`) H3 resolution level (1–16). Default is 6.
-#' @param providers (`character`) Data providers to query (e.g., `"gbif"`).
-#'   Default is `NULL` (all available providers).
-#' @param remove_duplicates (`logical`) Whether to remove duplicate geometries.
-#'   Default is `FALSE`.
-#' @param date (`character`) Vector of length two: start and end dates
-#'   (e.g., `c("2020-01-01", "2021-01-01")`) for filtering occurrences.
-#' @param expand_factor (`numeric`) Expand AOI bounding box to ensure full hexagon
-#'   coverage. Default is 0.1 (10%).
-#' @param limit (`integer`) Maximum number of occurrence records to download
-#'   per species. Default is 500.
+#' @param species character vector. Species names to query.
+#' @param aoi_sf sf object. Area of Interest polygon.
+#' @param res integer. H3 resolution level (1–16). Default: 6.
+#' @param providers character vector. Data providers to query. Default: NULL (all).
+#' @param remove_duplicates logical. Remove duplicate records. Default: FALSE.
+#' @param date character vector of length two. Start and end dates for filtering records.
+#' @param expand_factor numeric. Expand AOI bounding box. Default: 0.1.
+#' @param limit integer. Maximum number of occurrence records per species. Default: 500.
 #'
-#' @return (`sf`) An `sf` object containing H3 hexagonal polygons
-#'   covering the AOI. Each polygon includes counts of occurrences
-#'   for each species.
+#' @return sf object. H3 hex grid with species occurrence counts.
 #'
 #' @details
 #' This function is useful for spatial biodiversity analyses where
@@ -47,10 +42,6 @@
 #' )
 #' print(hex_counts)
 #' }
-#'
-#' @value
-#' An `sf` object with hexagon polygons and columns representing
-#' occurrence counts for each species.
 #'
 #' @export
 
