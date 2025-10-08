@@ -51,9 +51,15 @@ and optionally clipped to a specified area of interest (AOI).</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_worldclim_future</span><span class="op">(</span></span>
-<span>  var <span class="op">=</span> <span class="st">"bioc"</span>, res <span class="op">=</span> <span class="st">"30s"</span>, scenario <span class="op">=</span> <span class="st">"585"</span>,</span>
-<span>  time_range <span class="op">=</span> <span class="st">"2021-2040"</span>, gcm <span class="op">=</span> <span class="st">"ACCESS-CM2"</span>,</span>
-<span>  aoi <span class="op">=</span> <span class="cn">NULL</span>, retries <span class="op">=</span> <span class="fl">3</span>, timeout <span class="op">=</span> <span class="fl">300</span></span>
+<span>  var <span class="op">=</span> <span class="st">"bioc"</span>,</span>
+<span>  res <span class="op">=</span> <span class="st">"30s"</span>,</span>
+<span>  scenario <span class="op">=</span> <span class="st">"585"</span>,</span>
+<span>  time_range <span class="op">=</span> <span class="st">"2021-2040"</span>,</span>
+<span>  gcm <span class="op">=</span> <span class="st">"ACCESS-CM2"</span>,</span>
+<span>  aoi <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  retries <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  timeout <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>  destination_dir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -62,7 +68,7 @@ and optionally clipped to a specified area of interest (AOI).</p>
 
 
 <dl><dt id="arg-var">var<a class="anchor" aria-label="anchor" href="#arg-var"></a></dt>
-<dd><p>Character. Climate variable to download. Options:</p><ul><li><p>"bioc" — Bioclimatic variables (19 variables)</p></li>
+<dd><p>character Climate variable to download. Options:</p><ul><li><p>"bioc" — Bioclimatic variables (19 variables)</p></li>
 <li><p>"prec" — Precipitation</p></li>
 <li><p>"tavg" — Average temperature</p></li>
 <li><p>"tmin" — Minimum temperature</p></li>
@@ -71,7 +77,7 @@ and optionally clipped to a specified area of interest (AOI).</p>
 
 
 <dt id="arg-res">res<a class="anchor" aria-label="anchor" href="#arg-res"></a></dt>
-<dd><p>Character. Spatial resolution of the data. Options:</p><ul><li><p>"30s" — ~1 km (30 arc-seconds)</p></li>
+<dd><p>character Spatial resolution of the data. Options:</p><ul><li><p>"30s" — ~1 km (30 arc-seconds)</p></li>
 <li><p>"2.5m" — ~5 km (2.5 arc-minutes)</p></li>
 <li><p>"5m" — ~10 km (5 arc-minutes)</p></li>
 <li><p>"10m" — ~20 km (10 arc-minutes)</p></li>
@@ -79,7 +85,7 @@ and optionally clipped to a specified area of interest (AOI).</p>
 
 
 <dt id="arg-scenario">scenario<a class="anchor" aria-label="anchor" href="#arg-scenario"></a></dt>
-<dd><p>Character. SSP scenario. Options:</p><ul><li><p>"126" — SSP1-2.6 (low emissions)</p></li>
+<dd><p>character SSP scenario. Options:</p><ul><li><p>"126" — SSP1-2.6 (low emissions)</p></li>
 <li><p>"245" — SSP2-4.5 (intermediate emissions)</p></li>
 <li><p>"370" — SSP3-7.0 (high emissions)</p></li>
 <li><p>"585" — SSP5-8.5 (very high emissions)</p></li>
@@ -87,7 +93,7 @@ and optionally clipped to a specified area of interest (AOI).</p>
 
 
 <dt id="arg-time-range">time_range<a class="anchor" aria-label="anchor" href="#arg-time-range"></a></dt>
-<dd><p>Character. Time period. Options:</p><ul><li><p>"2021-2040"</p></li>
+<dd><p>character Time period. Options:</p><ul><li><p>"2021-2040"</p></li>
 <li><p>"2041-2060"</p></li>
 <li><p>"2061-2080"</p></li>
 <li><p>"2081-2100"</p></li>
@@ -95,50 +101,36 @@ and optionally clipped to a specified area of interest (AOI).</p>
 
 
 <dt id="arg-gcm">gcm<a class="anchor" aria-label="anchor" href="#arg-gcm"></a></dt>
-<dd><p>Character. General Circulation Model. Options:</p><ul><li><p>"ACCESS-CM2"</p></li>
-<li><p>"ACCESS-ESM1-5"</p></li>
-<li><p>"AWI-CM-1-1-MR"</p></li>
-<li><p>"BCC-CSM2-MR"</p></li>
-<li><p>"CanESM5"</p></li>
-<li><p>"CanESM5-CanOE"</p></li>
-<li><p>"CMCC-ESM2"</p></li>
-<li><p>"CNRM-CM6-1"</p></li>
-<li><p>"CNRM-CM6-1-HR"</p></li>
-<li><p>"CNRM-ESM2-1"</p></li>
-<li><p>"EC-Earth3-Veg"</p></li>
-<li><p>"EC-Earth3-Veg-LR"</p></li>
-<li><p>"FIO-ESM-2-0"</p></li>
-<li><p>"GFDL-ESM4"</p></li>
-<li><p>"GISS-E2-1-G"</p></li>
-<li><p>"GISS-E2-1-H"</p></li>
-<li><p>"HadGEM3-GC31-LL"</p></li>
-<li><p>"INM-CM4-8"</p></li>
-<li><p>"INM-CM5-0"</p></li>
-<li><p>"IPSL-CM6A-LR"</p></li>
-<li><p>"MIROC-ES2L"</p></li>
-<li><p>"MIROC6"</p></li>
-<li><p>"MPI-ESM1-2-HR"</p></li>
-<li><p>"MPI-ESM1-2-LR"</p></li>
-<li><p>"MRI-ESM2-0"</p></li>
-<li><p>"UKESM1-0-LL"</p></li>
-</ul><p>Default is "ACCESS-CM2".</p></dd>
+<dd><p>character General Circulation Model. Options:
+"ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR", "BCC-CSM2-MR",
+"CanESM5", "CanESM5-CanOE", "CMCC-ESM2", "CNRM-CM6-1",
+"CNRM-CM6-1-HR", "CNRM-ESM2-1", "EC-Earth3-Veg", "EC-Earth3-Veg-LR",
+"FIO-ESM-2-0", "GFDL-ESM4", "GISS-E2-1-G", "GISS-E2-1-H",
+"HadGEM3-GC31-LL", "INM-CM4-8", "INM-CM5-0", "IPSL-CM6A-LR",
+"MIROC-ES2L", "MIROC6", "MPI-ESM1-2-HR", "MPI-ESM1-2-LR",
+"MRI-ESM2-0", "UKESM1-0-LL".
+Default is "ACCESS-CM2".</p></dd>
 
 
 <dt id="arg-aoi">aoi<a class="anchor" aria-label="anchor" href="#arg-aoi"></a></dt>
-<dd><p>An `sf` or `SpatRaster` object representing the area of interest to clip the data. Default is NULL (no clipping).</p></dd>
+<dd><p>sf or SpatRaster Optional area of interest to clip the data. Default is NULL (no clipping).</p></dd>
 
 
 <dt id="arg-retries">retries<a class="anchor" aria-label="anchor" href="#arg-retries"></a></dt>
-<dd><p>Integer. Number of attempts to retry download in case of failure. Default is 3.</p></dd>
+<dd><p>integer Number of attempts to retry download in case of failure. Default is 3.</p></dd>
 
 
 <dt id="arg-timeout">timeout<a class="anchor" aria-label="anchor" href="#arg-timeout"></a></dt>
-<dd><p>Numeric. Download timeout in seconds. Default is 300.</p></dd>
+<dd><p>numeric Download timeout in seconds. Default is 300.</p></dd>
+
+
+<dt id="arg-destination-dir">destination_dir<a class="anchor" aria-label="anchor" href="#arg-destination-dir"></a></dt>
+<dd><p>character Directory where downloaded data will be stored. Default is NULL (uses a temporary directory).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A `SpatRaster` object containing the selected climate variables,
+    <p>SpatRaster object containing the selected climate variables,
 optionally clipped to the specified AOI.</p>
     </div>
     <div class="section level2">
@@ -150,9 +142,7 @@ International Journal of Climatology, 37(12), 4302–4315. <a href="https://doi.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
@@ -160,15 +150,15 @@ International Journal of Climatology, 37(12), 4302–4315. <a href="https://doi.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">climate_future</span> <span class="op">&lt;-</span> <span class="fu">get_worldclim_future</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">climate_future</span> <span class="op">&lt;-</span> <span class="fu">paisaje</span><span class="fu">::</span><span class="fu">get_worldclim_future</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  var <span class="op">=</span> <span class="st">"tmin"</span>, res <span class="op">=</span> <span class="st">"10m"</span>, scenario <span class="op">=</span> <span class="st">"585"</span>,</span></span>
 <span class="r-in"><span>  time_range <span class="op">=</span> <span class="st">"2021-2040"</span>, gcm <span class="op">=</span> <span class="st">"ACCESS-CM2"</span>, aoi <span class="op">=</span> <span class="va">nc</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No destination_dir provided. Using temporary directory: /tmp/RtmpUYwIvf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No destination_dir provided. Using temporary directory: /tmp/RtmpvAreWg</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Download URL: https://geodata.ucdavis.edu/cmip6/10m/ACCESS-CM2/ssp585/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raster saved at: /tmp/RtmpUYwIvf/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raster saved at: /tmp/RtmpvAreWg/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
