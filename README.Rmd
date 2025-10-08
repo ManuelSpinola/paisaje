@@ -21,11 +21,39 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/ManuelSpinola/paisaje/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ManuelSpinola/paisaje/actions/workflows/R-CMD-check.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-The goal of **paisaje** is to provide tools for spatial and landscape analysis in R.  It includes functions for working with landscape metrics, spatial data manipulation, and biodiversity conservation applications.
+# paisaje
+
+**paisaje**: Tools for spatial and landscape/habitat analysis.
+
+## Overview
+
+**paisaje** is an R package for calculating **landscape metrics** and performing **spatial analysis** over raster and vector data, including **H3 hexagonal grids**.  
+It provides tools to quantify habitat structure, fragmentation, and landscape patterns, supporting ecological research, environmental monitoring, and spatial data integration using hierarchical grid systems.
+
+Key features include:
+
+- Calculation of landscape metrics for categorical raster layers  
+- Generation and analysis of H3 hexagonal grids for spatial modeling  
+- Integration with spatial packages like **terra** and **sf**  
+- Flexible extraction of metrics at different spatial resolutions  
+- Functions for habitat and landscape characterization  
+
+By combining powerful spatial analysis tools with a user-friendly API, **paisaje** facilitates landscape ecology studies, habitat assessment, and spatial modeling workflows.
 
 ## Installation
 
-You can install the development version of paisaje from [GitHub](https://github.com/) with:
+You can install the development version of **paisaje from** [GitHub](https://github.com/) using one of the following methods:
+
+```{r, eval=FALSE}
+# install.packages("pak")
+pak::pak("ManuelSpinola/paisaje")
+```
+
+```{r, eval=FALSE}
+# install.packages("remotes")
+remotes::install_github("ManuelSpinola/paisaje")
+```
+
 
 ```{r, eval=FALSE}
 install.packages("devtools")
