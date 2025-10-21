@@ -11,27 +11,44 @@
 #'   - 2020: ESA WorldCover 10 m 2020 v100
 #'   - 2021: ESA WorldCover 10 m 2021 v200
 #' @param output_folder `character` Directory where data files will be saved.
-#'   Default is "." (current working directory).
+#'   Default is `"."` (current working directory).
 #'
 #' @details
-#' This function downloads global land cover raster data produced by the ESA WorldCover project.
-#' The downloaded file can be large (hundreds of MB), and processing may take several minutes
-#' depending on the AOI size and internet connection speed.
+#' This function downloads global land-cover raster data produced by the
+#' ESA WorldCover project.
+#' The downloaded file can be large (hundreds of MB), and processing may take
+#' several minutes depending on the AOI size and internet speed.
 #'
-#' @return `SpatRaster` A raster object containing land cover classification
-#'   for the specified AOI and year. The raster values correspond to land cover classes
-#'   as defined by the ESA WorldCover classification scheme.
+#' **Land-cover classification (ESA WorldCover 10 m v200):**
+#'
+#' | Value | Class (English)                  | Categoría (Español)                        |
+#' |:------:|:--------------------------------|:-------------------------------------------|
+#' | 10     | Tree cover                     | Cobertura arbórea                          |
+#' | 20     | Shrubland                      | Matorrales                                 |
+#' | 30     | Grassland                      | Pastizales / herbazales                    |
+#' | 40     | Cropland                       | Tierras de cultivo                         |
+#' | 50     | Built-up                       | Áreas construidas / urbanas                |
+#' | 60     | Bare / Sparse vegetation       | Vegetación escasa o suelos desnudos        |
+#' | 70     | Snow and ice                   | Nieve y hielo permanentes                  |
+#' | 80     | Permanent water bodies         | Cuerpos de agua permanentes                |
+#' | 90     | Herbaceous wetland             | Humedales herbáceos                        |
+#' | 95     | Mangroves                      | Manglares                                  |
+#' | 100    | Moss and lichen                | Musgos y líquenes                          |
+#'
+#' @return `SpatRaster` A raster object containing land-cover classification
+#'   for the specified AOI and year. The raster values correspond to land-cover
+#'   classes as defined by the ESA WorldCover classification scheme.
 #'
 #' @references
 #' Zanaga, D., Van De Kerchove, R., De Keersmaecker, W., et al. (2021).
-#'   ESA WorldCover 10 m 2020 v100. https://doi.org/10.5281/zenodo.5571936
+#' *ESA WorldCover 10 m 2020 v100.* https://doi.org/10.5281/zenodo.5571936
 #' Zanaga, D., Van De Kerchove, R., Daems, D., et al. (2022).
-#'   ESA WorldCover 10 m 2021 v200. https://doi.org/10.5281/zenodo.7254221
+#' *ESA WorldCover 10 m 2021 v200.* https://doi.org/10.5281/zenodo.7254221
 #'
 #' @examples
 #' \donttest{
 #' library(sf)
-#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 #' get_esa_10m(nc, year = 2021, output_folder = tempdir())
 #' }
 #'
