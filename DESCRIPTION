@@ -1,7 +1,7 @@
 Package: paisaje
 Type: Package
 Title: Spatial and Environmental Data Tools for Landscape Ecology
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: person(given="Manuel", family="Spínola", role=c("aut","cre"), email="mspinola10@gmail.com", comment=c(ORCID="0000-0002-7839-1908"))
 Maintainer: Manuel Spínola <mspinola10@gmail.com>
 Description: Provides functions for landscape analysis and data retrieval. 
