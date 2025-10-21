@@ -45,41 +45,50 @@
 
 extract_cat_raster <- function(spat_raster_cat, sf_hex_grid, proportion = TRUE) {
 
-  # Validar geometrías
+  # 1️⃣ Ensure geometries are valid
   sf_hex_grid <- sf::st_make_valid(sf_hex_grid)
 
-  # Filtrar solo POLYGON o MULTIPOLYGON
+  # 2️⃣ Keep only POLYGON or MULTIPOLYGON geometries
   geom_types <- sf::st_geometry_type(sf_hex_grid)
   if (!all(geom_types %in% c("POLYGON", "MULTIPOLYGON"))) {
     sf_hex_grid <- sf::st_collection_extract(sf_hex_grid, type = "POLYGON")
   }
 
-  # Asegurar ID único
+  # 3️⃣ Ensure unique ID for merging
   if (!"ID" %in% colnames(sf_hex_grid)) {
     sf_hex_grid$ID <- as.character(1:nrow(sf_hex_grid))
   }
 
-  # Extraer valores categóricos con exactextractr
+  # 4️⃣ Extract categorical raster values using exactextractr
   extraction <- exactextractr::exact_extract(spat_raster_cat, sf_hex_grid, progress = TRUE)
 
-  # Crear dataframe con proporciones
-  prop_list <- lapply(seq_along(extraction), function(i) {
+  # 5️⃣ Create a dataframe with category proportions per hex
+  prop_df <- purrr::map_dfr(seq_along(extraction), function(i) {
     df <- extraction[[i]]
     if (nrow(df) == 0) return(NULL)
-    t <- table(df$value, dnn = "value")
-    prop <- as.numeric(t) * df$coverage_fraction[1]  # peso inicial
-    data.frame(value = as.numeric(names(t)), prop = sum(df$coverage_fraction[df$value == names(t)]))
+
+    # Count occurrences per category
+    t <- table(df$value)
+    prop_values <- if (proportion) {
+      as.numeric(t) / sum(as.numeric(t))  # convert to proportion
+    } else {
+      as.numeric(t)                       # keep raw counts
+    }
+
+    tibble::tibble(
+      ID = sf_hex_grid$ID[i],
+      value = as.numeric(names(t)),
+      prop = prop_values
+    )
   })
 
-  prop_df <- do.call(rbind, lapply(seq_along(prop_list), function(i) {
-    if (is.null(prop_list[[i]])) return(NULL)
-    cbind(ID = sf_hex_grid$ID[i], prop_list[[i]])
-  }))
+  # 6️⃣ Spread categories into separate columns
+  prop_wide <- tidyr::pivot_wider(prop_df, names_from = value, values_from = prop, values_fill = 0)
 
-  prop_df <- data.frame(prop_df)
+  # 7️⃣ Join back to the hex grid
+  result_sf <- dplyr::left_join(sf_hex_grid, prop_wide, by = "ID")
 
-  # Unir proporciones al grid
-  result_sf <- dplyr::left_join(sf_hex_grid, prop_df, by = "ID")
-
+  # 8️⃣ Return as MULTIPOLYGON
+  result_sf <- sf::st_cast(result_sf, "MULTIPOLYGON")
   return(result_sf)
 }
