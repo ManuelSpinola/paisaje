@@ -2,58 +2,47 @@
 % Please edit documentation in R/calculate_it_metrics.R
 \name{calculate_it_metrics}
 \alias{calculate_it_metrics}
-\title{Calculate 5 information theory landscape metrics}
+\title{Calculate Landscape Complexity Metrics (IT Metrics) per Polygon}
 \usage{
 calculate_it_metrics(landscape_raster, aoi_sf)
 }
 \arguments{
-\item{landscape_raster}{A categorical raster object: SpatRaster.}
+\item{landscape_raster}{A \code{SpatRaster} object representing the categorical
+landscape (e.g., LULC).}
 
-\item{aoi_sf}{The spatial area of interest as an sf object.}
+\item{aoi_sf}{An \code{sf} object containing polygonal geometries (e.g., H3
+hexagons) for which the landscape metrics should be calculated.}
 }
 \value{
-An sf object
+An \code{sf} object identical to \code{aoi_sf}, but with new columns
+  appended. The new columns represent the calculated landscape metrics (e.g.,
+  \code{lsm_shdi}) with an \code{lsm_} prefix.
 }
 \description{
-This function allow to calculate 5 information theory
-landscape metrics
+Calculates specified landscape complexity metrics (a subset of Information Theory
+metrics) from a categorical land-cover raster for each input polygon using
+\code{landscapemetrics::sample_lsm()}. This function ensures a safe, alignment-guaranteed
+join of the results back to the original geometry.
 }
 \details{
-Calculate the landscape metrics: condent, ent, joinent,
-mutinf, and relmutinf.
-}
-\note{
-This is a wrapper of the function "sample_lsm" from the
- landscapemetrics package (see References)
+This function calculates metrics at the \code{"landscape"} level, filtering for
+\code{"complexity metric"} types. The function prioritizes data integrity by
+adding a temporary \code{plot_id} column based on row index, which is used
+by \code{landscapemetrics}.
+
+Crucially, the function uses \code{dplyr::left_join} with this \code{plot_id}
+for merging the results. This **robust join method** prevents data misalignment
+that could occur if rows were dropped during metric calculation, which is a significant
+improvement over the unsafe \code{cbind} method. The temporary \code{plot_id} column
+is removed before the final object is returned.
 }
 \examples{
-\donttest{
-nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-nc <- sf::st_transform(nc, crs = 4326)
-
-clc <- terra::rast(system.file("sao_miguel/clc2018_v2020_20u1.tif",
-  package = "exactextractr"))
-
-bbox <- sf::st_bbox(clc) |>
-  sf::st_as_sfc() |>
-  sf::st_as_sf()
-
-h3_bbox <- paisaje::get_h3_grid(bbox, resolution = 6)
-
-result_sf <- paisaje::calculate_it_metrics(clc, h3_bbox)
+\dontrun{
+# Assuming 'lulc' is a SpatRaster and 'hex_grid_sf' is an sf polygon grid
+# metrics_sf <- calculate_it_metrics(lulc, hex_grid_sf)
+# head(metrics_sf)
 }
-
 }
-\references{
-Hesselbarth, M.H.K., Sciaini, M., With, K.A.,
-Wiegand, K., Nowosad, J. 2019. landscapemetrics: an
-open‐source R tool to calculate landscape metrics.
-Ecography, 42: 1648-1657 (v2.1.4).
-
-Nowosad J., TF Stepinski. 2019. Information theory as a
-consistent framework for quantification and classification
-of landscape patterns.
-https://doi.org/10.1007/s10980-019-00830-x
-
-\href{https://r-spatialecology.github.io/landscapemetrics/articles/new_metrics.html}{Information theory-based framework for the analysis of landscape patterns}
+\seealso{
+\code{\link[landscapemetrics]{sample_lsm}} for available metrics.
 }

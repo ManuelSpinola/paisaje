@@ -2,29 +2,39 @@
 % Please edit documentation in R/extract_num_raster.R
 \name{extract_num_raster}
 \alias{extract_num_raster}
-\title{Extract Numeric Raster Values by Polygons}
+\title{Extract Area-Weighted Mean from Numeric Raster Stack for Polygons}
 \usage{
 extract_num_raster(spat_raster_multi, sf_hex_grid)
 }
 \arguments{
-\item{spat_raster_multi}{A SpatRaster object (single or multilayer numeric raster).}
+\item{spat_raster_multi}{A \code{SpatRaster} object from the \code{terra} package.
+Must contain numeric layers (can be a single layer or a stack/brick).}
 
-\item{sf_hex_grid}{An sf object with polygon geometries (e.g., H3 hexagons).}
+\item{sf_hex_grid}{An \code{sf} object containing polygonal geometries (e.g., H3
+hexagons).}
 }
 \value{
-An sf object with additional columns for each raster layer.
+An \code{sf} object identical to \code{sf_hex_grid}, but with new columns
+  appended. The new column names match the original \code{SpatRaster} layer names.
+  The values represent the area-weighted mean for that variable within each polygon.
 }
 \description{
-Extracts numeric raster values for each polygon in an sf object.
-Uses exactextractr to compute the weighted mean using the area of overlap.
+Calculates the area-weighted mean value for each layer in a numeric \code{SpatRaster}
+(or single layer) within each polygon feature of an \code{sf} object. This function
+is designed for high-precision zonal statistics of continuous variables
+(e.g., bioclimatic data).
+}
+\details{
+The function uses \code{exactextractr::exact_extract} with \code{fun = "weighted_mean"}
+and \code{weights = "area"} to ensure the most accurate sub-pixel summary. A critical
+security check is implemented before binding columns (\code{bind_cols}) to prevent
+data misalignment in case of row count discrepancies between the input features and
+the extracted results.
 }
 \examples{
 \dontrun{
-
-r <- terra::rast(system.file("raster/bio.tif", package = "spData"))
-grid_sf <- get_h3_grid(st_as_sf(st_bbox(r)), resolution = 6)
-result_sf <- extract_num_raster(r, grid_sf)
-head(result_sf)
+# Assuming 'bio' is a SpatRaster stack and 'h7' is an sf hexagon grid
+# bio_p <- extract_num_raster(bio, h7)
+# head(bio_p)
 }
-
 }

@@ -2,58 +2,53 @@
 % Please edit documentation in R/get_records.R
 \name{get_records}
 \alias{get_records}
-\title{Retrieve species occurrence records within an Area of Interest}
+\title{Query Species Occurrence Records within an Area of Interest (AOI)}
 \usage{
-get_records(species, aoi_sf, providers = NULL,
-  limit = 500, remove_duplicates = FALSE, date = NULL)
+get_records(
+  species,
+  aoi_sf,
+  providers = NULL,
+  limit = 500,
+  remove_duplicates = FALSE,
+  date = NULL
+)
 }
 \arguments{
-\item{species}{(`character`) Vector of species names to query.}
+\item{species}{Character string specifying the species name to query (e.g., "Puma concolor").}
 
-\item{aoi_sf}{(`sf`) An `sf` object representing the Area of Interest.
-Must have a valid CRS.}
+\item{aoi_sf}{An \code{sf} object defining the Area of Interest (AOI). Its CRS will be
+transformed to WGS84 (\code{EPSG:4326}) before query.}
 
-\item{providers}{(`character`) Data providers to query (e.g., `"gbif"`, `"inat"`).
-Default is `NULL`, which queries all available providers.}
+\item{providers}{Character vector of data providers to query (e.g., "gbif", "inat").
+If \code{NULL} (default), all available providers are used.}
 
-\item{limit}{(`integer`) Maximum number of records to retrieve per provider.
-Default is 500.}
+\item{limit}{Numeric. The maximum number of records to retrieve per provider. Default is 500.}
 
-\item{remove_duplicates}{(`logical`) Whether to remove duplicate geometries.
-Default is `FALSE`.}
+\item{remove_duplicates}{Logical. If \code{TRUE}, records with identical longitude and
+latitude are removed using \code{dplyr::distinct()}. Default is \code{FALSE}.}
 
-\item{date}{(`character`) Vector of length two specifying the date range
-(e.g., `c("YYYY-MM-DD", "YYYY-MM-DD")`). Records outside this range will
-be excluded. Default is `NULL` (no date filtering).}
+\item{date}{Character vector specifying a date range (e.g., \code{c('2000-01-01', '2020-12-31')}).}
 }
 \value{
-(`sf`) An `sf` object containing species occurrence records
-  within the specified AOI that match the query criteria. Returns `NULL`
-  if no records are found or if input parameters are invalid.
+An \code{sf} object of points containing the filtered occurrence records,
+  with geometry confirmed to fall strictly within the \code{aoi_sf} boundary.
 }
 \description{
-Retrieves species occurrence records from specified data providers
-within a given Area of Interest (AOI). The results are returned as
-an `sf` object containing point geometries. Duplicates can be removed
-based on geometry. This is a wrapper of the `occ` function from the
-\href{https://CRAN.R-project.org/package=spocc}{spocc package}.
+Downloads species occurrence records from providers (e.g., GBIF) using the \code{spocc}
+package, filtering the initial query by the exact polygonal boundary of the
+Area of Interest (AOI) for maximum efficiency and precision.
 }
 \details{
-This function simplifies retrieving occurrence records by wrapping the
-functionality of the `spocc::occ` function. It handles AOI spatial
-filtering and optional removal of duplicates.
+The function transforms the \code{aoi_sf} polygon into a WKT string, which is used in
+the \code{spocc::occ} geometry argument. This method is more efficient than querying
+by the rectangular bounding box, as it reduces the number of irrelevant records downloaded.
+Final spatial filtering is performed using \code{sf::st_intersection} to ensure strict
+containment.
 }
 \examples{
-\donttest{
-library(sf)
-nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
-records <- get_records(
-  species = "Lynx rufus",
-  aoi_sf = nc,
-  providers = c("gbif", "inat"),
-  limit = 200
-)
-head(records)
+\dontrun{
+# Assuming aoi_sf is a valid sf polygon
+# puma_records <- get_records("Puma concolor", aoi_sf, providers = "gbif", limit = 1000)
+# head(puma_records)
 }
-
 }

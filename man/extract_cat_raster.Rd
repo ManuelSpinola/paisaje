@@ -2,48 +2,47 @@
 % Please edit documentation in R/extract_cat_raster.R
 \name{extract_cat_raster}
 \alias{extract_cat_raster}
-\title{Extract categorical raster values by polygons or hexagons}
+\title{Calculate Area Proportions for Categorical Raster Classes (Generic)}
 \usage{
 extract_cat_raster(spat_raster_cat, sf_hex_grid, proportion = TRUE)
 }
 \arguments{
-\item{spat_raster_cat}{A categorical raster of class `SpatRaster` from the **terra** package.}
+\item{spat_raster_cat}{A single-layer \code{SpatRaster} object containing categorical
+values.}
 
-\item{sf_hex_grid}{An object of class `sf` representing the polygons (e.g., hexagonal grid).}
+\item{sf_hex_grid}{An \code{sf} object containing polygonal geometries. The function
+will use \code{h3_address} if present, otherwise it creates and uses a temporary \code{ID}
+column for joining.}
 
-\item{proportion}{Logical. If `TRUE` (default), returns the proportion of each
-category within each polygon. If `FALSE`, returns counts instead.}
+\item{proportion}{Logical. If \code{TRUE} (default), the output values are the
+proportion of the polygon area covered by each category (summing to 1 for the
+covered area). If \code{FALSE}, the output is the raw sum of the coverage fraction (area).}
 }
 \value{
-An `sf` object with the extracted values joined to the input grid.
-Each polygon will contain the calculated proportions or counts of the categorical
-raster values that fall within its area.
+An \code{sf} object identical to \code{sf_hex_grid}, but with new columns
+  appended for each categorical value found in the raster. Column names follow the
+  pattern \code{<layer_name>_prop_<category_value>}. Columns are **numerically ordered**
+  by the category value.
 }
 \description{
-Extracts categorical raster values (e.g., land cover classes) for each polygon
-in a given grid (e.g., H3 hexagons or administrative units). It returns either
-the proportion of each category within each polygon or the raw counts.
+Extracts and calculates the **area proportion** of each categorical class (e.g., LULC)
+found within each input polygon. This function uses area-weighting to ensure
+highly accurate, sub-pixel zonal statistics.
 }
 \details{
-This function uses `exactextractr::exact_extract()` to accurately compute the
-overlap between polygons and raster cells. Invalid geometries are automatically
-fixed using `sf::st_make_valid()`, and only `POLYGON` or `MULTIPOLYGON`
-geometries are processed.
+This function replaces the simplistic, non-area-weighted \code{table()} counting
+method with a robust custom function utilizing \code{dplyr} and the \code{coverage_fraction}
+column from \code{exactextractr}. Key features include:
+\itemize{
+  \item **Area-Weighted Accuracy:** Uses \code{coverage_fraction} for precise results.
+  \item **NA Filtering:** Excludes \code{NA} raster values to prevent a \code{prop_NaN} column.
+  \item **Numerical Ordering:** Sorts the final output columns by category number (e.g., 70 before 80).
+}
 }
 \examples{
 \dontrun{
-
-# Example categorical raster
-r <- terra::rast(nrows = 10, ncols = 10)
-terra::values(r) <- sample(1:3, terra::ncell(r), replace = TRUE)
-
-# Example grid (hexagons)
-bbox <- sf::st_as_sfc(sf::st_bbox(terra::as.polygons(r)))
-hex <- sf::st_make_grid(bbox, cellsize = 0.2, square = FALSE)
-hex_sf <- sf::st_sf(ID = 1:length(hex), geometry = hex)
-
-# Extract proportions of land cover classes per hexagon
-result <- extract_cat_raster(r, hex_sf, proportion = TRUE)
+# Assuming 'lulc' is a categorical SpatRaster and 'hex_grid' is an sf polygon grid
+# cat_data_p <- extract_cat_raster(lulc, hex_grid)
+# head(cat_data_p)
 }
-
 }
