@@ -20,7 +20,6 @@ URL: https://manuelspinola.github.io/paisaje/,
     https://github.com/ManuelSpinola/paisaje
 BugReports: https://github.com/ManuelSpinola/paisaje/issues
 Imports:
-    rlang,
     dplyr,
     tidyr,
     sf,
