@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   paisaje: paisaje.html
   articles/tutorial1: tutorial1.html
-last_built: 2025-10-21T13:48Z
+last_built: 2025-10-22T13:35Z
 urls:
   reference: https://manuelspinola.github.io/paisaje/reference
   article: https://manuelspinola.github.io/paisaje/articles
