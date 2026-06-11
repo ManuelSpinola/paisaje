@@ -2,16 +2,22 @@
 
 Provides functions for landscape analysis and data retrieval. The
 package allows users to download environmental variables from global
-datasets (e.g., WorldClim, ESA WorldCover, Nighttime Lights), and to
-compute spatial and landscape metrics using a hexagonal grid system
-based on the H3 spatial index. It is useful for ecological modeling,
-biodiversity studies, and spatial data processing in landscape ecology.
-Fick and Hijmans (2017)
+datasets (e.g., WorldClim, CHELSA, ESA WorldCover, Nighttime Lights),
+and to compute spatial and landscape metrics using a hexagonal grid
+system based on the H3 spatial index. It is useful for ecological
+modeling, biodiversity studies, and spatial data processing in landscape
+ecology. Fick and Hijmans (2017)
 [doi:10.1002/joc.5086](https://doi.org/10.1002/joc.5086) . Zanaga et al.
 (2022)
 [doi:10.5281/zenodo.7254221](https://doi.org/10.5281/zenodo.7254221) .
 Uber Technologies Inc. (2022) "H3: Hexagonal hierarchical spatial
-index".
+index". Román et al. (2018)
+[doi:10.1016/j.rse.2018.03.017](https://doi.org/10.1016/j.rse.2018.03.017)
+. Karger et al. (2017)
+[doi:10.1038/sdata.2017.122](https://doi.org/10.1038/sdata.2017.122) .
+Brun et al. (2022)
+[doi:10.5194/essd-14-5573-2022](https://doi.org/10.5194/essd-14-5573-2022)
+.
 
 ## See also
 
@@ -27,3 +33,8 @@ Useful links:
 
 **Maintainer**: Manuel Spínola <mspinola10@gmail.com>
 ([ORCID](https://orcid.org/0000-0002-7839-1908))
+
+Authors:
+
+- Manuel Spínola <mspinola10@gmail.com>
+  ([ORCID](https://orcid.org/0000-0002-7839-1908))

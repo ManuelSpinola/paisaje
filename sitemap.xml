@@ -14,6 +14,8 @@
 <url><loc>https://manuelspinola.github.io/paisaje/reference/create_cat_esa_10m.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/extract_cat_raster.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/extract_num_raster.html</loc></url>
+<url><loc>https://manuelspinola.github.io/paisaje/reference/get_chelsa_future.html</loc></url>
+<url><loc>https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/get_esa_10m.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/get_h3_grid.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/get_nightlight_data.html</loc></url>
@@ -23,6 +25,5 @@
 <url><loc>https://manuelspinola.github.io/paisaje/reference/get_worldclim_historic.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/index.html</loc></url>
 <url><loc>https://manuelspinola.github.io/paisaje/reference/paisaje-package.html</loc></url>
-<url><loc>https://manuelspinola.github.io/paisaje/reference/reexports.html</loc></url>
 </urlset>
 

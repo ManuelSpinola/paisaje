@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">paisaje</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,45 @@
       <small>Source: <a href="https://github.com/ManuelSpinola/paisaje/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="paisaje-030">paisaje 0.3.0<a class="anchor" aria-label="anchor" href="#paisaje-030"></a></h2>
+<div class="section level3">
+<h3 id="new-functions-0-3-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-3-0"></a></h3>
+<ul><li><p><code><a href="../reference/get_chelsa_historic.html">get_chelsa_historic()</a></code> — Downloads CHELSA v2.1 bioclimatic variables (bio1–bio19) for the 1981–2010 reference period. Uses Cloud Optimized GeoTIFF (COG) streaming via <code>/vsicurl/</code>, so only the spatial subset covering the AOI is retrieved — no full global download required. Accepts <code>var = "all"</code> to request all 19 variables in a single call.</p></li>
+<li><p><code><a href="../reference/get_chelsa_future.html">get_chelsa_future()</a></code> — Downloads CHELSA v2.1 future bioclimatic variables under CMIP6 scenarios (SSP126, SSP370, SSP585) for three periods (2011–2040, 2041–2070, 2071–2100) and five ISIMIP3b GCMs (GFDL-ESM4, IPSL-CM6A-LR, MPI-ESM1-2-HR, MRI-ESM2-0, UKESM1-0-LL). Also uses COG streaming. Note: SSP245 is not available in CHELSA v2.1.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/get_nightlight_data.html">get_nightlight_data()</a></code> — Complete rewrite. The function now wraps <code><a href="https://worldbank.github.io/blackmarbler/reference/bm_raster.html" class="external-link">blackmarbler::bm_raster()</a></code> (World Bank) instead of scraping the EOG (Earth Observation Group) website. <strong>Interface change</strong>: a new required <code>aoi_sf</code> argument (an <code>sf</code> object) replaces <code>year</code>/<code>month</code> as the first argument, and a <code>bearer</code> argument (NASA LAADS DAAC token) is now required. The function returns a <code>SpatRaster</code> cropped and masked to the AOI instead of a file path. See <code><a href="../reference/get_nightlight_data.html">?get_nightlight_data</a></code> for details on obtaining a bearer token.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-0-3-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-3-0"></a></h3>
+<ul><li><p><code><a href="../reference/get_nightlight_data.html">get_nightlight_data()</a></code> now supports daily (<code>VNP46A1</code>, <code>VNP46A2</code>), monthly (<code>VNP46A3</code>), and annual (<code>VNP46A4</code>) NASA Black Marble products at 500 m resolution, with built-in quality filtering via <code>quality_flag_rm</code>.</p></li>
+<li><p>Migrated from <code>magrittr</code> pipe (<code>%&gt;%</code>) to the native R pipe (<code>|&gt;</code>) throughout the package (<code><a href="../reference/extract_cat_raster.html">extract_cat_raster()</a></code>, <code><a href="../reference/get_records_by_hexagon.html">get_records_by_hexagon()</a></code>). Requires R &gt;= 4.1.0 (already declared in <code>Depends</code>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="dependency-changes-0-3-0">Dependency changes<a class="anchor" aria-label="anchor" href="#dependency-changes-0-3-0"></a></h3>
+<ul><li>
+<strong>Added</strong>: <code>blackmarbler</code> (replaces EOG scraping for nightlight data).</li>
+<li>
+<strong>Removed</strong>: <code>rvest</code> (no longer needed after EOG scraper was dropped).</li>
+<li>
+<strong>Removed</strong>: <code>magrittr</code> (replaced by native pipe <code>|&gt;</code>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="paisaje-020">paisaje 0.2.0<a class="anchor" aria-label="anchor" href="#paisaje-020"></a></h2><p class="text-muted">CRAN release: 2026-01-07</p>
+<ul><li>First CRAN release (2026-01-07).</li>
+<li>Functions for downloading environmental variables: <code><a href="../reference/get_worldclim_historic.html">get_worldclim_historic()</a></code>, <code><a href="../reference/get_worldclim_future.html">get_worldclim_future()</a></code>, <code><a href="../reference/get_esa_10m.html">get_esa_10m()</a></code>, <code><a href="../reference/get_nightlight_data.html">get_nightlight_data()</a></code>.</li>
+<li>Hexagonal grid tools: <code><a href="../reference/get_h3_grid.html">get_h3_grid()</a></code>, <code><a href="../reference/get_records_by_hexagon.html">get_records_by_hexagon()</a></code>.</li>
+<li>Zonal statistics: <code><a href="../reference/extract_num_raster.html">extract_num_raster()</a></code>, <code><a href="../reference/extract_cat_raster.html">extract_cat_raster()</a></code>.</li>
+<li>Landscape metrics: <code><a href="../reference/calculate_it_metrics.html">calculate_it_metrics()</a></code>.</li>
+<li>Biodiversity data: <code><a href="../reference/get_records.html">get_records()</a></code>, <code><a href="../reference/count_points_in_polygons.html">count_points_in_polygons()</a></code>.</li>
+<li>Included dataset: <code>cr_outline_c</code> (Costa Rica continental outline).</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

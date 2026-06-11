@@ -72,12 +72,17 @@ This package is released under the MIT License.
   : Calculate Area Proportions for Categorical Raster Classes (Generic)
 - [`extract_num_raster()`](https://manuelspinola.github.io/paisaje/reference/extract_num_raster.md)
   : Extract Area-Weighted Mean from Numeric Raster Stack for Polygons
+- [`get_chelsa_future()`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_future.md)
+  : Download and Process Future Climate Variables from CHELSA v2.1
+  (CMIP6)
+- [`get_chelsa_historic()`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.md)
+  : Download and Process Historic Climate Variables from CHELSA v2.1
 - [`get_esa_10m()`](https://manuelspinola.github.io/paisaje/reference/get_esa_10m.md)
   : Download ESA WorldCover land cover data
 - [`get_h3_grid()`](https://manuelspinola.github.io/paisaje/reference/get_h3_grid.md)
   : Generate an H3 Hexagonal Grid for an sf Object
 - [`get_nightlight_data()`](https://manuelspinola.github.io/paisaje/reference/get_nightlight_data.md)
-  : Download and Retrieve Nightlight Data
+  : Download and Retrieve Nightlight Data from NASA Black Marble
 - [`get_records()`](https://manuelspinola.github.io/paisaje/reference/get_records.md)
   : Query Species Occurrence Records within an Area of Interest (AOI)
 - [`get_records_by_hexagon()`](https://manuelspinola.github.io/paisaje/reference/get_records_by_hexagon.md)
