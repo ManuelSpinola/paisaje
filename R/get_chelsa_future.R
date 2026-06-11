@@ -90,7 +90,7 @@
 #'   \item \code{\link{get_chelsa_historic}} - CHELSA 1981-2010 baseline.
 #'   \item \code{\link{get_worldclim_future}} - WorldClim v2.1 future projections.
 #'   \item \code{\link{extract_num_raster}} - extract area-weighted means per polygon.
-#'   \item CHELSA CMIP6: \url{https://chelsa-climate.org/cmip6/}
+#'   \item CHELSA CMIP6: \url{https://chelsa-climate.org/}
 #'   \item EnviCloud browser: \url{https://envicloud.wsl.ch/#/?bucket=https://os.zhdk.cloud.switch.ch/chelsav2/}
 #' }
 #'

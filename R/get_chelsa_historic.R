@@ -4,12 +4,12 @@
 #' @description
 #' Downloads historic bioclimatic variables from CHELSA v2.1 (Climatologies at
 #' High Resolution for the Earth's Land Surface Areas) for the reference period
-#' 1981–2010. The data are served as Cloud Optimized GeoTIFFs (COGs) from the
+#' 1981-2010. The data are served as Cloud Optimized GeoTIFFs (COGs) from the
 #' Swiss WSL EnviCloud object store, which allows this function to retrieve only
 #' the spatial subset covering \code{aoi} without downloading the global file
 #' (~110 MB per variable).
 #'
-#' One or more bioclimatic variables (bio1–bio19) can be requested in a single
+#' One or more bioclimatic variables (bio1-bio19) can be requested in a single
 #' call. The result is a multi-layer \code{SpatRaster} optionally cropped and
 #' masked to the AOI, consistent with the interface of
 #' \code{\link{get_worldclim_historic}}.
@@ -19,29 +19,29 @@
 #'   (downloads all 19 variables). Variable names are case-insensitive.
 #'   Default: \code{"bio1"}.
 #'   \itemize{
-#'     \item \code{bio1}  — Annual mean temperature (°C × 10)
-#'     \item \code{bio2}  — Mean diurnal temperature range
-#'     \item \code{bio3}  — Isothermality
-#'     \item \code{bio4}  — Temperature seasonality
-#'     \item \code{bio5}  — Max temperature of warmest month
-#'     \item \code{bio6}  — Min temperature of coldest month
-#'     \item \code{bio7}  — Temperature annual range
-#'     \item \code{bio8}  — Mean temperature of wettest quarter
-#'     \item \code{bio9}  — Mean temperature of driest quarter
-#'     \item \code{bio10} — Mean temperature of warmest quarter
-#'     \item \code{bio11} — Mean temperature of coldest quarter
-#'     \item \code{bio12} — Annual precipitation (kg m⁻² yr⁻¹)
-#'     \item \code{bio13} — Precipitation of wettest month
-#'     \item \code{bio14} — Precipitation of driest month
-#'     \item \code{bio15} — Precipitation seasonality
-#'     \item \code{bio16} — Precipitation of wettest quarter
-#'     \item \code{bio17} — Precipitation of driest quarter
-#'     \item \code{bio18} — Precipitation of warmest quarter
-#'     \item \code{bio19} — Precipitation of coldest quarter
+#'     \item \code{bio1}  -- Annual mean temperature (degC x 10)
+#'     \item \code{bio2}  -- Mean diurnal temperature range
+#'     \item \code{bio3}  -- Isothermality
+#'     \item \code{bio4}  -- Temperature seasonality
+#'     \item \code{bio5}  -- Max temperature of warmest month
+#'     \item \code{bio6}  -- Min temperature of coldest month
+#'     \item \code{bio7}  -- Temperature annual range
+#'     \item \code{bio8}  -- Mean temperature of wettest quarter
+#'     \item \code{bio9}  -- Mean temperature of driest quarter
+#'     \item \code{bio10} -- Mean temperature of warmest quarter
+#'     \item \code{bio11} -- Mean temperature of coldest quarter
+#'     \item \code{bio12} -- Annual precipitation (kg m-2 yr-1)
+#'     \item \code{bio13} -- Precipitation of wettest month
+#'     \item \code{bio14} -- Precipitation of driest month
+#'     \item \code{bio15} -- Precipitation seasonality
+#'     \item \code{bio16} -- Precipitation of wettest quarter
+#'     \item \code{bio17} -- Precipitation of driest quarter
+#'     \item \code{bio18} -- Precipitation of warmest quarter
+#'     \item \code{bio19} -- Precipitation of coldest quarter
 #'   }
 #' @param aoi `sf` or `SpatVector` or `NULL`. Area of interest used to crop and
 #'   mask the raster. If \code{NULL} (default), the global raster is returned.
-#'   Providing an AOI is strongly recommended — each CHELSA variable is ~110 MB
+#'   Providing an AOI is strongly recommended -- each CHELSA variable is ~110 MB
 #'   globally, and the COG format enables efficient spatial subsetting.
 #' @param destination_dir `character` or `NULL`. Directory where the output
 #'   \code{.tif} will be saved. If \code{NULL} (default), a temporary directory
@@ -59,7 +59,7 @@
 #' ## Spatial resolution
 #' CHELSA v2.1 is provided at a **fixed resolution of 30 arc-seconds (~1 km)**
 #' globally. Unlike \code{\link{get_worldclim_historic}}, there is no \code{res}
-#' parameter — CHELSA does not offer coarser resolutions (2.5, 5, or 10
+#' parameter -- CHELSA does not offer coarser resolutions (2.5, 5, or 10
 #' arc-minutes). If you need multi-resolution data, use
 #' \code{\link{get_worldclim_historic}} instead, or downsample the CHELSA output
 #' with \code{terra::aggregate()}.
@@ -77,7 +77,7 @@
 #'         CHELSA is generally considered more accurate.
 #' }
 #'
-#' ## COG streaming — no full download required
+#' ## COG streaming -- no full download required
 #' CHELSA files are Cloud Optimized GeoTIFFs hosted on the Swiss WSL EnviCloud.
 #' This function uses the \code{/vsicurl/} virtual filesystem prefix from GDAL
 #' (via \code{terra}) to stream only the tiles that cover \code{aoi}, avoiding
@@ -85,28 +85,28 @@
 #' subsetting is done in memory before writing to disk.
 #'
 #' ## Reference period
-#' All historic CHELSA v2.1 bioclimatic variables use the **1981–2010**
+#' All historic CHELSA v2.1 bioclimatic variables use the **1981-2010**
 #' climatological normal period. For future projections see
 #' \code{\link{get_chelsa_future}}.
 #'
 #' @seealso
 #' \itemize{
-#'   \item \code{\link{get_chelsa_future}} — CHELSA future projections (CMIP6).
-#'   \item \code{\link{get_worldclim_historic}} — WorldClim v2.1 historic data.
-#'   \item \code{\link{extract_num_raster}} — extract area-weighted means per polygon.
+#'   \item \code{\link{get_chelsa_future}} -- CHELSA future projections (CMIP6).
+#'   \item \code{\link{get_worldclim_historic}} -- WorldClim v2.1 historic data.
+#'   \item \code{\link{extract_num_raster}} -- extract area-weighted means per polygon.
 #'   \item CHELSA website: \url{https://chelsa-climate.org}
 #'   \item EnviCloud browser: \url{https://envicloud.wsl.ch/#/?bucket=https://os.zhdk.cloud.switch.ch/chelsav2/}
 #' }
 #'
 #' @references
-#' Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza,
+#' Karger, D. N., Conrad, O., Bohner, J., Kawohl, T., Kreft, H., Soria-Auza,
 #' R. W., Zimmermann, N. E., Linder, P., & Kessler, M. (2017). Climatologies
 #' at high resolution for the earth's land surface areas (CHELSA).
 #' \emph{Scientific Data}, 4, 170122. \doi{10.1038/sdata.2017.122}
 #'
 #' Brun, P., Zimmermann, N. E., Hari, C., Pellissier, L., & Karger, D. N.
 #' (2022). Global climate-related predictors at kilometre resolution for the
-#' past and future. \emph{Earth System Science Data}, 14, 5573–5603.
+#' past and future. \emph{Earth System Science Data}, 14, 5573-5603.
 #' \doi{10.5194/essd-14-5573-2022}
 #'
 #' @examples
@@ -116,7 +116,7 @@
 #' # Use Costa Rica outline (included in paisaje)
 #' aoi <- paisaje::cr_outline_c
 #'
-#' # Single variable — Annual mean temperature
+#' # Single variable -- Annual mean temperature
 #' bio1 <- get_chelsa_historic(var = "bio1", aoi = aoi)
 #'
 #' # Multiple variables
