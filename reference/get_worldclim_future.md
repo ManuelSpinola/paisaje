@@ -141,8 +141,8 @@ climate_future <- paisaje::get_worldclim_future(
   var = "tmin", res = "10m", scenario = "585",
   time_range = "2021-2040", gcm = "ACCESS-CM2", aoi = nc
 )
-#> No destination_dir provided. Using temporary directory: /tmp/RtmpAZey9M
+#> No destination_dir provided. Using temporary directory: /tmp/Rtmp4fJxMq
 #> Download URL: https://geodata.ucdavis.edu/cmip6/10m/ACCESS-CM2/ssp585/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif
-#> Raster saved at: /tmp/RtmpAZey9M/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif
+#> Raster saved at: /tmp/Rtmp4fJxMq/wc2.1_10m_tmin_ACCESS-CM2_ssp585_2021-2040.tif
 # }
 ```
