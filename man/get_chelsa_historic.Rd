@@ -71,6 +71,14 @@ masked to the AOI, consistent with the interface of
 \code{\link{get_worldclim_historic}}.
 }
 \details{
+## Spatial resolution
+CHELSA v2.1 is provided at a **fixed resolution of 30 arc-seconds (~1 km)**
+globally. Unlike \code{\link{get_worldclim_historic}}, there is no \code{res}
+parameter — CHELSA does not offer coarser resolutions (2.5, 5, or 10
+arc-minutes). If you need multi-resolution data, use
+\code{\link{get_worldclim_historic}} instead, or downsample the CHELSA output
+with \code{terra::aggregate()}.
+
 ## Why CHELSA over WorldClim?
 CHELSA v2.1 and WorldClim v2.1 are both high-resolution (~1 km) global
 climatologies, but differ in their downscaling methodology:

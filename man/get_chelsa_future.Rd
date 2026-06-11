@@ -21,28 +21,28 @@ Default: \code{"bio1"}.}
 
 \item{scenario}{`character`. SSP emission scenario. Options:
 \itemize{
-  \item \code{"ssp126"} — SSP1-2.6 (low emissions, sustainable development).
-  \item \code{"ssp370"} — SSP3-7.0 (high emissions, regional rivalry).
-  \item \code{"ssp585"} — SSP5-8.5 (very high emissions, fossil-fueled growth).
+  \item \code{"ssp126"} - SSP1-2.6 (low emissions, sustainable development).
+  \item \code{"ssp370"} - SSP3-7.0 (high emissions, regional rivalry).
+  \item \code{"ssp585"} - SSP5-8.5 (very high emissions, fossil-fueled growth).
 }
 Default: \code{"ssp585"}.}
 
 \item{period}{`character`. Future climatological period. Options:
 \itemize{
-  \item \code{"2011-2040"} — Near future.
-  \item \code{"2041-2070"} — Mid future.
-  \item \code{"2071-2100"} — Far future.
+  \item \code{"2011-2040"} - Near future.
+  \item \code{"2041-2070"} - Mid future.
+  \item \code{"2071-2100"} - Far future.
 }
 Default: \code{"2041-2070"}.}
 
 \item{gcm}{`character`. Global Circulation Model following the ISIMIP3b
 selection. Options:
 \itemize{
-  \item \code{"GFDL-ESM4"}    — Priority 1 (highest priority).
-  \item \code{"IPSL-CM6A-LR"} — Priority 2.
-  \item \code{"MPI-ESM1-2-HR"} — Priority 3.
-  \item \code{"MRI-ESM2-0"}   — Priority 4.
-  \item \code{"UKESM1-0-LL"}  — Priority 5.
+  \item \code{"GFDL-ESM4"}    - Priority 1 (highest priority).
+  \item \code{"IPSL-CM6A-LR"} - Priority 2.
+  \item \code{"MPI-ESM1-2-HR"} - Priority 3.
+  \item \code{"MRI-ESM2-0"}   - Priority 4.
+  \item \code{"UKESM1-0-LL"}  - Priority 5.
 }
 When fewer than five models are used, selection should follow priority order.
 Default: \code{"MPI-ESM1-2-HR"}.}
@@ -70,16 +70,22 @@ selection), and three future periods. Files are served as Cloud Optimized
 GeoTIFFs (COGs) from the Swiss WSL EnviCloud, enabling efficient spatial
 subsetting via \code{/vsicurl/} without downloading global files.
 
-One or more bioclimatic variables (bio1–bio19) can be requested in a single
+One or more bioclimatic variables (bio1--bio19) can be requested in a single
 call. The result is a multi-layer \code{SpatRaster} optionally cropped and
 masked to the AOI, consistent with the interface of
 \code{\link{get_worldclim_future}}.
 }
 \details{
+## Spatial resolution
+CHELSA v2.1 future projections are at a **fixed resolution of 30 arc-seconds
+(~1 km)**. There is no \code{res} parameter - unlike WorldClim, CHELSA does
+not offer coarser resolutions. To downsample, use \code{terra::aggregate()}
+on the returned \code{SpatRaster}.
+
 ## GCM availability
 CHELSA v2.1 future projections follow the ISIMIP3b model selection, which
 provides five GCMs covering a range of climate sensitivities and regional
-performance. Not all SSP × GCM × period combinations are guaranteed to be
+performance. Not all SSP x GCM x period combinations are guaranteed to be
 available on the server. If a combination is unavailable, the function
 emits a warning and returns \code{NULL} for that variable.
 
@@ -107,7 +113,7 @@ library(sf)
 # Use Costa Rica outline (included in paisaje)
 aoi <- paisaje::cr_outline_c
 
-# Single variable — Annual mean temperature, mid-century, pessimistic
+# Single variable - Annual mean temperature, mid-century, pessimistic
 bio1_fut <- get_chelsa_future(
   var      = "bio1",
   scenario = "ssp585",
@@ -116,7 +122,7 @@ bio1_fut <- get_chelsa_future(
   aoi      = aoi
 )
 
-# Multiple variables — near future, optimistic
+# Multiple variables - near future, optimistic
 bio_stack <- get_chelsa_future(
   var      = c("bio1", "bio12", "bio15"),
   scenario = "ssp126",
@@ -137,21 +143,21 @@ h7_fut  <- extract_num_raster(bio_stack, h7)
 
 }
 \references{
-Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza,
+Karger, D. N., Conrad, O., B00f6hner, J., Kawohl, T., Kreft, H., Soria-Auza,
 R. W., Zimmermann, N. E., Linder, P., & Kessler, M. (2017). Climatologies
 at high resolution for the earth's land surface areas (CHELSA).
 \emph{Scientific Data}, 4, 170122. \doi{10.1038/sdata.2017.122}
 
 Brun, P., Zimmermann, N. E., Hari, C., Pellissier, L., & Karger, D. N.
 (2022). Global climate-related predictors at kilometre resolution for the
-past and future. \emph{Earth System Science Data}, 14, 5573–5603.
+past and future. \emph{Earth System Science Data}, 14, 5573-5603.
 \doi{10.5194/essd-14-5573-2022}
 }
 \seealso{
 \itemize{
-  \item \code{\link{get_chelsa_historic}} — CHELSA 1981–2010 baseline.
-  \item \code{\link{get_worldclim_future}} — WorldClim v2.1 future projections.
-  \item \code{\link{extract_num_raster}} — extract area-weighted means per polygon.
+  \item \code{\link{get_chelsa_historic}} - CHELSA 1981-2010 baseline.
+  \item \code{\link{get_worldclim_future}} - WorldClim v2.1 future projections.
+  \item \code{\link{extract_num_raster}} - extract area-weighted means per polygon.
   \item CHELSA CMIP6: \url{https://chelsa-climate.org/cmip6/}
   \item EnviCloud browser: \url{https://envicloud.wsl.ch/#/?bucket=https://os.zhdk.cloud.switch.ch/chelsav2/}
 }
