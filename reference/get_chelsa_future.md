@@ -159,7 +159,7 @@ the past and future. *Earth System Science Data*, 14, 5573-5603.
 - [`extract_num_raster`](https://manuelspinola.github.io/paisaje/reference/extract_num_raster.md) -
   extract area-weighted means per polygon.
 
-- CHELSA CMIP6: <https://chelsa-climate.org/cmip6/>
+- CHELSA CMIP6: <https://chelsa-climate.org/>
 
 - EnviCloud browser:
   <https://envicloud.wsl.ch/#/?bucket=https://os.zhdk.cloud.switch.ch/chelsav2/>
