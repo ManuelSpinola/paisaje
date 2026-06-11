@@ -1,0 +1,77 @@
+# Count Points within Polygons by Species
+
+Counts the number of points per species within each polygon. If the
+points dataset contains a \`species\` column, a separate column is
+created for each species with the counts inside each polygon. Spaces in
+species names are replaced with underscores for naming columns.
+
+This function is particularly useful in ecological studies where species
+have different spatial distributions. It accounts for the possibility
+that some species may not be present in all polygons, producing zero
+counts in those cases.
+
+## Usage
+
+``` r
+count_points_in_polygons(points_sf, polygons_sf)
+```
+
+## Arguments
+
+- points_sf:
+
+  An \`sf\` object containing point geometries. Must include a
+  \`species\` column.
+
+- polygons_sf:
+
+  An \`sf\` object containing polygon geometries.
+
+## Value
+
+An \`sf\` object containing the original polygons and additional columns
+for each species count. Column names follow the format
+\`species_name_count\`, with spaces replaced by underscores.
+
+## Details
+
+The function performs a spatial join to count occurrences of each
+species within each polygon. For species absent in a polygon, the count
+will be zero. This approach allows for flexible analysis of species
+distributions across landscape units.
+
+## Examples
+
+``` r
+# \donttest{
+library(sf)
+#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+
+points_sf <- st_as_sf(data.frame(
+  id = 1:6,
+  species = c("Panthera onca", "Panthera onca", "Felis catus",
+              "Felis catus", "Felis catus", "Panthera leo"),
+  x = c(1, 2, 3, 4, 5, 6),
+  y = c(1, 2, 3, 4, 5, 6)
+), coords = c("x", "y"), crs = 4326)
+
+polygons_sf <- st_as_sf(data.frame(
+  id = 1:2,
+  geometry = st_sfc(
+    st_polygon(list(rbind(c(0,0), c(3,0), c(3,3), c(0,3), c(0,0)))),
+    st_polygon(list(rbind(c(3,3), c(6,3), c(6,6), c(3,6), c(3,3))))
+  )
+), crs = 4326)
+
+result <- count_points_in_polygons(points_sf, polygons_sf)
+print(result)
+#> Simple feature collection with 2 features and 4 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 0 ymin: 0 xmax: 6 ymax: 6
+#> Geodetic CRS:  WGS 84
+#>   id                       geometry Panthera_onca Felis_catus Panthera_leo
+#> 1  1 POLYGON ((0 0, 3 0, 3 3, 0 ...             2           1            0
+#> 2  2 POLYGON ((3 3, 6 3, 6 6, 3 ...             0           3            1
+# }
+```

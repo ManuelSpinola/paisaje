@@ -1,0 +1,50 @@
+# Extract Area-Weighted Mean from Numeric Raster Stack for Polygons
+
+Calculates the area-weighted mean value for each layer in a numeric
+`SpatRaster` (or single layer) within each polygon feature of an `sf`
+object. This function is designed for high-precision zonal statistics of
+continuous variables (e.g., bioclimatic data).
+
+## Usage
+
+``` r
+extract_num_raster(spat_raster_multi, sf_hex_grid)
+```
+
+## Arguments
+
+- spat_raster_multi:
+
+  A `SpatRaster` object from the `terra` package. Must contain numeric
+  layers (can be a single layer or a stack/brick).
+
+- sf_hex_grid:
+
+  An `sf` object containing polygonal geometries (e.g., H3 hexagons).
+
+## Value
+
+An `sf` object identical to `sf_hex_grid`, but with new columns
+appended. The new column names match the original `SpatRaster` layer
+names. The values represent the area-weighted mean for that variable
+within each polygon.
+
+## Details
+
+The function uses
+[`exactextractr::exact_extract`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
+with `fun = "weighted_mean"` and `weights = "area"` to ensure the most
+accurate sub-pixel summary. A critical security check is implemented
+before binding columns (`bind_cols`) to prevent data misalignment in
+case of row count discrepancies between the input features and the
+extracted results.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# Assuming 'bio' is a SpatRaster stack and 'h7' is an sf hexagon grid
+# bio_p <- extract_num_raster(bio, h7)
+# head(bio_p)
+} # }
+```
