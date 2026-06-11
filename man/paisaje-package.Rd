@@ -6,7 +6,7 @@
 \alias{paisaje-package}
 \title{paisaje: Spatial and Environmental Data Tools for Landscape Ecology}
 \description{
-Provides functions for landscape analysis and data retrieval. The package allows users to download environmental variables from global datasets (e.g., WorldClim, ESA WorldCover, Nighttime Lights), and to compute spatial and landscape metrics using a hexagonal grid system based on the H3 spatial index. It is useful for ecological modeling, biodiversity studies, and spatial data processing in landscape ecology. Fick and Hijmans (2017) \doi{10.1002/joc.5086}. Zanaga et al. (2022) \doi{10.5281/zenodo.7254221}. Uber Technologies Inc. (2022) "H3: Hexagonal hierarchical spatial index".
+Provides functions for landscape analysis and data retrieval. The package allows users to download environmental variables from global datasets (e.g., WorldClim, CHELSA, ESA WorldCover, Nighttime Lights), and to compute spatial and landscape metrics using a hexagonal grid system based on the H3 spatial index. It is useful for ecological modeling, biodiversity studies, and spatial data processing in landscape ecology. Fick and Hijmans (2017) \doi{10.1002/joc.5086}. Zanaga et al. (2022) \doi{10.5281/zenodo.7254221}. Uber Technologies Inc. (2022) "H3: Hexagonal hierarchical spatial index". Román et al. (2018) \doi{10.1016/j.rse.2018.03.017}. Karger et al. (2017) \doi{10.1038/sdata.2017.122}. Brun et al. (2022) \doi{10.5194/essd-14-5573-2022}.
 }
 \seealso{
 Useful links:
@@ -19,6 +19,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Manuel Spínola \email{mspinola10@gmail.com} (\href{https://orcid.org/0000-0002-7839-1908}{ORCID})
+
+Authors:
+\itemize{
+  \item Manuel Spínola \email{mspinola10@gmail.com} (\href{https://orcid.org/0000-0002-7839-1908}{ORCID})
+}
 
 }
 \keyword{internal}

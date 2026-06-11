@@ -73,16 +73,16 @@ get_records_by_hexagon <- function(species,
   # 3️⃣ Iterate over each species
   for (i in seq_along(species)) {
     sp_orig <- species[i]
-    sp_col <- species_clean[i]
+    sp_col  <- species_clean[i]
 
     # Get species records within AOI
     sp_sf <- get_records(
-      species = sp_orig,
-      aoi_sf = aoi_sf,
-      providers = providers,
+      species           = sp_orig,
+      aoi_sf            = aoi_sf,
+      providers         = providers,
       remove_duplicates = remove_duplicates,
-      date = date,
-      limit = limit
+      date              = date,
+      limit             = limit
     )
 
     if (nrow(sp_sf) == 0) {
@@ -97,9 +97,9 @@ get_records_by_hexagon <- function(species,
     joined <- suppressWarnings(sf::st_join(sp_sf, hex_grid, left = FALSE))
 
     # 5️⃣ Count records per hex
-    rec_count <- joined %>%
-      sf::st_drop_geometry() %>%
-      dplyr::group_by(hex_id = h3_address) %>%
+    rec_count <- joined |>
+      sf::st_drop_geometry() |>
+      dplyr::group_by(hex_id = h3_address) |>
       dplyr::summarise(n = dplyr::n(), .groups = "drop")
 
     # 6️⃣ Merge counts into full hex grid

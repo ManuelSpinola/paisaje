@@ -53,44 +53,39 @@ extract_cat_raster <- function(spat_raster_cat, sf_hex_grid, proportion = TRUE) 
   }
 
   sf_hex_grid <- sf::st_make_valid(sf_hex_grid)
-  layer_name <- names(spat_raster_cat)[1]
+  layer_name  <- names(spat_raster_cat)[1]
 
   # 2️⃣ Extraction and Consolidation (Area-Weighted Custom Function)
   extracted <- exactextractr::exact_extract(
-    x = spat_raster_cat,
-    y = sf_hex_grid,
-    # Use summarize_df=TRUE to pass dataframes per feature
+    x            = spat_raster_cat,
+    y            = sf_hex_grid,
     summarize_df = TRUE,
-    # Include the determined join key
     include_cols = join_key,
 
     fun = function(df) {
       if (nrow(df) == 0) return(NULL)
 
-      # KEY FILTER: Exclude NA pixels (to prevent the prop_NaN column)
-      df <- df %>%
+      # KEY FILTER: Exclude NA pixels (prevents prop_NaN column)
+      df <- df |>
         dplyr::filter(!is.na(.data$value))
 
       if (nrow(df) == 0) return(NULL)
 
       # Calculate the sum of coverage (weighted area) for each category
-      df_summary <- df %>%
-        dplyr::group_by(.data$value, .data[[join_key]]) %>%
+      df_summary <- df |>
+        dplyr::group_by(.data$value, .data[[join_key]]) |>
         dplyr::summarize(
           sum_coverage = sum(.data$coverage_fraction, na.rm = TRUE),
           .groups = "drop_last"
         )
 
       # Calculate the proportion
-      df_summary <- df_summary %>%
+      df_summary <- df_summary |>
         dplyr::mutate(
-          # Total area of the cell (only covered by defined categories)
           total_area_cell = sum(.data$sum_coverage),
-          # Proportion = Category Area / Total Polygon Area
           freq = if (proportion) .data$sum_coverage / .data$total_area_cell else .data$sum_coverage
-        ) %>%
-        dplyr::ungroup() %>%
-        # Select only necessary columns for pivoting
+        ) |>
+        dplyr::ungroup() |>
         dplyr::select(dplyr::all_of(c(join_key, "value", "freq")))
 
       return(df_summary)
@@ -104,38 +99,34 @@ extract_cat_raster <- function(spat_raster_cat, sf_hex_grid, proportion = TRUE) 
     return(sf_hex_grid)
   }
 
-  extracted_wide <- extracted %>%
+  extracted_wide <- extracted |>
     tidyr::pivot_wider(
-      id_cols = dplyr::all_of(join_key),
-      names_from = .data$value,
-      values_from = .data$freq,
+      id_cols      = dplyr::all_of(join_key),
+      names_from   = .data$value,
+      values_from  = .data$freq,
       names_prefix = paste0(layer_name, "_prop_"),
-      values_fill = 0
+      values_fill  = 0
     )
 
   # 4️⃣ Join to Geometry and Order Columns
-  result_sf <- sf_hex_grid %>%
+  result_sf <- sf_hex_grid |>
     dplyr::left_join(extracted_wide, by = join_key)
 
-  # Fill NAs (polygons that didn't intersect any defined category) with 0
+  # Fill NAs (polygons with no intersecting category) with 0
   prop_cols <- names(result_sf)[grepl(paste0(layer_name, "_prop_"), names(result_sf))]
-  result_sf <- result_sf %>%
+  result_sf <- result_sf |>
     dplyr::mutate(dplyr::across(dplyr::all_of(prop_cols), ~tidyr::replace_na(.x, 0)))
 
   # EXTRA STEP: NUMERICAL COLUMN ORDERING
   if (length(prop_cols) > 0) {
-    # 1. Extract only the numeric part (e.g., "10" from "lulc_prop_10")
-    prop_numbers <- gsub(paste0(layer_name, "_prop_"), "", prop_cols)
-
-    # 2. Order column names based on the NUMERIC value
-    ordered_indices <- order(as.numeric(prop_numbers))
+    prop_numbers      <- gsub(paste0(layer_name, "_prop_"), "", prop_cols)
+    ordered_indices   <- order(as.numeric(prop_numbers))
     ordered_prop_cols <- prop_cols[ordered_indices]
 
-    # 3. Reorder the dataframe: ID, Ordered Columns, Geometry, Other Columns
     cols_to_select <- c(join_key, ordered_prop_cols, "geometry",
                         setdiff(names(result_sf), c(join_key, ordered_prop_cols, "geometry")))
 
-    result_sf <- result_sf %>%
+    result_sf <- result_sf |>
       dplyr::select(dplyr::all_of(cols_to_select))
   }
 

@@ -1,22 +1,25 @@
 Package: paisaje
 Type: Package
 Title: Spatial and Environmental Data Tools for Landscape Ecology
-Version: 0.2.0
-Authors@R: person(given="Manuel", family="Spínola", role=c("aut","cre"), email="mspinola10@gmail.com", comment=c(ORCID="0000-0002-7839-1908"))
+Version: 0.3.0
+Authors@R: person(given="Manuel", family="Spínola", role=c("aut","cre"),
+    email="mspinola10@gmail.com", comment=c(ORCID="0000-0002-7839-1908"))
 Maintainer: Manuel Spínola <mspinola10@gmail.com>
-Description: Provides functions for landscape analysis and data retrieval. 
-    The package allows users to download environmental variables from global 
-    datasets (e.g., WorldClim, ESA WorldCover, Nighttime Lights), and to 
-    compute spatial and landscape metrics using a hexagonal grid system 
-    based on the H3 spatial index. It is useful for ecological modeling, 
-    biodiversity studies, and spatial data processing in landscape ecology. 
-    Fick and Hijmans (2017) <doi:10.1002/joc.5086>. 
-    Zanaga et al. (2022) <doi:10.5281/zenodo.7254221>. 
+Description: Provides functions for landscape analysis and data retrieval.
+    The package allows users to download environmental variables from global
+    datasets (e.g., WorldClim, CHELSA, ESA WorldCover, Nighttime Lights), and
+    to compute spatial and landscape metrics using a hexagonal grid system
+    based on the H3 spatial index. It is useful for ecological modeling,
+    biodiversity studies, and spatial data processing in landscape ecology.
+    Fick and Hijmans (2017) <doi:10.1002/joc.5086>.
+    Zanaga et al. (2022) <doi:10.5281/zenodo.7254221>.
     Uber Technologies Inc. (2022) "H3: Hexagonal hierarchical spatial index".
+    Román et al. (2018) <doi:10.1016/j.rse.2018.03.017>.
+    Karger et al. (2017) <doi:10.1038/sdata.2017.122>.
+    Brun et al. (2022) <doi:10.5194/essd-14-5573-2022>.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.3
-URL: https://manuelspinola.github.io/paisaje/, 
+URL: https://manuelspinola.github.io/paisaje/,
     https://github.com/ManuelSpinola/paisaje
 BugReports: https://github.com/ManuelSpinola/paisaje/issues
 Imports:
@@ -25,20 +28,20 @@ Imports:
     sf,
     terra,
     h3jsr,
-    rvest,
     httr,
     landscapemetrics,
     spocc,
     exactextractr,
     progress,
-    magrittr
+    blackmarbler
 Suggests:
     ggplot2,
     rmarkdown,
     knitr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-Depends: 
+Depends:
     R (>= 4.1.0)
 LazyData: true
 Language: en-US
+Config/roxygen2/version: 8.0.0
