@@ -98,6 +98,15 @@ invisibly on error.
 
 ## Details
 
+\## Spatial resolution CHELSA v2.1 is provided at a \*\*fixed resolution
+of 30 arc-seconds (~1 km)\*\* globally. Unlike
+[`get_worldclim_historic`](https://manuelspinola.github.io/paisaje/reference/get_worldclim_historic.md),
+there is no `res` parameter — CHELSA does not offer coarser resolutions
+(2.5, 5, or 10 arc-minutes). If you need multi-resolution data, use
+[`get_worldclim_historic`](https://manuelspinola.github.io/paisaje/reference/get_worldclim_historic.md)
+instead, or downsample the CHELSA output with
+[`terra::aggregate()`](https://rspatial.github.io/terra/reference/aggregate.html).
+
 \## Why CHELSA over WorldClim? CHELSA v2.1 and WorldClim v2.1 are both
 high-resolution (~1 km) global climatologies, but differ in their
 downscaling methodology:

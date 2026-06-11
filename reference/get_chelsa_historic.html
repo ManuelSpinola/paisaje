@@ -137,7 +137,14 @@ Default: <code>300</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>## Why CHELSA over WorldClim?
+    <p>## Spatial resolution
+CHELSA v2.1 is provided at a **fixed resolution of 30 arc-seconds (~1 km)**
+globally. Unlike <code><a href="get_worldclim_historic.html">get_worldclim_historic</a></code>, there is no <code>res</code>
+parameter — CHELSA does not offer coarser resolutions (2.5, 5, or 10
+arc-minutes). If you need multi-resolution data, use
+<code><a href="get_worldclim_historic.html">get_worldclim_historic</a></code> instead, or downsample the CHELSA output
+with <code><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">terra::aggregate()</a></code>.</p>
+<p>## Why CHELSA over WorldClim?
 CHELSA v2.1 and WorldClim v2.1 are both high-resolution (~1 km) global
 climatologies, but differ in their downscaling methodology:</p><ul><li><p>CHELSA uses a **mechanistic downscaling** approach based on
         atmospheric dynamics and orographic effects, which tends to perform

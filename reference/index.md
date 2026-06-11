@@ -6,6 +6,8 @@
   : Calculate Landscape Complexity Metrics (IT Metrics) per Polygon
 - [`count_points_in_polygons()`](https://manuelspinola.github.io/paisaje/reference/count_points_in_polygons.md)
   : Count Points within Polygons by Species
+- [`cr_outline`](https://manuelspinola.github.io/paisaje/reference/cr_outline.md)
+  : Costa Rica Full Outline (Continental + Islands)
 - [`cr_outline_c`](https://manuelspinola.github.io/paisaje/reference/cr_outline_c.md)
   : Costa Rica Continental Outline
 - [`create_cat_esa_10m()`](https://manuelspinola.github.io/paisaje/reference/create_cat_esa_10m.md)
@@ -20,6 +22,8 @@
   (CMIP6)
 - [`get_chelsa_historic()`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.md)
   : Download and Process Historic Climate Variables from CHELSA v2.1
+- [`get_cr_outline()`](https://manuelspinola.github.io/paisaje/reference/get_cr_outline.md)
+  : Download Costa Rica Outline from GADM
 - [`get_esa_10m()`](https://manuelspinola.github.io/paisaje/reference/get_esa_10m.md)
   : Download ESA WorldCover land cover data
 - [`get_h3_grid()`](https://manuelspinola.github.io/paisaje/reference/get_h3_grid.md)

@@ -219,6 +219,6 @@ get_esa_10m(nc, year = 2021, output_folder = tempdir())
 #> Failed to download: https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_NA_Map.tif
 #> Failed to download: https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_NA_Map.tif
 #> Failed to download: https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_NA_Map.tif
-#> Download completed. Files saved in: /tmp/Rtmp7FAZMs
+#> Download completed. Files saved in: /tmp/RtmpAZey9M
 # }
 ```

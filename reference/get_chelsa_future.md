@@ -38,11 +38,11 @@ get_chelsa_future(
 
   \`character\`. SSP emission scenario. Options:
 
-  - `"ssp126"` — SSP1-2.6 (low emissions, sustainable development).
+  - `"ssp126"` - SSP1-2.6 (low emissions, sustainable development).
 
-  - `"ssp370"` — SSP3-7.0 (high emissions, regional rivalry).
+  - `"ssp370"` - SSP3-7.0 (high emissions, regional rivalry).
 
-  - `"ssp585"` — SSP5-8.5 (very high emissions, fossil-fueled growth).
+  - `"ssp585"` - SSP5-8.5 (very high emissions, fossil-fueled growth).
 
   Default: `"ssp585"`.
 
@@ -50,11 +50,11 @@ get_chelsa_future(
 
   \`character\`. Future climatological period. Options:
 
-  - `"2011-2040"` — Near future.
+  - `"2011-2040"` - Near future.
 
-  - `"2041-2070"` — Mid future.
+  - `"2041-2070"` - Mid future.
 
-  - `"2071-2100"` — Far future.
+  - `"2071-2100"` - Far future.
 
   Default: `"2041-2070"`.
 
@@ -63,15 +63,15 @@ get_chelsa_future(
   \`character\`. Global Circulation Model following the ISIMIP3b
   selection. Options:
 
-  - `"GFDL-ESM4"` — Priority 1 (highest priority).
+  - `"GFDL-ESM4"` - Priority 1 (highest priority).
 
-  - `"IPSL-CM6A-LR"` — Priority 2.
+  - `"IPSL-CM6A-LR"` - Priority 2.
 
-  - `"MPI-ESM1-2-HR"` — Priority 3.
+  - `"MPI-ESM1-2-HR"` - Priority 3.
 
-  - `"MRI-ESM2-0"` — Priority 4.
+  - `"MRI-ESM2-0"` - Priority 4.
 
-  - `"UKESM1-0-LL"` — Priority 5.
+  - `"UKESM1-0-LL"` - Priority 5.
 
   When fewer than five models are used, selection should follow priority
   order. Default: `"MPI-ESM1-2-HR"`.
@@ -100,9 +100,16 @@ invisibly on error.
 
 ## Details
 
+\## Spatial resolution CHELSA v2.1 future projections are at a \*\*fixed
+resolution of 30 arc-seconds (~1 km)\*\*. There is no `res` parameter -
+unlike WorldClim, CHELSA does not offer coarser resolutions. To
+downsample, use
+[`terra::aggregate()`](https://rspatial.github.io/terra/reference/aggregate.html)
+on the returned `SpatRaster`.
+
 \## GCM availability CHELSA v2.1 future projections follow the ISIMIP3b
 model selection, which provides five GCMs covering a range of climate
-sensitivities and regional performance. Not all SSP × GCM × period
+sensitivities and regional performance. Not all SSP x GCM x period
 combinations are guaranteed to be available on the server. If a
 combination is unavailable, the function emits a warning and returns
 `NULL` for that variable.
@@ -130,7 +137,7 @@ file downloads.
 
 ## References
 
-Karger, D. N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H.,
+Karger, D. N., Conrad, O., B00f6hner, J., Kawohl, T., Kreft, H.,
 Soria-Auza, R. W., Zimmermann, N. E., Linder, P., & Kessler, M. (2017).
 Climatologies at high resolution for the earth's land surface areas
 (CHELSA). *Scientific Data*, 4, 170122.
@@ -138,19 +145,19 @@ Climatologies at high resolution for the earth's land surface areas
 
 Brun, P., Zimmermann, N. E., Hari, C., Pellissier, L., & Karger, D. N.
 (2022). Global climate-related predictors at kilometre resolution for
-the past and future. *Earth System Science Data*, 14, 5573–5603.
+the past and future. *Earth System Science Data*, 14, 5573-5603.
 [doi:10.5194/essd-14-5573-2022](https://doi.org/10.5194/essd-14-5573-2022)
 
 ## See also
 
-- [`get_chelsa_historic`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.md)
-  — CHELSA 1981–2010 baseline.
+- [`get_chelsa_historic`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.md) -
+  CHELSA 1981-2010 baseline.
 
-- [`get_worldclim_future`](https://manuelspinola.github.io/paisaje/reference/get_worldclim_future.md)
-  — WorldClim v2.1 future projections.
+- [`get_worldclim_future`](https://manuelspinola.github.io/paisaje/reference/get_worldclim_future.md) -
+  WorldClim v2.1 future projections.
 
-- [`extract_num_raster`](https://manuelspinola.github.io/paisaje/reference/extract_num_raster.md)
-  — extract area-weighted means per polygon.
+- [`extract_num_raster`](https://manuelspinola.github.io/paisaje/reference/extract_num_raster.md) -
+  extract area-weighted means per polygon.
 
 - CHELSA CMIP6: <https://chelsa-climate.org/cmip6/>
 
@@ -166,7 +173,7 @@ library(sf)
 # Use Costa Rica outline (included in paisaje)
 aoi <- paisaje::cr_outline_c
 
-# Single variable — Annual mean temperature, mid-century, pessimistic
+# Single variable - Annual mean temperature, mid-century, pessimistic
 bio1_fut <- get_chelsa_future(
   var      = "bio1",
   scenario = "ssp585",
@@ -175,7 +182,7 @@ bio1_fut <- get_chelsa_future(
   aoi      = aoi
 )
 
-# Multiple variables — near future, optimistic
+# Multiple variables - near future, optimistic
 bio_stack <- get_chelsa_future(
   var      = c("bio1", "bio12", "bio15"),
   scenario = "ssp126",
