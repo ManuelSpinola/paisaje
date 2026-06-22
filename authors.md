@@ -8,15 +8,16 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ManuelSpinola/paisaje/blob/main/inst/CITATION)
+[`DESCRIPTION`](https://github.com/ManuelSpinola/paisaje/blob/main/DESCRIPTION)
 
-Spínola M (2024). *paisaje*. version 0.1.0,
+Spínola M (2026). *paisaje: Spatial and Environmental Data Tools for
+Landscape Ecology*. R package version 0.3.0,
 <https://manuelspinola.github.io/paisaje/>.
 
     @Manual{,
-      title = {paisaje},
+      title = {paisaje: Spatial and Environmental Data Tools for Landscape Ecology},
       author = {Manuel Spínola},
-      year = {2024},
-      note = {version 0.1.0},
+      year = {2026},
+      note = {R package version 0.3.0},
       url = {https://manuelspinola.github.io/paisaje/},
     }

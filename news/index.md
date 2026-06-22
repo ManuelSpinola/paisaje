@@ -2,6 +2,8 @@
 
 ## paisaje 0.3.0
 
+CRAN release: 2026-06-12
+
 ### New functions
 
 - [`get_chelsa_historic()`](https://manuelspinola.github.io/paisaje/reference/get_chelsa_historic.md)

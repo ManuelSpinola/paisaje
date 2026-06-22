@@ -107,8 +107,8 @@ climate_historic <- get_worldclim_historic(
   res = 5,
   aoi = nc
 )
-#> No destination_dir provided. Using temporary directory: /tmp/RtmpPIbJHF
+#> No destination_dir provided. Using temporary directory: /tmp/Rtmp4NdhnN
 #> Download URL: https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_5m_tmin.zip
-#> Raster saved at: /tmp/RtmpPIbJHF/wc2.1_5m_tmin.tif
+#> Raster saved at: /tmp/Rtmp4NdhnN/wc2.1_5m_tmin.tif
 # }
 ```
